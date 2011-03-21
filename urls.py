@@ -7,6 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     # (r'^change_agent/', include('change_agent.foo.urls')),
+    (r'^give_feedback/$','give_feedback.views.index'),
+    (r'^give_feedback/(?P<form>\d+)/$','give_feedback.views.show_form'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),

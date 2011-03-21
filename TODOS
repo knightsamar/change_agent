@@ -1,4 +1,7 @@
 BUGS
 ----
-Currently, when I create a question, I have to go seperately and create associated options...Actually it should ask me directly what options to create.
+* Currently, when I create a question, I have to go seperately and create associated options...Actually it should ask me directly what options to create.
+ -- a sample is created in ldap_login/groups' admin view.
+ -- checkout http://docs.djangoproject.com/en/1.2/intro/tutorial02/ for more guidance.
+
 

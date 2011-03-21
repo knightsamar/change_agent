@@ -1,0 +1,10 @@
+<h2> Hi {{user}}! </h2>
+
+<h4> List of Feeback forms </h4>
+
+<ul>
+    {% for form in form_list %}
+    <li> <a href='{{form.id}}'>{{ form.title }}</a></li>
+    {% endfor %}
+</ul>
+

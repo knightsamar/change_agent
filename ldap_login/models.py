@@ -10,11 +10,14 @@ class user(models.Model):
     group = models.ForeignKey('group',blank=True,null=True);
     allowed_viewing_feedback_about = models.ManyToManyField('manage_feedback.feedbackAbout',blank=True,null=True);
 
+    def __str__(self):
+	return self.username;
+
 #one group has many users
 class group(models.Model):
     name = models.CharField(max_length=20,unique=True);
     created_on = models.DateTimeField(auto_now_add=True);
-    pass;
 
-
+    def __str__(self):
+	return self.name;
 
