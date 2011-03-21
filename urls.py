@@ -13,4 +13,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+
+    #(r'^/', include(ldap_login.views.login)), #default is login page
+
+#    (r'^/feedback_about/'
 )

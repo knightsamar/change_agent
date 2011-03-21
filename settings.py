@@ -94,4 +94,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'change_agent.ldap_login',
+    'change_agent.manage_feedback',
+    'change_agent.give_feedback',
 )
