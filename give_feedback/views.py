@@ -1,5 +1,4 @@
 from django.template import Context, loader
-
 from django.http import HttpResponse
 from change_agent.manage_feedback.models import feedbackForm
 
@@ -16,11 +15,10 @@ def index(request):
 
 def show_form(request,form):
     f = feedbackForm.objects.get(pk=form);
-    f_questions = feedbackForm.objects.
-    return HttpResponse('Going to display form with id %s titled %s' % (form, f.title));
+    t = loader.get_template('give_feedback/form.html');
+    c = Context (
+           {
+             'form' : f
+           } );
 
-   
-
-	
-
-    
+    return HttpResponse(t.render(c));

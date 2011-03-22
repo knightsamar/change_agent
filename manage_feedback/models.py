@@ -2,10 +2,10 @@ from django.db import models
 
 #one feedbackquestion is applicable for many Forms and one Form can have many such questions
 class feedbackQuestion(models.Model):
-    	name = models.CharField("Question Name", max_length=100, help_text='An identifier for the question for internal usage',unique=True);
+   	name = models.CharField("Question Name", max_length=100, help_text='An identifier for the question for internal usage',unique=True);
 	text = models.CharField("Question Text", max_length=200,help_text="The actual question");
 	
-	type = models.CharField(max_length=30, choices=
+	type = models.CharField(max_length=40, choices=
        	((u'multiple-choice-single-answer',u'Multiple-choice (single answer)'), #render a set of radio buttons
 	(u'multiple-choice-multiple-answer',u'Multiple-choice (multiple answer)'),#render a set of checkboxes
 	(u'text',u'Open-ended question'))); #render a textarea which is wide
