@@ -15,6 +15,7 @@ def index(request):
     return HttpResponse(t.render(c));
 
 def show(request,form):
+    #are you allowed to VIEW this feedback form?
     f = feedbackForm.objects.get(pk=form);
     t = loader.get_template('give_feedback/form.html');
     c = RequestContext(request, #we use RequestContext to automagically prevent CSRF
@@ -27,13 +28,14 @@ def show(request,form):
 def submit(request,form):
     '''handles feedback form submission'''
     #find out
-        #who submitted this form?
-        #was he authorized to submit ? --- by 
+        #who submitted this form? -- will come from the sessions framework
+        #was he authorized to submit ? --- validation to be done ...do we store groups and users finally ? how about autocreating them on fetch-from-ldap()?
+
         #how many questions ?
         #now for each question answer
             #store the text 
+    
+    c = request.POST;
 
-    c = request;
-
-    return HttpResponse("Submitting feedback for %s and request is %s" % (form,request));
+    return HttpResponse("Submitting feedback for %s and request is %s" % (form,c.items()));
 

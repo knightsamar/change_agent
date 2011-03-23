@@ -11,6 +11,7 @@ class feedbackQuestion(models.Model):
 	(u'text',u'Open-ended question'))); #render a textarea which is wide
 	
 	helptext = models.CharField(max_length=100, help_text="The text appears under the question", blank=True, null=True);
+    mandatory = models.BooleanField(help_text="Whether you want to keep this field mandatory ?");
 
 	def __str__(self):
 	    return ('%s - %s' % (self.name, self.type));

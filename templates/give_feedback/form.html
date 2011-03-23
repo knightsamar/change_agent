@@ -6,24 +6,25 @@
 	<h4>{{ q.text }}</h4>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
-			    <input type='radio' name='rdb_opt_for_{{ q.id }}'/>
-	                    <label for='rdb_opt_for_{{ q.id }}'>
+                <input type='radio' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
+	                    <label for='q{{ q.id }}_rdb_opt'>
         	                {{ opt.text }}
 			    </label> <br/>
-			{% endfor %}
+            {% endfor %}
 		{% endif %}
 		{% if q.type == 'multiple-choice-multiple-answer' %}
-                	{% for opt in q.feedbackquestionoption_set.values %}
-			    <input type='checkbox' name='chk_opt_{{ opt.id }}'/> 
-	                    <label for='chk_opt_{{ opt.id }}'>
+            {% for opt in q.feedbackquestionoption_set.values %}
+               <input type='checkbox' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
+	                    <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
         	                {{ opt.text }}
                 	    </label><br/>
-        	        {% endfor %}
+        	{% endfor %}
 		{% endif %}
 		{% if q.type == 'text' %}
-			<textarea name='q_{{ q.id }}' rows='8' cols='120'></textarea> <br/>
+			<textarea name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
 		{% endif %}
 	    <br/>
-	 {% endfor %}
+   {% endfor %}
+    <input type='hidden' value='{{ form.id }}' name='formid'>
  	<input type='submit' value='Submit feedback!'>
 </form>

@@ -8,11 +8,11 @@ class feedbackSubmission(models.Model):
     def __str__(self):
         return ("%s's submission of form '%s'" % (self.feedbackForm, self.submitter))
 
-class feedbackSubmissionAnswerOptions(models.Model):
+class feedbackSubmissionAnswer(models.Model):
     submission = models.ForeignKey('feedbackSubmission',help_text='Submission for which this is the answer');
     question = models.ForeignKey('manage_feedback.feedbackQuestion',help_text='Question for which the answer was submitted');
-    answer = models.ForeignKey('manage_feedback.feedbackQuestionOption',help_text='The answer submitted by the user');
-    answer_text = models.TextField('Answer text (only for text questions)',help_text='Text answer given by the user(only for text questions');
+    answer_option = models.ForeignKey('manage_feedback.feedbackQuestionOption',help_text='The answerOption selected by the user',blank=True,null=True);
+    answer_text = models.TextField('Answer text (only for text questions)',help_text='Text answer given by the user(only for text questions',blank=True,null=True);
 
     def __str__(self):
         return ("%s's answer to '%s' in submission '%s'" % (self.submission.submitter, self.question.text, self.submission.id));
