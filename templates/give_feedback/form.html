@@ -1,24 +1,29 @@
 <h3 align='center'> {{ form.title }} </h3>
-    <form action='submit_feedback/'>
-        {% for q in form.questions.all %}
-            {% if q.type == 'multiple-choice-single-answer' %}
-                {% for opt in q.feedbackquestionoption_set.values_list %}
-                    <label for='opt_{{ opt.id }}'>
-                        {{ opt.text }}
-                    </label>
-                    <input type='radio' name='opt_{{ opt.id }}'/>
-                    {% endfor %}
-            {% endif %}
-            {% if q.type == 'multiple-choice-multiple-answer' %}
-                {% for opt in q.feedbackquestionoption_set.values_list %}
-                    <label for='opt_{{ opt.id }}'>
-                        {{ opt.text }}
-                    </label>
-                    <input type='checkbox' name='opt_{{ opt.id }}'/>
-                {% endfor %}
-            {% endif %}
-            {% if q.type == 'text' %}
-                <textarea name='q_{{ q.id }}' rows='8' cols='120'></textarea>
-            {% endif %}
-        {% endfor %}
-    </form>       
+<h4 align='center'> Your feedback is valuable to us! </h4>
+<form action='/give_feedback/{{ form.id }}/submit/' method='POST'>
+    {% csrf_token %}
+	{% for q in form.questions.all %}
+	<h4>{{ q.text }}</h4>
+		{% if q.type == 'multiple-choice-single-answer' %}
+			{% for opt in q.feedbackquestionoption_set.values %}
+			    <input type='radio' name='rdb_opt_for_{{ q.id }}'/>
+	                    <label for='rdb_opt_for_{{ q.id }}'>
+        	                {{ opt.text }}
+			    </label> <br/>
+			{% endfor %}
+		{% endif %}
+		{% if q.type == 'multiple-choice-multiple-answer' %}
+                	{% for opt in q.feedbackquestionoption_set.values %}
+			    <input type='checkbox' name='chk_opt_{{ opt.id }}'/> 
+	                    <label for='chk_opt_{{ opt.id }}'>
+        	                {{ opt.text }}
+                	    </label><br/>
+        	        {% endfor %}
+		{% endif %}
+		{% if q.type == 'text' %}
+			<textarea name='q_{{ q.id }}' rows='8' cols='120'></textarea> <br/>
+		{% endif %}
+	    <br/>
+	 {% endfor %}
+ 	<input type='submit' value='Submit feedback!'>
+</form>
