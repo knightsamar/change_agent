@@ -2,8 +2,16 @@
 <h4 align='center'> Your feedback is valuable to us! </h4>
 <form action='/give_feedback/{{ form.id }}/submit/' method='POST'>
     {% csrf_token %}
-	{% for q in form.questions.all %}
-	<h4>{{ q.text }}</h4>
+    {% for q in form.questions.all %}
+    
+    <h4>{{ q.text }}
+        {% if q.mandatory %}
+            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}M'/>
+            <sup>*</sup>
+        {% else %}
+            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}'/>
+        {% endif %}
+    </h4>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
                 <input type='radio' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>

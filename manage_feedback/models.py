@@ -6,12 +6,12 @@ class feedbackQuestion(models.Model):
 	text = models.CharField("Question Text", max_length=200,help_text="The actual question");
 	
 	type = models.CharField(max_length=40, choices=
-       	((u'multiple-choice-single-answer',u'Multiple-choice (single answer)'), #render a set of radio buttons
-	(u'multiple-choice-multiple-answer',u'Multiple-choice (multiple answer)'),#render a set of checkboxes
-	(u'text',u'Open-ended question'))); #render a textarea which is wide
-	
+		((u'multiple-choice-single-answer',u'Multiple-choice (single answer)'), #render a set of radio buttons
+		(u'multiple-choice-multiple-answer',u'Multiple-choice (multiple answer)'),#render a set of checkboxes
+		(u'text',u'Open-ended question')) #render a textarea which is wide
+	);
 	helptext = models.CharField(max_length=100, help_text="The text appears under the question", blank=True, null=True);
-    mandatory = models.BooleanField(help_text="Whether you want to keep this field mandatory ?");
+	mandatory = models.BooleanField(help_text="Whether you want to keep this field mandatory ?",default=False);
 
 	def __str__(self):
 	    return ('%s - %s' % (self.name, self.type));
@@ -45,11 +45,10 @@ class feedbackForm(models.Model):
 		pass
 
 class feedbackAbout(models.Model):
-    	title = models.CharField("The thing/person about which Feedback is being collected",max_length=40);
+   	title = models.CharField("The thing/person about which Feedback is being collected",max_length=40);
 	description = models.CharField(max_length=200,help_text="Description");
 	#allowed_viewers =  users who are allowed to browse about thsi feedback -- will be back-referenced
 	#which form? = which forms are used to collect feedback about this thing/person -- will be back-referenced
 
 	def __str__(self):
 	    return self.title;
-
