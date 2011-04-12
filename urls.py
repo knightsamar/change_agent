@@ -9,8 +9,9 @@ urlpatterns = patterns('',
     # (r'^change_agent/', include('change_agent.foo.urls')),
     (r'^give_feedback/$','give_feedback.views.index'),
     (r'^give_feedback/(?P<form>\d+)/show/$','give_feedback.views.show'),
-    (r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),
-    
+    (r'^give_feedback/(?P<submissionID>\d+)/preview.html/$','give_feedback.views.preview'),
+#(r'^give_feedback/(?P<form>\d+)/preview/$','give_feedback.views.preview'),
+    (r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

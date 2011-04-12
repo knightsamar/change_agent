@@ -4,4 +4,6 @@ BUGS
  -- a sample is created in ldap_login/groups' admin view.
  -- checkout http://docs.djangoproject.com/en/1.2/intro/tutorial02/ for more guidance.
 
-
+FEATURES
+--------
+* We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED.

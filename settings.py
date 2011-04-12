@@ -5,13 +5,14 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
      ('Samar', 'samar@sicsr.ac.in'),
+     ('Apoorva','ascoolas.apoorva@gmail.com')
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'change_agent',                      # Or path to database file if using sqlite3.
         'USER': 'change_agent',                      # Not used with sqlite3.
         'PASSWORD': 'change',                  # Not used with sqlite3.
@@ -81,7 +82,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/a/change_agent/templates'
+    '/Users/apoorva/change_agent/templates'
 )
 
 INSTALLED_APPS = (
@@ -98,3 +99,10 @@ INSTALLED_APPS = (
     'change_agent.manage_feedback',
     'change_agent.give_feedback',
 )
+
+AUTHENTICATION_BACKENDS = (
+    #'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+

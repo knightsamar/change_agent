@@ -1,6 +1,14 @@
 <h2> Hi {{user}}! </h2>
 
-<h4> List of Feeback forms </h4>
+<h4> My Feeback forms to be filled </h4>
+
+<ul>
+    {% for form in form_list %}
+    <li> <a href='./{{form.id}}/show'>{{ form.title }}</a></li>
+    {% endfor %}
+</ul>
+
+<h4> Feedback you gave </h4>
 
 <ul>
     {% for form in form_list %}
