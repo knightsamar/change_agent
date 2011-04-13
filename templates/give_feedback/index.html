@@ -3,7 +3,7 @@
 <h4> My Feeback forms to be filled </h4>
 
 <ul>
-    {% for form in form_list %}
+    {% for form in unform_list %}
     <li> <a href='./{{form.id}}/show'>{{ form.title }}</a></li>
     {% endfor %}
 </ul>
@@ -12,7 +12,8 @@
 
 <ul>
     {% for form in form_list %}
-    <li> <a href='./{{form.id}}/show'>{{ form.title }}</a></li>
+   
+    <li> <a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></li>
     {% endfor %}
 </ul>
 

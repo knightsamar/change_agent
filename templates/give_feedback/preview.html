@@ -1,5 +1,5 @@
-<h3 align='center'> {{ form.title }} </h3>
-<h4 align='center'> Your feedback is valuable to us! </h4>
+<h3 align='center'> {{ form.title }}<br>
+Form Preview :)</h3>
 
 {% for v in answer %}
     Q. {{ v.question.text }} <br/>
@@ -17,40 +17,7 @@
     {{ a }}<br/>
 {% endfor %}
 
-<!-- <form action='/give_feedback/{{ form.id }}/submit/' method='POST'>
-    {% csrf_token %}
-    {% for q in form.questions.all %}
-    
-    <h4>{{ q.text }}
-        {% if q.mandatory %}
-            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}M'/>
-            <sup>*</sup>
-        {% else %}
-            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}'/>
-        {% endif %}
-    </h4>
-		{% if q.type == 'multiple-choice-single-answer' %}
-			{% for opt in q.feedbackquestionoption_set.values %}
-                <input type='radio' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
-	                    <label for='q{{ q.id }}_rdb_opt'>
-        	                {{ opt.text }}
-			    </label> <br/>
-            {% endfor %}
-		{% endif %}
-		{% if q.type == 'multiple-choice-multiple-answer' %}
-            {% for opt in q.feedbackquestionoption_set.values %}
-               <input type='checkbox' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
-	                    <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
-        	                {{ opt.text }}
-                	    </label><br/>
-        	{% endfor %}
-		{% endif %}
-		{% if q.type == 'text' %}
-			<textarea name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
-		{% endif %}
-	    <br/>
-   {% endfor %}
-    <input type='hidden' value='{{ form.id }}' name='formid'>
- 	<input type='submit' value='Submit feedback!'>
-</form> -->
+
+<a href = "/give_feedback/{{form.id}}/show"><input type = "submit" value = "Edit Form"></a>
+<a href = "/give_feedback"><input type = "submit" value = "Go back to main menu"></a>
 

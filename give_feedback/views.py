@@ -9,17 +9,39 @@ from give_feedback.models import *;
 from ldap_login.models import user;
 
 def index(request):
-    form_list = feedbackForm.objects.all()
+    username='ldkuser';
+    # to fetch the all the forms
+    unfilled_forms=feedbackForm.objects.all();
+    
+    # to fetch the filled forms for previewing and editing 
+    filled_forms=feedbackSubmission.objects.filter(submitter=username);
+
+    # to remove the filled forms from the list of all forms to get the newly available forms
+    unfilledforms=list(unfilled_forms)
+    for form in  filled_forms:
+	k=form.feedbackForm
+	if (k in unfilledforms):
+		unfilledforms.remove(k)
+		
+	else:
+		print "no"
+    		
     t = loader.get_template('give_feedback/index.html');
     c = Context (
             {
-                'form_list' : form_list,
+                'form_list' : filled_forms,
+		'unform_list': unfilledforms,
+#		'testing':filled_forms
+		
+
         }) #pass the list to the template
  
     #output = '<h3>List</h3>\n' . join([f.title for f in list_of_forms]); #old line kept here just like that!
     return HttpResponse(t.render(c));
 
 def show(request,form):
+  
+    if ( in )
     #are you allowed to VIEW this feedback form?
     f = feedbackForm.objects.get(pk=form);
     t = loader.get_template('give_feedback/form.html');
@@ -33,75 +55,20 @@ def show(request,form):
 def preview(request,submissionID):
     #ans=feedbackSubmissionAnswer():
     ans=feedbackSubmissionAnswer.objects.filter(submission=submissionID);
+
+    form=feedbackSubmission.objects.get(pk=submissionID).feedbackForm
+
     t=loader.get_template('give_feedback/preview.html');
     c=RequestContext(request,
 	   {
-		'answer':ans
+		'answer':ans,
+		'form':form
 	   }
 	);
     return HttpResponse(t.render(c));
     	
-    '''handles submitted form preview..!
-     #submitter = request.SESSION....something
-        #find out 
-        #who submitted this form? -- will come from the sessions framework
-        #was he authorized to submit ? --- validation to be done ...do we store groups and users finally ? how about autocreating them on fetch-from-ldap()?  
-    username = 'ldkuser';
-    #submission = Submission(); #create a new object
-    submission.feedbackForm = feedbackForm.objects.get(pk=s['formid']);
-    submission.submitter = user.objects.get(username__exact=username);
-    submission.save();
-    submissionQuestion = dict() #collection of question objects of the questions filled by the user
-    submissionAnswer = dict(); #collection of answer objects of the answers given by the user
-
-    for k,v in s.iteritems():
-        if k == 'csrfmiddlewaretoken':
-            continue; #skip to next iteration...we don't hv anything to do with this
-        
-        pieces = k.split('_');
-        print pieces;
-        print "type is ", type(pieces[0]);
-        if ('q' in pieces[0] and len(pieces) == 1):               #this is a question
-            if 'M' in v:
-                #insert code here to check the mandatoriness of the answers's submission
-                
-                #now remove the M
-                v = v.rstrip('M');
-            submissionQuestion[k] = feedbackQuestion.objects.get(pk=v);
-            #to be used for mandatory processing.
-        elif ('q' in pieces[0]  and len(pieces) > 1):             #this is an answer 
-            #what type of question is this then ?
-            print "pieces are ",pieces
-            #we have answers, store them nicely
-                
-            if (pieces[1] == 'rdb'):     #this is a radiobutton answer 
-                submissionAnswer[k] = feedbackSubmissionAnswer(
-                    question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
-                    answer_option = feedbackQuestionOption.objects.get(pk=v), #because radio buttons groups are namedin a bunch with one name and their values differ.
-                    submission = submission,
-                    )
-            elif (pieces[1] == 'chk'):  #this is a checkbox wala answer;
-                submissionAnswer[k] = feedbackSubmissionAnswer(
-                    question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
-                    answer_option = feedbackQuestionOption.objects.get(pk=int(pieces[2].lstrip('opt'))), #because check boxes are named seperately.
-                    submission = submission,
-                    )
-            elif (pieces[1] == 'txt'):  #this is a txt wala answer;
-                submissionAnswer[k] = feedbackSubmissionAnswer(
-                    question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
-                    answer_text = v,
-                    submission = submission,
-                    )
-        
-        t = loader.get_template('give_feedback/submit.html');
-        c = RequestContext(request, #we use RequestContext to automatically prevent CSRF
-           {
-             'submission' : submission,
-           }
-        );
-        submission.save();
-    return HttpResponse(t.render(c));'''
-    #return HttpResponse("submission id %s  answer option %s" % (submissionID, ans[0].answer_option));
+#def edit(request,form)
+#   ''' handles editing of filled forms.. and updating the tables instead of creating new '''
 
 def submit(request,form):
     '''handles feedback form submission'''
