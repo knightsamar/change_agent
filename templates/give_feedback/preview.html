@@ -1,8 +1,16 @@
 <h3 align='center'> {{ form.title }} </h3>
 <h4 align='center'> Your feedback is valuable to us! </h4>
 
-{% for v in submissionQuestion %}
-    {{ v.text }} <br/>
+{% for v in answer %}
+    Q. {{ v.question.text }} <br/>
+    A.
+    {% if v.question.type == "text" %}	
+    
+	{{ v.answer_text}}
+    {% else %}
+	{{v.answer_option}} 
+   {% endif %}
+   <br/><br/>
 {% endfor %}
 {{submissionAnswer}}
 {% for a  in submissionAnswer %}

@@ -32,7 +32,15 @@ def show(request,form):
 
 def preview(request,submissionID):
     #ans=feedbackSubmissionAnswer():
-    ans=feedbackSubmissionAnswer.objects.get(submission=submissionID);
+    ans=feedbackSubmissionAnswer.objects.filter(submission=submissionID);
+    t=loader.get_template('give_feedback/preview.html');
+    c=RequestContext(request,
+	   {
+		'answer':ans
+	   }
+	);
+    return HttpResponse(t.render(c));
+    	
     '''handles submitted form preview..!
      #submitter = request.SESSION....something
         #find out 
@@ -93,7 +101,7 @@ def preview(request,submissionID):
         );
         submission.save();
     return HttpResponse(t.render(c));'''
-    return HttpResponse("submission id %s question ID answer option" % (submissionID));#, "question id ", ans[0].question, "answer option selected ", ans[0],answer_option);
+    #return HttpResponse("submission id %s  answer option %s" % (submissionID, ans[0].answer_option));
 
 def submit(request,form):
     '''handles feedback form submission'''
