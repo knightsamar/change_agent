@@ -1,6 +1,75 @@
+<script language='javascript'>
+
+function mandatory()
+{
+    var hide=document.getElementsByTagName('input');
+    var a=Array();
+    var m=0;
+    for(var i=0;i<hide.length;i++)
+       { 
+        if(hide[i].type=='hidden')
+         { id=hide[i].value;
+           if(id.indexOf('M')==1)
+              { 
+                //alert(hide[i].name+' is Mandatory..!!');
+                a[m++]=hide[i].name;
+                // a is now an array containing all the Mandatory question id's
+              }    
+         } 
+       } 
+     alert("Mandatory questions are " + a.join(','));
+//TODO: A better way would be to present a list of all mandatory questions that are unanswered and tset the question color in red background or something like that.
+     for (var i=0;i<m;i++)
+     {
+         // var man=document.getElementById(a[i]);
+         var man = document.getElementsByName(a[i]);
+    	 debug('Dealing with a mandatory question of type ' + man.type + ' named ' + man.name);
+         if(man.type=='radio')
+         {
+             if(man.checked == true) 
+             {
+			    debug('radio' + man.id + 'selected');
+                continue;
+             }
+		     else 
+             {
+		    	break;
+             }
+         }
+         elif(man.type=='checkbox')
+         {
+             if (man.checked==true) 
+             {
+                 debug('checkbox' + man.id + 'selected');
+                 continue;
+             }
+             else
+             {
+                 break;
+             }
+         }
+    }
+    alert('Please answer the mandatory questions!');
+    man.focus(); 
+    return false;
+}
+
+function debug(str)
+{
+    alert(str);
+}
+
+</script>
 <h3 align='center'> {{ form.title }} </h3>
 <h4 align='center'> Your feedback is valuable to us! </h4>
-<form action='/give_feedback/{{ form.id }}/submit/' method='POST'>
+
+{% if flag == 'show' %}
+  <form action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+{% else %}  
+  <form action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <input type='hidden' name='submissionID' value='{{ submissionID }}'>
+{% endif %}
+
     {% csrf_token %}
     {% for q in form.questions.all %}
     
@@ -14,25 +83,25 @@
     </h4>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
-                <input type='radio' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
-	                    <label for='q{{ q.id }}_rdb_opt'>
-        	                {{ opt.text }}
-			    </label> <br/>
-            {% endfor %}
+            <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
+	             <label for='q{{ q.id }}_rdb_opt'>
+        	           {{ opt.text }}
+		         </label> <br/>
+		    {% endfor %}
 		{% endif %}
 		{% if q.type == 'multiple-choice-multiple-answer' %}
             {% for opt in q.feedbackquestionoption_set.values %}
-               <input type='checkbox' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
-	                    <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
-        	                {{ opt.text }}
-                	    </label><br/>
+            <input type='checkbox' id = 'q{{q.id}} 'name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
+	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
+        	            {{ opt.text }}
+                 </label><br/>
         	{% endfor %}
 		{% endif %}
 		{% if q.type == 'text' %}
-			<textarea name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
 		{% endif %}
 	    <br/>
    {% endfor %}
-    <input type='hidden' value='{{ form.id }}' name='formid'>
- 	<input type='submit' value='Submit feedback!'>
+          <input type='hidden' name='formid' value='{{ form.id }}'> 
+     	<input type='submit' value='Submit feedback!'>
 </form>

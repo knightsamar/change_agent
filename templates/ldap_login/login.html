@@ -1,1 +1,10 @@
-<input type='text' name='username' value='' maxlength='
+
+<form action='/ldap_login/login' method='POST'>
+    <label for='username'>Username</label>
+    <input type='text' name='username' value='' maxlength='30'/>
+    
+    <label for='password'>Password</label>
+    <input type='password' name='password' value='' maxlength='255'/>    
+
+    <input type='submit' value='Login!'/>
+</form>

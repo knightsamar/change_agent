@@ -4,8 +4,7 @@ Form Preview :)</h3>
 {% for v in answer %}
     Q. {{ v.question.text }} <br/>
     A.
-    {% if v.question.type == "text" %}	
-    
+    {% if v.question.type == "text" %}	 
 	{{ v.answer_text}}
     {% else %}
 	{{v.answer_option}} 
@@ -17,7 +16,15 @@ Form Preview :)</h3>
     {{ a }}<br/>
 {% endfor %}
 
+{% if form.deadline_for_filling < date %}
+  <br/> The deadline for fillling has exceeded. you cannot edit the form..!!<br/>
+{% else %}
 
-<a href = "/give_feedback/{{form.id}}/show"><input type = "submit" value = "Edit Form"></a>
+<form action = "/give_feedback/edit/" method='post'>
+{% csrf_token %}
+<input type='hidden' name='submissionID' value= '{{submissionID}}'>
+<input type = "submit" value = "Edit Form">
+</form>
+{% endif %}
 <a href = "/give_feedback"><input type = "submit" value = "Go back to main menu"></a>
 

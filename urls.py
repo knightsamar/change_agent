@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+#from ldapAuthBackend import authenticate;
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -8,8 +9,10 @@ urlpatterns = patterns('',
     # Example:
     # (r'^change_agent/', include('change_agent.foo.urls')),
     (r'^give_feedback/$','give_feedback.views.index'),
+    #(r'^ldap_login/$','ldap_login.views.login'), #for authentication
     (r'^give_feedback/(?P<form>\d+)/show/$','give_feedback.views.show'), 
-
+    (r'^give_feedback/(?P<form>\d+)/edit/$','give_feedback.views.editsubmit'), 
+    (r'^give_feedback/edit/$','give_feedback.views.edit'),
     (r'^give_feedback/(?P<submissionID>\d+)/preview.html/$','give_feedback.views.preview'),
 #(r'^give_feedback/(?P<form>\d+)/preview/$','give_feedback.views.preview'),
     (r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    

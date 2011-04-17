@@ -1,6 +1,6 @@
 # Create your views here.
 import ldap
-from django_auth_ldap.config import LDAPSearch
+#from django_auth_ldap.config import LDAPSearch
 #ldap_login
 def login(request):
     AUTH_LDAP_SERVER_URI = "172.17.2.12"

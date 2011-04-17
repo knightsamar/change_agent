@@ -1,19 +1,36 @@
+
 <h2> Hi {{user}}! </h2>
 
 <h4> My Feeback forms to be filled </h4>
 
-<ul>
+<table cellpadding='14'>
+   {% if not unform_list %}
+      You have no new forms...!!
+   {% else %}   
     {% for form in unform_list %}
-    <li> <a href='./{{form.id}}/show'>{{ form.title }}</a></li>
+      {% if today < form.deadline_for_filling %}
+        <tr><td> <a href='./{{form.id}}/show'>{{ form.title }}</a><td bgcolor='#983fac'>{{form.deadline_for_filling}}</li>
+      {% else %}
+        <td>{{ form.title }}
+      {% endif %}
     {% endfor %}
-</ul>
+   {% endif %} 
+</table>
 
 <h4> Feedback you gave </h4>
 
-<ul>
+<table cellpadding='16'>
+   {% if not form_list %}
+     You have no filled forms
+   {% else %}  
     {% for form in form_list %}
-   
-    <li> <a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></li>
-    {% endfor %}
-</ul>
+      {% if today < form.feedbackForm.deadline_for_filling  %}
+         <tr> <td><a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a><td>{{form.feedbackForm.deadline_for_filling}}</li>
+      {% else %}
+        <td>{{ form.feedbackForm.title }} 
+      {% endif %} 
+
+       {% endfor %}
+    {% endif %}   
+</table>
 
