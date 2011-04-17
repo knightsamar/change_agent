@@ -53,6 +53,7 @@ def show(request,form):
     # is the deadline exceded??
     now = datetime.today()
     f = feedbackForm.objects.get(pk=form); 
+    mandatoryQuestions = f.mandatoryFields()
     if (f.deadline_for_filling < now ):
         print "lalala"
         return HttpResponse("Sorry deadline exceedd..:)");

@@ -44,9 +44,9 @@ class feedbackForm(models.Model):
                 #
             pass;
         
-        def mandatoryFields(self):
+        def mandatoryQuestions(self):
             """returns a list of mandatory feedbackQuestion in the form"""
-            l = self.questions.filter(mandatory=True);
+            l = list(self.questions.filter(mandatory=True));
             return l;
 
 class feedbackAbout(models.Model):
