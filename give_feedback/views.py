@@ -17,7 +17,13 @@ def hamari404():
 
 def index(request):
     """for rendering the index page for any user who has just logged in"""
-    username='ldkuser';
+    #if ('username' not in request.session):
+    #    username = 'ldkuser';
+    #else:
+    #    username = request.session['username'];
+    
+    request.session['champu'] = 'hamaraSexyUser';
+    username = 'ldkuser';
     # to fetch the all the forms
     unfilled_forms=feedbackForm.objects.all();
     
@@ -49,7 +55,7 @@ def index(request):
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     
     #are you allowed to VIEW this feedback form?
-
+    username = request.session.get('champu');
     # is the deadline exceded??
     now = datetime.today()
     f = feedbackForm.objects.get(pk=form); 
@@ -62,6 +68,7 @@ def show(request,form):
         t = loader.get_template('give_feedback/form.html');
         c = RequestContext(request, #we use RequestContext to automagically prevent CSRF
            {
+             'user': username,
              'form' : f,
              'flag':flag,
              'mandatoryQuestions':mandatoryQuestions,
