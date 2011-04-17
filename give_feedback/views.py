@@ -1,5 +1,6 @@
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponse,HttpResponseNotFound
+from django.shortcuts import redirect
 from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
@@ -17,36 +18,40 @@ def hamari404():
 
 def index(request):
     """for rendering the index page for any user who has just logged in"""
-    #if ('username' not in request.session):
-    #    username = 'ldkuser';
-    #else:
-    #    username = request.session['username'];
     
-    request.session['champu'] = 'hamaraSexyUser';
-    username = 'ldkuser';
+    if 'username' not in request.session or request.session['username'] == None:
+        redirect('/ldap_login/');
+    else:
+        print 'username in session object';
+        username = request.session['username'];
+
+
     # to fetch the all the forms
-    unfilled_forms=feedbackForm.objects.all();
+    unfilled_forms = feedbackForm.objects.all();
     
     # to fetch the filled forms for previewing and editing 
-    filled_forms=feedbackSubmission.objects.filter(submitter=username);
+    filled_forms = feedbackSubmission.objects.filter(submitter=username);
 
     # to remove the filled forms from the list of all forms to get the newly available forms
-    unfilledforms=list(unfilled_forms)
-    for form in filled_forms:
-    	k=form.feedbackForm
-	
-    if (k in unfilledforms):
-		unfilledforms.remove(k)
+    unfilledforms = list(unfilled_forms)
 
-    d=datetime.today();
+    #k = None; #initializing just in case we don't have any such form
+
+    for form in filled_forms:
+    	k = form.feedbackForm
+	
+        if k is not None and k in unfilledforms:
+		    unfilledforms.remove(k)
+
+    d = datetime.today();
     		
     t = loader.get_template('give_feedback/index.html');
     c = Context (
             {
+                'username' : username,
                 'form_list' : filled_forms,
 		        'unform_list': unfilledforms,
-#		        'testing':filled_forms,
-                'today' : d
+                'today' : d,
             }  ) #pass the list to the template
  
     #output = '<h3>List</h3>\n' . join([f.title for f in list_of_forms]); #old line kept here just like that!

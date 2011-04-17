@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # (r'^change_agent/', include('change_agent.foo.urls')),
     (r'^change_agent/','ldap_login.views.login'),
     (r'^give_feedback/$','give_feedback.views.index'),
-    #(r'^ldap_login/$','ldap_login.views.login'), #for authentication
+    (r'^ldap_login/$','ldap_login.views.login'), #for authentication
     (r'^give_feedback/(?P<form>\d+)/show/$','give_feedback.views.show'), 
     (r'^give_feedback/(?P<form>\d+)/edit/$','give_feedback.views.editsubmit'), 
     (r'^give_feedback/edit/$','give_feedback.views.edit'),
