@@ -46,8 +46,12 @@ class feedbackForm(models.Model):
         
         def mandatoryQuestions(self):
             """returns a list of mandatory feedbackQuestion in the form"""
-            l = list(self.questions.filter(mandatory=True));
-            return l;
+            questions = self.questions.filter(mandatory=True);
+            questions_dict = {};
+            for q in questions:
+                questions_dict[q.id] =  q.type;
+            
+            return questions_dict;
 
 class feedbackAbout(models.Model):
         title = models.CharField("The thing/person about which Feedback is being collected",max_length=40);

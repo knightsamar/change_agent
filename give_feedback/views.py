@@ -53,7 +53,7 @@ def show(request,form):
     # is the deadline exceded??
     now = datetime.today()
     f = feedbackForm.objects.get(pk=form); 
-    mandatoryQuestions = f.mandatoryFields()
+    mandatoryQuestions = f.mandatoryQuestions();
     if (f.deadline_for_filling < now ):
         print "lalala"
         return HttpResponse("Sorry deadline exceedd..:)");
@@ -63,7 +63,8 @@ def show(request,form):
         c = RequestContext(request, #we use RequestContext to automagically prevent CSRF
            {
              'form' : f,
-             'flag':flag
+             'flag':flag,
+             'mandatoryQuestions':mandatoryQuestions,
            }
          );
         return HttpResponse(t.render(c));
@@ -100,11 +101,11 @@ def edit(request):
     else:
         #no submission id was passed for editing!
         return hamari404();
-
+    
     now=datetime.today()
     ans=feedbackSubmissionAnswer.objects.filter(submission=submissionID);
     form=feedbackSubmission.objects.get(pk=submissionID).feedbackForm
-
+    mandatoryQuestions = form.mandatoryQuestions();
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
         return HttpResponse("Sorry deadline exceedd..:)");
@@ -116,7 +117,9 @@ def edit(request):
              'form' : form,
              'flag':flag,
              'answer':ans,
-             'submissionID':submissionID
+             'submissionID':submissionID,
+             'mandatoryQuestions':mandatoryQuestions
+
            }
          );
 
@@ -149,11 +152,11 @@ def editsubmit(request,form):
             continue;
         pieces = k.split('_');
         #whether this is a field depciting a question simply?
-        if ('q' in pieces[0] and len(pieces) == 1):
-            if 'M' in v:
-                #insert code here to mandatoriness
-                v = v.rstrip('M');
-        elif ('q' in pieces[0] and len(pieces) > 1):
+        #if ('q' in pieces[0] and len(pieces) == 1):
+        #    if 'M' in v:
+        #        #insert code here to mandatoriness
+        #        v = v.rstrip('M');
+        if ('q' in pieces[0] and len(pieces) > 1):
             if (pieces[1] == 'rdb'):
                 #construct an answer object
                 q = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q')))

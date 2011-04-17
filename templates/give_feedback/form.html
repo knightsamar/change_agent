@@ -2,56 +2,57 @@
 
 function mandatory()
 {
-    var hide=document.getElementsByTagName('input');
-    var a=Array();
-    var m=0;
-    for(var i=0;i<hide.length;i++)
-       { 
-        if(hide[i].type=='hidden')
-         { id=hide[i].value;
-           if(id.indexOf('M')==1)
-              { 
-                //alert(hide[i].name+' is Mandatory..!!');
-                a[m++]=hide[i].name;
-                // a is now an array containing all the Mandatory question id's
-              }    
-         } 
-       } 
-     alert("Mandatory questions are " + a.join(','));
-//TODO: A better way would be to present a list of all mandatory questions that are unanswered and tset the question color in red background or something like that.
-     for (var i=0;i<m;i++)
-     {
-         // var man=document.getElementById(a[i]);
-         var man = document.getElementsByName(a[i]);
-    	 debug('Dealing with a mandatory question of type ' + man.type + ' named ' + man.name);
-         if(man.type=='radio')
+   flag=1;
+   {% for id,type in mandatoryQuestions.items %}
+    {% if type == 'multiple-choice-single-answer' %}
+        var radio= document.forms.feedbackForm.q{{id}}_rdb_opt;
+        for(i=0;i<radio.length;i++)
+          {          
+              if (radio[i].checked) 
+           {
+               flag=4;
+           }
+          } 
+        if(flag!=4) 
+        {   
+            alert('Please answer the mandatory radio button questions');
+            radio[0].focus();
+            return false;
+        }
+    {% endif %}  
+    {% if type == 'multiple-choice-multiple-answer' %}
+       var check=document.forms.feedbackForm.q2
+       for(i=0;i<check.length;i++)
+           {
+             //alert(check[i].value);
+             if(check[i].checked) 
+               {
+                  flag=7;
+               }
+               
+           }
+       if(flag!=7) 
+       {
+           alert('Please answer the mandatory checkbox questions!');
+           check[0].focus();
+           return false;
+       }
+
+    {% endif %}     
+    {%if type == 'text'%}
+         var a='q{{id}}'
+         var text=document.getElementById(a);
+         if(text.value=="")
          {
-             if(man.checked == true) 
-             {
-			    debug('radio' + man.id + 'selected');
-                continue;
-             }
-		     else 
-             {
-		    	break;
-             }
+             alert('Please answer the mandatory text question!');
+             text.focus();
+             return false;
          }
-         elif(man.type=='checkbox')
-         {
-             if (man.checked==true) 
-             {
-                 debug('checkbox' + man.id + 'selected');
-                 continue;
-             }
-             else
-             {
-                 break;
-             }
-         }
-    }
-    alert('Please answer the mandatory questions!');
-    man.focus(); 
-    return false;
+         else flag=5;
+    {% endif %}      
+   {% endfor %} 
+ if(flag!=1) return true;
+ else return false;
 }
 
 function debug(str)
@@ -64,9 +65,9 @@ function debug(str)
 <h4 align='center'> Your feedback is valuable to us! </h4>
 
 {% if flag == 'show' %}
-  <form action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
-  <form action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 
@@ -75,11 +76,8 @@ function debug(str)
     
     <h4>{{ q.text }}
         {% if q.mandatory %}
-            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}M'/>
             <sup>*</sup>
-        {% else %}
-            <input type='hidden' name='q{{ q.id }}' value='{{ q.id }}'/>
-        {% endif %}
+         {% endif %}
     </h4>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
@@ -91,7 +89,7 @@ function debug(str)
 		{% endif %}
 		{% if q.type == 'multiple-choice-multiple-answer' %}
             {% for opt in q.feedbackquestionoption_set.values %}
-            <input type='checkbox' id = 'q{{q.id}} 'name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
+            <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
 	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
         	            {{ opt.text }}
                  </label><br/>
