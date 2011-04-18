@@ -1,6 +1,6 @@
 <h3 align='center'> {{ form.title }}<br>
 Form Preview :)</h3>
-Submitted by {{user}}<br>
+Submitted by {{sub}}<br>
 {% for v in answer %}
     Q. {{ v.question.text }} <br/>
     A.
@@ -17,7 +17,7 @@ Submitted by {{user}}<br>
 {% endfor %}
 
 {% if form.deadline_for_filling < date %}
-  <br/> The deadline for fillling has exceeded. you cannot edit the form..!!<br/>
+  <br/> <font color='red'>The deadline for fillling has exceeded. you cannot edit the form..!!<br/></font>
 {% else %}
 
 <form action = "/give_feedback/edit/" method='post'>

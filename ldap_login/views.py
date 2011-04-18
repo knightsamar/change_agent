@@ -3,6 +3,8 @@ from ldapAuthBackend import authenticate;
 from django.http import HttpResponse;
 from django.shortcuts import redirect;
 from django.template import RequestContext, loader;
+from ldap_login.models import user,group;
+from datetime import datetime
 
 #from django_auth_ldap.config import LDAPSearch
 #ldap_login
@@ -18,7 +20,7 @@ def login(request):
         	#for now all auths are true :*
         	#status = True;
         	print status;
-        	print 'auth successfull!'
+        	print 'auth process completed'
         except e as Exception:
             return HttpResponse('Error!!! %s' %  e.message());
             
@@ -28,7 +30,28 @@ def login(request):
             #store encrypted password
             #start session
             request.session['username'] = request.POST['username']; 
+            userName=request.session['username']
+	    print userName
             print 'redirecting now...';
+	    #check for user existance... and/or add the use in our feedback database..!!
+	    userexists=user.objects.get_or_create(pk=userName)
+            if userexists[1] is True:
+		# the user not in database... create one..!!
+		newuser=userexists[0]
+		newuser.username=userName
+		newuser.password=''
+		newuser.created_on=datetime.today();
+		newuser.save();
+		groupid=userName[0:8];
+		groupexists=group.objects.get_or_create(name=groupid)
+
+		newuser.group=groupexists[0];
+		newuser.save();
+  	    else:
+		print "user already existed..!!!"
+		userexists[0].last_login=datetime.today();
+		userexists[0].save();
+		
             #redirect to the index view!
             return redirect('/give_feedback/');
         else:
@@ -52,4 +75,17 @@ def login(request):
         
     #unsuccessful ldap login
     #wrong username/password!!!
- 
+
+def logout(request):
+	#are we actually logged in ?
+	if 'username' in request.session:
+		print 'logging you out';
+		#yes,#then log us out!
+		request.session.flush();
+	else:
+		#no,
+		print 'redirecting to login page to tell you to login first :P';
+			#then tell me to login first, using the message if possible 
+			#message = "Hey, you need to go in before you can go out :P :P";
+
+	return redirect('/change_agent/');	

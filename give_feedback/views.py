@@ -25,9 +25,9 @@ def index(request):
         print 'username in session object';
         username = request.session['username'];
 
-
+    u=user.objects.get(pk=username);
     # to fetch the all the forms
-    unfilled_forms = feedbackForm.objects.all();
+    unfilled_forms = feedbackForm.objects.filter(allowed_groups=u.group);
     
     # to fetch the filled forms for previewing and editing 
     filled_forms = feedbackSubmission.objects.filter(submitter=username);
@@ -49,6 +49,7 @@ def index(request):
     c = Context (
             {
                 'username' : username,
+		'login':u.last_login,
                 'form_list' : filled_forms,
 		'unform_list': unfilledforms,
                 'today' : d,
@@ -78,7 +79,7 @@ def show(request,form):
         t = loader.get_template('give_feedback/form.html');
         c = RequestContext(request, #we use RequestContext to automagically prevent CSRF
            {
-             'user': username,
+             'username': username,
              'form' : f,
              'flag':flag,
              'mandatoryQuestions':mandatoryQuestions,
@@ -91,7 +92,9 @@ def preview(request,submissionID):
         return redirect('/ldap_login/');
     else:
         username = request.session['username'];
+
     username=str(username);
+    print "the username in preview is : ", username;
     if submissionID is None:
         return hamari404();
           
@@ -102,6 +105,11 @@ def preview(request,submissionID):
         return hamari404();
 
     form=feedbackSubmission.objects.get(pk=submissionID).feedbackForm
+    # whether this  form submission is actually owned by the user...
+    Submitter=str(feedbackSubmission.objects.get(pk=submissionID).submitter)
+   
+    if Submitter != username:
+	return HttpResponse("boohoooooooooo..!! caught ya..!!! ")
     now=datetime.today();
     t=loader.get_template('give_feedback/preview.html');
     c=RequestContext(request,
@@ -110,7 +118,8 @@ def preview(request,submissionID):
 		'form':form,
        		'submissionID':submissionID,
         	'date':now,
-		'user':username
+		'sub':Submitter,
+		'username':username
 	   }
 	);
     return HttpResponse(t.render(c));
@@ -130,10 +139,13 @@ def edit(request):
     else:
         #no submission id was passed for editing!
         return hamari404();
-    
+    Submitter=feedback.objects.get(pk=submissionID).submitter
+    if Submitter!=username:
+	return HttpResponse("Create it.. to edit it..!!"); 
     now=datetime.today()
     ans=feedbackSubmissionAnswer.objects.filter(submission=submissionID);
     form=feedbackSubmission.objects.get(pk=submissionID).feedbackForm
+   
     mandatoryQuestions = form.mandatoryQuestions();
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
