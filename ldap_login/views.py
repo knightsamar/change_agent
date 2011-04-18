@@ -42,7 +42,14 @@ def login(request):
 		newuser.password=''
 		newuser.created_on=datetime.today();
 		newuser.save();
-		groupid=userName[0:8];
+		# this auto gruop assignment takes place by the logic that all students log in from thier PRN's and thier 1st 8 digit of thier PRN represents thier gruop.. to assignm a student to another group we need to do it manually..:) and we need to find out a better way of creating groups..!!! :D
+		
+
+		# to check whether its a student or staff.. :)
+		if userName.isdigit() is True:
+			groupid=userName[0:8];
+		else:
+			groupid='staff'
 		groupexists=group.objects.get_or_create(name=groupid)
 
 		newuser.group=groupexists[0];
