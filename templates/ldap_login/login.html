@@ -1,8 +1,11 @@
 
-<form action='/ldap_login/' method='POST'>
+<form action='/change_agent/' method='POST'>
 
     {% csrf_token %}
- 
+    {% if message != None%}
+    <font color='red' face='comic sans' sizs='10'>
+	{{message}} </font><br/><br/>
+    {%endif%}
     <label for='username'>Username</label>
     <input type='text' name='username' value='' maxlength='30'/> <br/>
     

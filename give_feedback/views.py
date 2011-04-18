@@ -10,7 +10,7 @@ from give_feedback.models import *;
 from ldap_login.models import user;
 
 #for date
-from datetime import *
+from datetime import datetime
 
 def hamari404():
     #for customizing our 404
@@ -20,7 +20,7 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        redirect('/ldap_login/');
+        return redirect('/ldap_login/');
     else:
         print 'username in session object';
         username = request.session['username'];
@@ -50,23 +50,28 @@ def index(request):
             {
                 'username' : username,
                 'form_list' : filled_forms,
-		        'unform_list': unfilledforms,
+		'unform_list': unfilledforms,
                 'today' : d,
             }  ) #pass the list to the template
  
-    #output = '<h3>List</h3>\n' . join([f.title for f in list_of_forms]); #old line kept here just like that!
     return HttpResponse(t.render(c));
 
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     
     #are you allowed to VIEW this feedback form?
-    username = request.session.get('champu');
+   
+    if 'username' not in request.session or request.session['username'] == None:
+        return redirect('/ldap_login/');
+    else:
+        username = request.session['username'];
+        username=str(username);
+    f = feedbackForm.objects.get(pk=form);
+    mandatoryQuestions = f.mandatoryQuestions();
     # is the deadline exceded??
     now = datetime.today()
-    f = feedbackForm.objects.get(pk=form); 
-    mandatoryQuestions = f.mandatoryQuestions();
+    
+    
     if (f.deadline_for_filling < now ):
-        print "lalala"
         return HttpResponse("Sorry deadline exceedd..:)");
     else:
         flag='show'
@@ -82,9 +87,14 @@ def show(request,form):
         return HttpResponse(t.render(c));
 
 def preview(request,submissionID):
+    if 'username' not in request.session or request.session['username'] == None:
+        return redirect('/ldap_login/');
+    else:
+        username = request.session['username'];
+    username=str(username);
     if submissionID is None:
         return hamari404();
-        
+          
     ans=feedbackSubmissionAnswer.objects.filter(submission=submissionID);
     #submissionID=0 #why do we need to set submissionID to 0 ? 
 
@@ -98,15 +108,22 @@ def preview(request,submissionID):
 	   {
 		'answer':ans,
 		'form':form,
-        'submissionID':submissionID,
-        'date':now
+       		'submissionID':submissionID,
+        	'date':now,
+		'user':username
 	   }
 	);
     return HttpResponse(t.render(c));
     	
-    submissionID=0
+   
 def edit(request):
     #handles editing of filled forms.. and updating the tables instead of creating new 
+    # if the user is lot logged in.. redirect to login page
+    if 'username' not in request.session or request.session['username'] == None:
+        return redirect('/ldap_login/');
+    else:
+        username = request.session['username'];
+    # getting the submissionID from the post
     if (request.POST):
         s = request.POST;
         submissionID = s['submissionID']
@@ -143,7 +160,11 @@ def editsubmit(request,form):
         #find out 
         #who submitted this form? -- will come from the sessions framework
         #was he authorized to submit ? --- validation to be done ...do we store groups and users finally ? how about autocreating them on fetch-from-ldap()?  
-    username = 'ldkuser';
+    if 'username' not in request.session or request.session['username'] == None:
+        return redirect('/ldap_login/');
+    else:
+        username = request.session['username'];
+  
 
     s = request.POST; #get the form's submission data
     string = ''
@@ -198,8 +219,13 @@ def submit(request,form):
         #find out 
         #who submitted this form? -- will come from the sessions framework
         #was he authorized to submit ? --- validation to be done ...do we store groups and users finally ? how about autocreating them on fetch-from-ldap()?  
-    username = 'ldkuser';
-
+    if 'username' not in request.session or request.session['username'] == None:
+        return redirect('/ldap_login/');
+    else:
+        username = str(request.session['username']);
+    print "username.. in submit====", username;
+    print "username in session", request.session['username']
+    print type(username);
     s = request.POST; #get the form's submission data
     string = ''
 
