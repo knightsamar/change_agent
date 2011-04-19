@@ -1,3 +1,4 @@
+<title> Give Your Feedback..!!</title>
 <script language='javascript'>
 
 function mandatory()
@@ -62,7 +63,7 @@ function debug(str)
 
 
 </script>
-<h3 align='left'> Hiya {{ user }} </h3>
+<h3 align='left'> Hiya {{ username }} </h3>
 <h3 align='center'> {{ form.title }} </h3>
 <h4 align='center'> Your feedback is valuable to us! </h4>
 
@@ -104,4 +105,5 @@ function debug(str)
    {% endfor %}
           <input type='hidden' name='formid' value='{{ form.id }}'> 
      	<input type='submit' value='Submit feedback!'>
+	<input type='button' onclick="javascript:location.href='/give_feedback/'" value='Cancel'>
 </form>

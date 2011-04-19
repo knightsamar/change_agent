@@ -4,6 +4,11 @@ BUGS
  -- a sample is created in ldap_login/groups' admin view.
  -- checkout http://docs.djangoproject.com/en/1.2/intro/tutorial02/ for more guidance.
 
+* Currently, when any non-mandatory is in a form edit and the user doesn't submit any value for that non-mandatory question, the original value which was filled priorly, is automatically associated and NOT flushed out. Thus non-mandatory questions in an edit have a value by default, whihc is their original value. 
+     --- We need prefilled forms while editing.
+     --- We need to flush out all submissionAnswerOptions corresponding to that submission when saving the edited submission.
+
+* Check the mandatoriness of submissions on SERVER SIDE though it's already working on CLIENT SIDE
 FEATURES
 --------
-* We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED.
+* We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED. -- DONE

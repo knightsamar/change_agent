@@ -1,21 +1,21 @@
 
-
+{% extends "base.html" %}
+{% block content %}
 <h2> Hi {{username}}! </h2>
-<h3 align = 'right'>Last login on : {{login}}</h3>
 
 <fieldset>
 <legend> My Feeback forms to be filled </legend>
 
 <table cellpadding='16'>
-<th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
-   {% if not unform_list %}
+   {% if not unfilled_list %}
       You have no new forms...!!
    {% else %}   
-    {% for form in unform_list %}
+    <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
+    {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='red'onMouseOver='stylr.backgroundcolor='green''><td> <a href='./{{form.id}}/show'>{{ form.title }}</a></td><td>{{form.deadline_for_filling}}</td><td>{{form.created_on}}</tr>
+        <tr bgcolor='red'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a></td><td>{{form.deadline_for_filling}}</td><td>{{form.created_on}}</tr>
       {% else %}
-        <tr><td>{{ form.title }}</td></tr>
+        <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td><td>{{form.created_on}}</td></tr>
       {% endif %}
     {% endfor %}
    {% endif %} 
@@ -25,11 +25,11 @@
 <legend> Feedback you gave </legend>
 
 <table cellpadding='16'>
-  <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
-   {% if not form_list %}
-     You have no filled forms
+   {% if not filled_list %}
+     <i>You have no filled forms</i>
    {% else %}  
-    {% for form in form_list %}
+    <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
+    {% for form in filled_list %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
          <tr> <td><a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
       {% else %}
@@ -41,3 +41,4 @@
     {% endif %}   
 </table>
 </fieldset>
+{% endblock %}

@@ -6,5 +6,8 @@
   <input type="submit" value="View Form Preview">
  
 </form>
-<a href="/give_feedback">Please go back to the main menu</a>
+<input type='button' onclick="javascript:location.href='/give_feedback/'" value="Please go back to the main menu"><br>
+{% if nextform != None %}
+<input type='button' onclick="javascript:location.href='/give_feedback/{{nextform.id}}/show'", value="Next Form">
+{% endif %}
 
