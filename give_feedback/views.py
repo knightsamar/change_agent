@@ -252,43 +252,47 @@ def editsubmit(request,form):
 def submit(request,form):
     '''handles NEW feedback form submission'''
     
+    #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
         return redirect('/ldap_login/');
     else:
         username = str(request.session['username']);
     
-    s = request.POST; #get the form's submission data
-    
+    #get the form's submission data
+    s = request.POST;     
+
     print "in submisson view...unfilled forms are ", request.session['unfilled']
+    
     unfilled = request.session['unfilled']
     f = feedbackForm.objects.get(pk=form)
+
     nextform = None
-
-    if unfilled is None: #if unfilled forms list is empty!
-    	nextform = None
+    if len(unfilled) is 0: #if unfilled forms list is empty!
+    	nextform = None #then there is no next form!
     else:
-	    nextform = unfilled[0]
+        print "nextform =",nextform,type(nextform)
+        print "form = ",form,type(form)
+    
+        #this code to be MADE BETTER!
+        nextFormKaindex = -1;
 
-    print "nextform =",nextform,type(nextform)
-    print "form = ",form,type(form)
+        if f in unfilled:
+            currentFormKaindex = unfilled.index(f)
+            j = currentFormKaindex + 1 #start seeking from NEXT form
     
-    if f in unfilled:
-        index = unfilled.index(f)
-        j = index + 1
-    
-        for i in range(j,len(unfilled)):# to check the next editable/submitable form
-            #findout the next form to be filled which hasn't exceeded deadline!
-            if unfilled[i].deadline_for_filling > datetime.today():
-               index = i
-               break;
+            for i in range(j,len(unfilled)):# to check the next editable/submitable form
+                #findout the next form to be filled which hasn't exceeded deadline!
+                if unfilled[i].deadline_for_filling > datetime.today():
+                   nextFormKaindex = i;
+                   break;
      
-        #if this was the last form
-        print 'unfilled length is %d and index is %d' % (len(unfilled), index)
-        if (len(unfilled)-1) > index:  
-           #there is AN editable form
-           nextform = unfilled[index];
-        else: #then there is NO editable form
-	        nextform = None
+            #if this was the last form
+            print 'unfilled length is %d and currentFormindex is %d and nextFormindex is %d' % (len(unfilled), currentFormKaindex, nextFormKaindex)
+            if len(unfilled) is not index:  
+               #there is AN editable form
+               nextform = unfilled[nextFormKaindex];
+            if nextFormKaindex: #then there is NO editable form
+	           nextform = None
 
     #create a new submission object
     submissionObj = feedbackSubmission(); 
