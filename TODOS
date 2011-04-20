@@ -9,6 +9,18 @@ BUGS
      --- We need to flush out all submissionAnswerOptions corresponding to that submission when saving the edited submission.
 
 * Check the mandatoriness of submissions on SERVER SIDE though it's already working on CLIENT SIDE
+* during preview.. checkbooxes are shown in different questions
+
 FEATURES
 --------
 * We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED. -- DONE
+* next next functioanlity in preview and show -- DONE
+
+
+REQUIREMENTS
+-- by vidya maam
+--------------------
+* SA and SD seperate groups
+* list of students who havent and have filled a particular form
+* list of unfilled forms during loggoff..!! and email and all the dhanki business
+
