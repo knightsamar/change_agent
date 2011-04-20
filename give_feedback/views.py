@@ -68,6 +68,9 @@ def show(request,form):
         username = str(request.session['username']);
 
     f = feedbackForm.objects.get(pk=form);
+    # is this form actually unfilled??
+    if f not in request.session['unfilled']:
+        return HttpResponse("This form is already filled..!!")
     mandatoryQuestions = f.mandatoryQuestions();
 
     # is the deadline exceded??
@@ -265,34 +268,36 @@ def submit(request,form):
     
     unfilled = request.session['unfilled']
     f = feedbackForm.objects.get(pk=form)
-
+    print "PROCESSING NEXT FORMS..!!"
     nextform = None
     if len(unfilled) is 0: #if unfilled forms list is empty!
+        print "Exiting because len(unfilled) is 0..."    
     	nextform = None #then there is no next form!
     else:
-        print "nextform =",nextform,type(nextform)
-        print "form = ",form,type(form)
-    
-        #this code to be MADE BETTER!
+        #this code is awesome..!!
         nextFormKaindex = -1;
 
         if f in unfilled:
             currentFormKaindex = unfilled.index(f)
             j = currentFormKaindex + 1 #start seeking from NEXT form
-    
+            print "current form ka index", currentFormKaindex, "j==", j
             for i in range(j,len(unfilled)):# to check the next editable/submitable form
+                print "inside the loop.."
                 #findout the next form to be filled which hasn't exceeded deadline!
+                print "next unfilled form.",unfilled[i],"and uska deadline", unfilled[i].deadline_for_filling
                 if unfilled[i].deadline_for_filling > datetime.today():
                    nextFormKaindex = i;
                    break;
-     
+            print "i am out of the loop and the next form ka index now is", nextFormKaindex
             #if this was the last form
             print 'unfilled length is %d and currentFormindex is %d and nextFormindex is %d' % (len(unfilled), currentFormKaindex, nextFormKaindex)
-            if len(unfilled) is not index:  
+            if nextFormKaindex is -1:
+               nextform=None
+            else:   
                #there is AN editable form
                nextform = unfilled[nextFormKaindex];
-            if nextFormKaindex: #then there is NO editable form
-	           nextform = None
+            #request.session['unfilled'].remove(f)
+               
 
     #create a new submission object
     submissionObj = feedbackSubmission(); 
@@ -341,12 +346,14 @@ def submit(request,form):
 
             submissionAnswerObj.save(); #save this answer!
 
-            t = loader.get_template('give_feedback/submit.html');
-            c = RequestContext(request,
-             {
-                    'submissionID' : submissionObj.id,
-                    'nextform' : nextform,
-             }
-           );
+
+
+    t = loader.get_template('give_feedback/submit.html');
+    c = RequestContext(request,
+         {
+                'submissionID' : submissionObj.id,
+                'nextform' : nextform,
+         }
+        );
 
     return HttpResponse(t.render(c));
