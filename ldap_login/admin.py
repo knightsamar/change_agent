@@ -1,16 +1,12 @@
 from django.contrib import admin
 from ldap_login.models import group,user
 
-class UsersInLine(admin.TabularInline):
-    model = user;
-    extra = 1;
+#class UsersInline(admin.TabularInline):
+#    model = user;
+#    extra = 1;
 
-class groupAdmin(admin.ModelAdmin):
-	inlines = [UsersInLine];
+#class groupAdmin(admin.ModelAdmin):
+#	inlines = [UsersInline];
 
-
-admin.site.register(group,groupAdmin);
+admin.site.register(group);
 admin.site.register(user);
-
-
-

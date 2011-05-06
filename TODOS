@@ -1,3 +1,8 @@
+
+All checkboxes stacked up in one go.
+
+
+
 BUGS
 ----
 * Currently, when I create a question, I have to go seperately and create associated options...Actually it should ask me directly what options to create.
@@ -8,7 +13,7 @@ BUGS
      --- We need prefilled forms while editing.
      --- We need to flush out all submissionAnswerOptions corresponding to that submission when saving the edited submission.
 
-* Check the mandatoriness of submissions on SERVER SIDE though it's already working on CLIENT SIDE
+* Check the mandatoriness of submissions on SERVER SIDE though it's already working on CLIENT SIDE -- done FOR SUBMITTING, remaining for editsubmit
 * during preview.. checkbooxes are shown in different questions
 
 FEATURES
