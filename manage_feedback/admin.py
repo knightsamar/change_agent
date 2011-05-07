@@ -1,8 +1,10 @@
 from manage_feedback.models import feedbackQuestion,feedbackQuestionOption,feedbackForm,feedbackAbout
 from django.contrib import admin
+from django.template import RequestContext, Context, loader
 from ldap_login.models import *
 from give_feedback.models import feedbackSubmission
 from django.http import HttpResponse
+
 #for displaying options directly underneath the question when creating or editing
 class feedbackQuestionOptionsInline(admin.TabularInline):
     model = feedbackQuestionOption;
@@ -12,9 +14,8 @@ class feedbackQuestionAdmin(admin.ModelAdmin):
     inlines = [feedbackQuestionOptionsInline];
     
 class feedbackFormAdmin(admin.ModelAdmin):
-    actions = ['duplicateForm'];
-    actions = ['notFilled']
-
+    actions = ['duplicateForm','notFilled'];
+    list_display=['title', 'created_on', 'deadline_for_filling']
     def duplicateForm(self, request, queryset):
         for existing_form in queryset:
              new_form = feedbackForm();
@@ -30,10 +31,9 @@ class feedbackFormAdmin(admin.ModelAdmin):
     
              #new_form.allowed_groups = existing_form.allowed_groups;
 
-    duplicateForm.short_description = "Duplicate this form";
-
-
+    
     def notFilled(self, request, queryset):
+        user_dict=dict()
         for existing_form in queryset:
             user_all=list()
             groups=existing_form.allowed_groups.values()
@@ -47,7 +47,17 @@ class feedbackFormAdmin(admin.ModelAdmin):
                 user_all.remove(f.submitter)
             print ".....",existing_form.title,"......"
             print user_all
-        return HttpResponse(existing_form.title)
+            user_dict[str(existing_form.title)]=user_all
+            print user_dict
+        t = loader.get_template('manage_feedback/notFilled.html');
+        c = Context(
+           {
+             'forms_users_dict':user_dict
+           }
+         );
+   
+        return HttpResponse(t.render(c))
+    duplicateForm.short_description = "Duplicate this form";
     notFilled.short_description = "People who have not filled this form";
          
 admin.site.register(feedbackQuestion,feedbackQuestionAdmin);
