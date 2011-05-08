@@ -15,7 +15,8 @@ class feedbackQuestionAdmin(admin.ModelAdmin):
     
 class feedbackFormAdmin(admin.ModelAdmin):
     actions = ['duplicateForm','notFilled'];
-    list_display=['title', 'created_on', 'deadline_for_filling']
+    list_display=['title', 'deadline_for_filling']
+    ordering=['title']
     def duplicateForm(self, request, queryset):
         for existing_form in queryset:
              new_form = feedbackForm();
@@ -45,10 +46,7 @@ class feedbackFormAdmin(admin.ModelAdmin):
             forms=feedbackSubmission.objects.filter(feedbackForm=existing_form)
             for f in forms:
                 user_all.remove(f.submitter)
-            print ".....",existing_form.title,"......"
-            print user_all
             user_dict[str(existing_form.title)]=user_all
-            print user_dict
         t = loader.get_template('manage_feedback/notFilled.html');
         c = Context(
            {
