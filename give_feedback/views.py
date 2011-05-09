@@ -34,9 +34,9 @@ def index(request):
     feedback_about_list=list()
     feedback_about=u.allowed_viewing_feedback_about.values();
     for a in feedback_about:
-        ab=feedbackAbout.objects.get(title=a['title'])
-        feedback_forms_about=feedbackForm.objects.filter(about=ab)
-        feedback_about_list.extend(feedback_forms_about)
+        ab=feedbackForm.objects.get(pk=a['id'])
+        #feedback_forms_about=feedbackForm.objects.filter(about=ab)
+        feedback_about_list.extend([ab])
      
        
     # to fetch the filled forms for previewing and editing 

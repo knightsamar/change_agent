@@ -1,5 +1,3 @@
-# Create your views here.
-
 #comment this line when you ARE OUTSIDE SICSR!
 #from ldapAuthBackend import authenticate;
 from django.http import HttpResponse;
@@ -45,7 +43,7 @@ def login(request):
         if userexists[1] is True:
             print " got a new user"
 		    # the user not in database... create one..!!
-            newuser=userexists[0]
+            newuser = userexists[0]
             newuser.username=userName
             newuser.password=''
             newuser.created_on=datetime.today();
@@ -84,7 +82,7 @@ def login(request):
             userexists[0].save();
 		
             #redirect to the index view!
-        return redirect('/give_feedback/');
+        return redirect('/give_feedback');
        
     else:
    

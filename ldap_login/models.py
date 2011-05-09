@@ -16,7 +16,7 @@ class user(models.Model):
     last_login = models.DateTimeField(auto_now=True);
     created_on = models.DateTimeField(auto_now_add=True);
     groups = models.ManyToManyField(group);
-    allowed_viewing_feedback_about = models.ManyToManyField('manage_feedback.feedbackAbout',blank=True,null=True);
+    allowed_viewing_feedback_about = models.ManyToManyField('manage_feedback.feedbackForm',blank=True,null=True);
 
     def __str__(self):
 	return self.username;
