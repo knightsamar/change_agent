@@ -1,5 +1,5 @@
 # Create your views here.
-from manage_feedbak.models import feedbackForm,feedbackQuestion,feedbackQuestionOption;
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption;
 from give_feedback.models import feedbackSubmission,feedbackSubmissionAnswer
 from django.http import HttpResponse;
 from datetime import datetime;
@@ -8,15 +8,15 @@ from datetime import datetime;
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 #or not filled the form
 
-def summary(request,formID):
-"""summary of feedback for a form..."""
-#select a form
-f = feedbackForm.objects.get(pk=formID);
-print 'we got %s in summary wala view' % (f);
+def summary(request,formID):    
+    """summary of feedback for a form..."""
+    #select a form
+    f = feedbackForm.objects.get(pk=formID);
+    print 'we got %s in summary wala view' % (f);
 
-if f is None:
+    
     #do we have any submissions for this form ?
-    submissions = feedbackSubmission.objects.filter(feedbackForm == f);
+    submissions = feedbackSubmission.objects.filter(feedbackForm = f);
 
     #if number of submissions is more than 0,
     if len(submissions) < 0:
@@ -30,14 +30,18 @@ if f is None:
 
     summary = list();
     #for each feedbackQuestion in the form
-    for q in f.questions:
+    for q in f.questions.values():
+        print "Q. ------",q['text']
         #find all AnswerOptions corresponding to it.
-        qwaleOptions = feedbackQuestionOption.objects.filter(question == q)
-        #for each AnswerOption
-             for o in qwaleOptions:
-             #count the number of total feedbackSubmissionAnswer...
-                 numberofSubmissionsChoosingThis = feedbackSubmissionAnswer.objects.filter(answer_option == o).count();
-                 t = feedback
+        qwaleOptions = feedbackQuestionOption.objects.filter(question = q['id'])
+        #for each AnswerOption:
+        for o in qwaleOptions:
+                 print "...........",o.text,"..........",
+                 #count the number of total feedbackSubmissionAnswer...
+                 numberofSubmissionsChoosingThis = feedbackSubmissionAnswer.objects.filter(answer_option = o).count();
+                 print numberofSubmissionsChoosingThis
+                 #t = feedback
+    return HttpResponse("heyy..!!")        
 
 #def notfilled(request, formID)
 #''' to give out the list of ppl who have not filled the form... '''

@@ -21,7 +21,7 @@ FEATURES
 * We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED. -- DONE
 * next next functioanlity in preview and show -- DONE
 * ppl who havent filled the forms... - DONE by Apoorva on 5th May
-
+* subhashri wala...!!
 
 REQUIREMENTS
 -- by vidya maam
@@ -30,3 +30,7 @@ REQUIREMENTS
 * list of students who havent and have filled a particular form-done by Apoorva
 * list of unfilled forms during loggoff..!! and email and all the dhanki business-- to be finished by Samar..(the email part)
 
+PROBLEMS TO BE FACED............  8TH MAY 2011
+* SA/SD to be grouped on thier own.. using AD logic or JS confirmation BOx (as suggested by Apoorva)
+* Students to be enrolled automaicaly from AD/Ldap
+* Editing of forms to be closed after first submission.- by using filter in admin view. 

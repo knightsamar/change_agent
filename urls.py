@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     (r'^ldap_login/logout$','ldap_login.views.logout'), #for loggin out
     (r'^give_feedback/(?P<form>\d+)/show/$','give_feedback.views.show'), 
     (r'^give_feedback/(?P<form>\d+)/edit/$','give_feedback.views.editsubmit'), 
+    (r'^manage_feedback/(?P<formID>\d+)/feedbackAbout/$','manage_feedback.views.summary'), 
+    (r'^give_feedback/edit/$','give_feedback.views.edit'),
     (r'^give_feedback/edit/$','give_feedback.views.edit'),
     (r'^give_feedback/(?P<submissionID>\d+)/preview.html/$','give_feedback.views.preview'),
 #(r'^give_feedback/(?P<form>\d+)/preview/$','give_feedback.views.preview'),

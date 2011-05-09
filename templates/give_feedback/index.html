@@ -44,4 +44,16 @@
     {% endif %}   
 </table>
 </fieldset>
+<fieldset>
+<legand> View Feedback About</legand>
+{% if not feedback_about_list %}
+ <i> You have no feedback to view</i>
+{% else %} 
+<ul>
+{% for f in feedback_about_list %}
+ <li><a href ="/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
+{% endfor %}
+{% endif %}
+</ul>
+</fieldset>
 {% endblock %}

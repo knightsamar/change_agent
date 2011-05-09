@@ -1,7 +1,7 @@
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponse,HttpResponseNotFound
 from django.shortcuts import redirect
-from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
 
@@ -27,8 +27,18 @@ def index(request):
 
     u=user.objects.get(pk=username);
     # to fetch the all the forms
-   
+    # for feedback About
     
+    #TO ADD:- check for group as staff... not that important...:) 
+    u=user.objects.get(username=username)
+    feedback_about_list=list()
+    feedback_about=u.allowed_viewing_feedback_about.values();
+    for a in feedback_about:
+        ab=feedbackAbout.objects.get(title=a['title'])
+        feedback_forms_about=feedbackForm.objects.filter(about=ab)
+        feedback_about_list.extend(feedback_forms_about)
+     
+       
     # to fetch the filled forms for previewing and editing 
     filled_forms = feedbackSubmission.objects.filter(submitter=username);
 
@@ -66,6 +76,7 @@ def index(request):
                 'filled_list' : request.session['filled'],
         		'unfilled_list': request.session['unfilled'],
                 'today' : d,
+                'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
@@ -79,7 +90,8 @@ def show(request,form):
         return redirect('/ldap_login/'); 
     else: #is logged in!
         username = str(request.session['username']);
-
+       
+    #for feedback Forms Filling   
     f = feedbackForm.objects.get(pk=form);
     # is this form actually unfilled??
 
