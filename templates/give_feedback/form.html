@@ -1,0 +1,110 @@
+
+<title> Give Your Feedback..!!</title>
+<script language='javascript'>
+
+function mandatory()
+{
+   flag=1;
+   {% for id,type in mandatoryQuestions.items %}
+    {% if type == 'multiple-choice-single-answer' %}
+        var radio= document.forms.feedbackForm.q{{id}}_rdb_opt;
+        for(i=0;i<radio.length;i++)
+          {          
+              if (radio[i].checked) 
+           {
+               flag=4;
+           }
+          } 
+        if(flag!=4) 
+        {   
+            alert('Please answer the mandatory radio button questions');
+            radio[0].focus();
+            return false;
+        }
+    {% endif %}  
+    {% if type == 'multiple-choice-multiple-answer' %}
+       var check=document.forms.feedbackForm.q2
+       for(i=0;i<check.length;i++)
+           {
+             //alert(check[i].value);
+             if(check[i].checked) 
+               {
+                  flag=7;
+               }
+               
+           }
+       if(flag!=7) 
+       {
+           alert('Please answer the mandatory checkbox questions!');
+           check[0].focus();
+           return false;
+       }
+
+    {% endif %}     
+    {%if type == 'text'%}
+         var a='q{{id}}'
+         var text=document.getElementById(a);
+         if(text.value=="")
+         {
+             alert('Please answer the mandatory text question!');
+             text.focus();
+             return false;
+         }
+         else flag=5;
+    {% endif %}      
+   {% endfor %} 
+ if(flag!=1) return true;
+ else return false;
+}
+
+function debug(str)
+{
+    alert(str);
+}
+
+
+</script>
+<h3 align='left'> Hiya {{ username }} </h3>
+<h3 align='center'> {{ form.title }} </h3>
+<h4 align='center'> Your feedback is valuable to us! </h4>
+
+{% if flag == 'show' %}
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+{% else %}  
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <input type='hidden' name='submissionID' value='{{ submissionID }}'>
+{% endif %}
+
+    {% csrf_token %}
+    {% for q in form.questions.all %}
+    
+    <h4>{{ q.text }}
+        {% if q.mandatory %}
+            <sup>*</sup>
+         {% endif %}
+    </h4>
+		{% if q.type == 'multiple-choice-single-answer' %}
+			{% for opt in q.feedbackquestionoption_set.values %}
+            <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
+	             <label for='q{{ q.id }}_rdb_opt'>
+        	           {{ opt.text }}
+		         </label> <br/>
+		    {% endfor %}
+		{% endif %}
+		{% if q.type == 'multiple-choice-multiple-answer' %}
+            {% for opt in q.feedbackquestionoption_set.values %}
+            <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
+	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
+        	            {{ opt.text }}
+                 </label><br/>
+        	{% endfor %}
+		{% endif %}
+		{% if q.type == 'text' %}
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
+		{% endif %}
+	    <br/>
+   {% endfor %}
+          <input type='hidden' name='formid' value='{{ form.id }}'> 
+     	<input type='submit' value='Submit feedback!'>
+	<input type='button' onclick="javascript:location.href='/give_feedback/'" value='Cancel'>
+</form>

@@ -1,0 +1,8 @@
+<h1> List of Feeback forms </h1>
+
+<ul>
+    {% for form in manage_feedback.feedbackForm.all %}
+    <li> {{ form }}  </li>
+    {% endfor %}
+</ul>
+
