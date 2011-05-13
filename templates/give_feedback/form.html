@@ -30,7 +30,7 @@ function mandatory()
              //alert(check[i].value);
              if(check[i].checked) 
                {
-                  flag=7;
+                flag=7;
                }
                
            }
@@ -70,9 +70,10 @@ function debug(str)
 <h4 align='center'> Your feedback is valuable to us! </h4>
 
 {% if flag == 'show' %}
-  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+ 
 {% else %}  
-  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 
@@ -107,6 +108,6 @@ function debug(str)
    {% endfor %}
           <input type='hidden' name='formid' value='{{ form.id }}'> 
      	<input type='submit' value='Submit feedback!'>
-	<input type='button' onclick="javascript:location.href='/give_feedback/'" value='Cancel'>
+	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
 </form>
 {% endblock %}

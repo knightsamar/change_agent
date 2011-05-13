@@ -38,14 +38,14 @@ Submitted by {{sub}}<br>
   <br/>
 {% else %}
 
-<form action = "/give_feedback/edit/" method='post'>
+<form action = "/change_agent/give_feedback/edit/" method='post'>
 {% csrf_token %}
 <input type='hidden' name='submissionID' value= '{{submissionID}}'>
 <input type = "submit" value = "Edit Form">
 </form>
 {% endif %}
-<input type = "submit" value = "Go back to main menu" onclick="javascript:location.href='/give_feedback/'">
+<input type = "submit" value = "Go back to main menu" onclick="javascript:location.href='/change_agent/give_feedback/'">
 {% if nextform != None %}
-<input type='button' onclick="javascript:location.href='/give_feedback/{{nextform.id}}/preview.html'" value='next'>
+<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/{{nextform.id}}/preview.html'" value='next'>
 {% endif %}
 {% endblock %}

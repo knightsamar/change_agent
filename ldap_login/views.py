@@ -13,7 +13,7 @@ def login(request):
     #are we processing login attempt ?
     message = None;
     if 'username' in request.session:
-        return redirect('give_feedback/');
+        return redirect('/change_agent/give_feedback/');
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
@@ -32,6 +32,7 @@ def login(request):
             #store encrypted password
             #start session
             request.session['username'] = request.POST['username']; 
+            request.session.set_expiry(1800);
             userName=request.session['username']
             #print "because status was", status, "hence message is", message;
     
@@ -79,7 +80,7 @@ def login(request):
                 userexists[0].last_login=datetime.today();
                 userexists[0].save();
              #redirect to the index view!
-            return redirect('give_feedback/');
+            return redirect('/change_agent/give_feedback/');
        
         else:#status is false
             message="Incorrect Username Password..!!"

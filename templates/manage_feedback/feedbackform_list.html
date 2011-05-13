@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}
+ Home Page
+{% endblock %}
+{% block content %}
+
 <h1> List of Feeback forms </h1>
 
 <ul>
@@ -5,4 +11,5 @@
     <li> {{ form }}  </li>
     {% endfor %}
 </ul>
+{% endblock %}
 

@@ -13,9 +13,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'change_agent',                      # Or path to database file if using sqlite3.
-        'USER': 'change_agent',                      # Not used with sqlite3.
-        'PASSWORD': 'hs7do8a6712h312iuhp8abnfak@',                  # Not used with sqlite3.
+        'NAME': 'change_agent',                   # Or path to database file if using sqlite3.
+        'USER': 'change_agent',                   # Not used with sqlite3.
+        'PASSWORD': 'rfLacMXAaHAMK3Ej',           # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -56,7 +56,7 @@ MEDIA_URL = 'http://localhost/change_agent_media/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '=#la7@=jw@sri_$zzb_(puj*8ad88664z7bs4x#bj)^o=s81z$'

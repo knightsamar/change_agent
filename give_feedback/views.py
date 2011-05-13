@@ -20,7 +20,7 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('ldap_login/');
+        return redirect('/change_agent/ldap_login');
     else:
         #print 'username in session object';
         username = request.session['username'];
@@ -87,7 +87,7 @@ def show(request,form):
 
     #user is not logged in 
     if 'username' not in request.session or request.session['username'] == None: 
-        return redirect('ldap_login/'); 
+        return redirect('/change_agent/ldap_login/'); 
     else: #is logged in!
         username = str(request.session['username']);
        
@@ -122,7 +122,7 @@ def show(request,form):
 
 def preview(request,submissionID):
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
 
@@ -204,7 +204,7 @@ def edit(request):
     # if the user is lot logged in.. redirect to login page
 
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
     
@@ -254,7 +254,7 @@ def editsubmit(request,form):
 
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('ldap_login/');
+        return redirect('/change_Agent/ldap_login/');
     else:
         username = request.session['username'];
     
@@ -340,7 +340,7 @@ def submit(request,form):
     
     #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
     
