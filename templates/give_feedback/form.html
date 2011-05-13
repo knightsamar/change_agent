@@ -1,4 +1,5 @@
-
+{% extends "base.html" %}
+{% block content %}
 <title> Give Your Feedback..!!</title>
 <script language='javascript'>
 
@@ -108,3 +109,4 @@ function debug(str)
      	<input type='submit' value='Submit feedback!'>
 	<input type='button' onclick="javascript:location.href='/give_feedback/'" value='Cancel'>
 </form>
+{% endblock %}

@@ -1,6 +1,9 @@
 
 {% extends "base.html" %}
+
 {% block content %}
+<span><input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout/'" value='Logout!' alt='Enough of form filling!'></span> 
+
 <h2> Hi {{username}}! </h2>
 
 <fieldset>
@@ -40,5 +43,17 @@
        {% endfor %}
     {% endif %}   
 </table>
+</fieldset>
+<fieldset>
+<legend> View Feedback About</legend>
+{% if not feedback_about_list %}
+ <i> You have no feedback to view</i>
+{% else %} 
+<ul>
+{% for f in feedback_about_list %}
+ <li><a href ="/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
+{% endfor %}
+{% endif %}
+</ul>
 </fieldset>
 {% endblock %}

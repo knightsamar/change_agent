@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <h3 align='center'> {{ form.title }}<br>
 Form Preview :)</h3>
 Submitted by {{sub}}<br>
@@ -45,3 +48,4 @@ Submitted by {{sub}}<br>
 {% if nextform != None %}
 <input type='button' onclick="javascript:location.href='/give_feedback/{{nextform.id}}/preview.html'" value='next'>
 {% endif %}
+{% endblock %}

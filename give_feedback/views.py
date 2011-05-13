@@ -1,7 +1,7 @@
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponse,HttpResponseNotFound
 from django.shortcuts import redirect
-from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
 
@@ -20,33 +20,43 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('ldap_login/');
     else:
-        print 'username in session object';
+        #print 'username in session object';
         username = request.session['username'];
 
     u=user.objects.get(pk=username);
     # to fetch the all the forms
-   
+    # for feedback About
     
+    #TO ADD:- check for group as staff... not that important...:) 
+    u=user.objects.get(username=username)
+    feedback_about_list=list()
+    feedback_about=u.allowed_viewing_feedback_about.values();
+    for a in feedback_about:
+        ab=feedbackForm.objects.get(pk=a['id'])
+        #feedback_forms_about=feedbackForm.objects.filter(about=ab)
+        feedback_about_list.extend([ab])
+     
+       
     # to fetch the filled forms for previewing and editing 
     filled_forms = feedbackSubmission.objects.filter(submitter=username);
 
     # to remove the filled forms from the list of all forms to get the newly available forms
     request.session['filled']=list(filled_forms)
-    print "filled firm in index...", request.session['filled']
+    #print "filled firm in index...", request.session['filled']
     
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
     all_forms = list(feedbackForm.objects.all())
-    print "all-forms.. ", all_forms
-    print "user.", u
-    print "user groups", u.groups.values()
+    #print "all-forms.. ", all_forms
+    #print "user.", u
+    #print "user groups", u.groups.values()
     unfilled_forms=list();
     for g in u.groups.values():
         for f in all_forms:
             if g in f.allowed_groups.values():
                 unfilled_forms.extend([f])
-    print "unfilled forms..!!", unfilled_forms;
+    #print "unfilled forms..!!", unfilled_forms;
     for form in filled_forms:
     	k = form.feedbackForm
 	
@@ -66,6 +76,7 @@ def index(request):
                 'filled_list' : request.session['filled'],
         		'unfilled_list': request.session['unfilled'],
                 'today' : d,
+                'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
@@ -76,15 +87,16 @@ def show(request,form):
 
     #user is not logged in 
     if 'username' not in request.session or request.session['username'] == None: 
-        return redirect('/ldap_login/'); 
+        return redirect('ldap_login/'); 
     else: #is logged in!
         username = str(request.session['username']);
-
+       
+    #for feedback Forms Filling   
     f = feedbackForm.objects.get(pk=form);
     # is this form actually unfilled??
 
-    print 'I am in show and f is %s' % (f);
-    print 'and unfilled is %s' % (request.session['unfilled']);
+    #print 'I am in show and f is %s' % (f);
+    #print 'and unfilled is %s' % (request.session['unfilled']);
 
     if f not in request.session['unfilled']:
         return HttpResponse("This form is already filled..!!")
@@ -110,18 +122,18 @@ def show(request,form):
 
 def preview(request,submissionID):
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('ldap_login/');
     else:
         username = str(request.session['username']);
 
-    print "the username in preview is : ", username;
+    #print "the username in preview is : ", username;
 
     if submissionID is None:
         return hamari404();
           
     ans = feedbackSubmissionAnswer.objects.filter(submission=submissionID).extra(order_by = ['question']); #so that we can group
     ans_dict = ans.values()
-    print "--> We have ", ans; 
+    #print "--> We have ", ans; 
     #submissionID=0 #why do we need to set submissionID to 0 ? 
 
     if ans is None:
@@ -136,7 +148,7 @@ def preview(request,submissionID):
     	return HttpResponse("boohoooooooooo..!! caught ya..!!! ")
 
     now = datetime.today();
-    print "filled forms as per preview...", request.session['filled'];
+    #print "filled forms as per preview...", request.session['filled'];
     
     #preview function also allows navigation to next preview
     if 'filled' in request.session:
@@ -151,11 +163,11 @@ def preview(request,submissionID):
                 nextform = request.session['filled'][index]
             else:
                 nextform = None
-                print "next from",nextform,"type",type(nextform)
+                #print "next from",nextform,"type",type(nextform)
         else:
             	print "this form",form," not in filled form"
-
-    #make a good list to print questions and their selected answers
+                pass;
+    #make a good list to #print questions and their selected answers
     #get all the answers given by the user in the submission object.
     answers = feedbackSubmissionAnswer.objects.filter(submission=submissionID).order_by('question'); 
     #create a blank dictionary:
@@ -192,7 +204,7 @@ def edit(request):
     # if the user is lot logged in.. redirect to login page
 
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('ldap_login/');
     else:
         username = str(request.session['username']);
     
@@ -205,7 +217,7 @@ def edit(request):
         return hamari404();
     
     Submitter = str(feedbackSubmission.objects.get(pk=submissionID).submitter)
-    print 'S=', type(Submitter),"U=",type(username)
+    #print 'S=', type(Submitter),"U=",type(username)
     
     #every user is allowed to edit only 
     if Submitter != username:
@@ -242,7 +254,7 @@ def editsubmit(request,form):
 
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('ldap_login/');
     else:
         username = request.session['username'];
     
@@ -255,10 +267,10 @@ def editsubmit(request,form):
         pieces=k.split('_')
         if 'q' in pieces[0] and int(pieces[0].lstrip('q')) not in answeredQuestions:
                answeredQuestions.extend([int(pieces[0].lstrip('q'))])
-    print "The answered questions ARE ........ ", answeredQuestions
+    #print "The answered questions ARE ........ ", answeredQuestions
     M=list(f.mandatoryQuestions())
-    print "mandatory questions are ......", M
-    print type(M)
+    #print "mandatory questions are ......", M
+    #print type(M)
     for mq in M:
         if mq not in answeredQuestions:
             return HttpResponse("Not all questions answered..!!"); 
@@ -271,7 +283,7 @@ def editsubmit(request,form):
     #if mandatoriness is successfull,
     oldSubmissionAnswerOptions = feedbackSubmissionAnswer.objects.filter(submission=s['submissionID']);
     #discovery by Apoorva :)
-    print "--> I am DELETING!";
+    #print "--> I am DELETING!";
     oldSubmissionAnswerOptions.delete(); #will directly delete all the corresponding submissions in teh QuerySet
       
     for k,v in s.items():
@@ -288,8 +300,8 @@ def editsubmit(request,form):
        
         #delete old submission;
         if ('q' in pieces[0] and len(pieces) > 1):
-            print "---> I am EDITSUBMIT!";
-            print "pieces 0 is",pieces[0]
+            #print "---> I am EDITSUBMIT!";
+            #print "pieces 0 is",pieces[0]
             if (pieces[1] == 'rdb'):
                 #construct an answer object
                 submissionAnswerObj = feedbackSubmissionAnswer(
@@ -298,23 +310,23 @@ def editsubmit(request,form):
                     submission = submissionObj
                 )
             elif (pieces[1] == 'chk'):
-                print 'got a checkbox!';
+                #print 'got a checkbox!';
                 submissionAnswerObj = feedbackSubmissionAnswer(
                     question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
                     answer_option = feedbackQuestionOption.objects.get(pk=int(pieces[2].lstrip('opt'))),
                     submission = submissionObj
                 )
             elif (pieces[1] == 'txt'):
-                print 'got a textbox'
+                #print 'got a textbox'
                 submissionAnswerObj = feedbackSubmissionAnswer(
                     question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
                     answer_text = v,
                     submission = submissionObj
                 )
-            print "---> Saving %s" % submissionAnswerObj;
+            #print "---> Saving %s" % submissionAnswerObj;
             submissionAnswerObj.save(); #save this answer!
 
-            print "Outside for loop!";
+            #print "Outside for loop!";
     t = loader.get_template('give_feedback/submit.html');
     c = RequestContext(request,
              {
@@ -328,43 +340,43 @@ def submit(request,form):
     
     #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('ldap_login/');
     else:
         username = str(request.session['username']);
     
     #get the form's submission data
     s = request.POST;     
 
-    print "in submisson view...unfilled forms are ", request.session['unfilled']
+    #print "in submisson view...unfilled forms are ", request.session['unfilled']
     
     unfilled = request.session['unfilled']
     f = feedbackForm.objects.get(pk=form)
-    print "PROCESSING NEXT FORMS..!!"
+    #print "PROCESSING NEXT FORMS..!!"
     nextform = None
     if len(unfilled) is 0: #if unfilled forms list is empty!
-        print "Exiting because len(unfilled) is 0..."    
+        #print "Exiting because len(unfilled) is 0..."    
     	nextform = None #then there is no next form!
     else:
         #this code is awesome..!!
         nextFormKaindex = -1;
-        print " IN SUBMIT ....unfilled form ki list", unfilled
+        #print " IN SUBMIT ....unfilled form ki list", unfilled
 
         if f in unfilled:
-            print "f is... ", f, "NOT FILLED..!! "
+            #print "f is... ", f, "NOT FILLED..!! "
 
             currentFormKaindex = unfilled.index(f)
             j = currentFormKaindex + 1 #start seeking from NEXT form
-            print "current form ka index", currentFormKaindex, "j==", j
+            #print "current form ka index", currentFormKaindex, "j==", j
             for i in range(j,len(unfilled)):# to check the next editable/submitable form
-                print "inside the loop.."
+                #print "inside the loop.."
                 #findout the next form to be filled which hasn't exceeded deadline!
-                print "next unfilled form.",unfilled[i],"and uska deadline", unfilled[i].deadline_for_filling
+                #print "next unfilled form.",unfilled[i],"and uska deadline", unfilled[i].deadline_for_filling
                 if unfilled[i].deadline_for_filling > datetime.today():
                    nextFormKaindex = i;
                    break;
-            print "i am out of the loop and the next form ka index now is", nextFormKaindex
+            #print "i am out of the loop and the next form ka index now is", nextFormKaindex
             #if this was the last form
-            print 'unfilled length is %d and currentFormindex is %d and nextFormindex is %d' % (len(unfilled), currentFormKaindex, nextFormKaindex)
+            #print 'unfilled length is %d and currentFormindex is %d and nextFormindex is %d' % (len(unfilled), currentFormKaindex, nextFormKaindex)
             if nextFormKaindex is -1:
                nextform=None
             else:   
@@ -383,22 +395,22 @@ def submit(request,form):
         pieces=k.split('_')
         if 'q' in pieces[0] and int(pieces[0].lstrip('q')) not in answeredQuestions:
                answeredQuestions.extend([int(pieces[0].lstrip('q'))])
-    print "The answered questions ARE ........ ", answeredQuestions
+    #print "The answered questions ARE ........ ", answeredQuestions
     M=list(f.mandatoryQuestions())
-    print "mandatory questions are ......", M
-    print type(M)
+    #print "mandatory questions are ......", M
+    #print type(M)
     for mq in M:
         if mq not in answeredQuestions:
             return HttpResponse("Not all questions answered..!!"); 
             break;
-    print "i ma getting printed.."
+    #print "i ma getting #printed.."
 
     #create a new submission object
     submissionObj = feedbackSubmission(); 
     submissionObj.feedbackForm = feedbackForm.objects.get(pk=s['formid']);
     submissionObj.submitter = user.objects.get(username__exact=username);
     submissionObj.save();
-    print "request.POST === ", request.POST
+    #print "request.POST === ", request.POST
     #put the submitted answers in the database
   
     for k,v in s.iteritems():
@@ -416,7 +428,7 @@ def submit(request,form):
                 v = v.rstrip('M');
 
         elif ('q' in pieces[0] and len(pieces) > 1):
-            print 'pieces are ',pieces;
+            #print 'pieces are ',pieces;
 
             if (pieces[1] == 'rdb'):
                 #construct an answer object
@@ -426,14 +438,14 @@ def submit(request,form):
                     submission = submissionObj
                 )
             elif (pieces[1] == 'chk'):
-                print 'got a checkbox!';
+                #print 'got a checkbox!';
                 submissionAnswerObj = feedbackSubmissionAnswer(
                     question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
                     answer_option = feedbackQuestionOption.objects.get(pk=int(pieces[2].lstrip('opt'))),
                     submission = submissionObj
                 )
             elif (pieces[1] == 'txt'):
-                print 'got a textbox'
+                #print 'got a textbox'
                 submissionAnswerObj = feedbackSubmissionAnswer(
                     question = feedbackQuestion.objects.get(pk=int(pieces[0].lstrip('q'))),
                     answer_text = v,
@@ -443,11 +455,11 @@ def submit(request,form):
             submissionAnswerObj.save(); #save this answer!
 
     # Remove this form from the list of unfilled forms...
-    print "unfilled form ki list", unfilled
-    print "current form ,f ", f
+    #print "unfilled form ki list", unfilled
+    #print "current form ,f ", f
     unfilled.remove(f)
     request.session['unfilled']=unfilled
-    print "unfilled form ki list after removing..!!", unfilled
+    #print "unfilled form ki list after removing..!!", unfilled
 
     t = loader.get_template('give_feedback/submit.html');
     c = RequestContext(request,
