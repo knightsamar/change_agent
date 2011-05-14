@@ -14,7 +14,7 @@ def summary(request,formID):
     """summary of feedback for a form..."""
     #select a form
     f = feedbackForm.objects.get(pk=formID);
-    #print 'we got %s in summary wala view' % (f);
+    print 'we got %s in summary wala view' % (f);
 
     # check if the user is actually allowed to view the form..!!
     u=user.objects.get(username=request.session['username'])
@@ -23,18 +23,16 @@ def summary(request,formID):
     for a in feedbackAbout:
         if str(a['title']) == str(f.title):
             allowed=True;
-            break;
-
     if allowed is False:
         return HttpResponse("You are not allowed to see this submission ");
     #do we have any submissions for this form ?
     submissions = feedbackSubmission.objects.filter(feedbackForm = f).count();
-    #print "no of submissions are..!!!", submissions
+    print "no of submissions are..!!!", submissions
     #if number of submissions is less than 0,
     if submissions <= 0:
        return HttpResponse("No submissions were made for this form!");
          
-    ##print whether deadline is gone or not for submitting...
+    #print whether deadline is gone or not for submitting...
     if f.deadline_for_filling < datetime.now():
         deadlineGone = True;
     else:
@@ -44,18 +42,31 @@ def summary(request,formID):
     #for each feedbackQuestion in the form
     for q in f.questions.values():
         summary_inner_dict=dict();
+        Options=feedbackQuestionOption.objects.filter(question=q['id'])
+        # to set the dictionalry initial value to 0. and the key to the question options
+        for o in Options:
+            summary_inner_dict[o]=0
+        
         #find all AnswerOptions corresponding to it.
-        qwaleOptions = feedbackQuestionOption.objects.filter(question = q['id'])
-        #for each AnswerOption:
-        for o in qwaleOptions:
+        
+        sub=feedbackSubmission.objects.filter(feedbackForm=f)
+        for s in sub:
+            # the options to be counted is to be related to a partcular submission made for this partucal form.
+            qwaleOptions = feedbackSubmissionAnswer.objects.filter(question = q['id']).filter(submission=s);
+            #for each AnswerOption:
+            for opt in qwaleOptions:
                  #count the number of total feedbackSubmissionAnswer...
-                 numberofSubmissionsChoosingThis = feedbackSubmissionAnswer.objects.filter(answer_option = o).count()
-                 summary_inner_dict[str(o.text)]=numberofSubmissionsChoosingThis
+                 # adding the count to the inner dictionry
+                 if opt.answer_text is not None:
+                     summary_inner_dict[opt.answer_text]=None;
+                     pass;
+                 else:    
+                     summary_inner_dict[opt.answer_option] = summary_inner_dict[opt.answer_option] + 1
         summary_outer_dict[str(q['text'])]=summary_inner_dict;         
     t = loader.get_template('manage_feedback/summary.html')
     c=Context(
                  {
-                     'deadlinegone':deadlineGone,
+                     'deadlinegone':deadlineGone, # idk why we had put this condition...!! ??
                      'formName':f.title,
                      'summaryDict':summary_outer_dict
                  }
@@ -63,21 +74,4 @@ def summary(request,formID):
 
     return HttpResponse(t.render(c))        
 
-#def notfilled(request, formID)
-#''' to give out the list of ppl who have not filled the form... '''
-        # get the form object rom the formid
-        #generate an error if the form does not exists
-        #get the deadline for filling the form
-
-        #check for the form id in feedbackSubmissions
-        #if no entry exu=ists.,.. generate the error......
-        #else:
-            # fetch all the users who all have filed the form
-            # i.e. f=feeedbacksubmission.objects.filter(formid=formid)
-            #and then f.submitter.
-
-        # now get the list of the ppl who are supposed to fill the form
-        # which is all the users who belong to the form.allowed_groups tuple.
-
-        # display this list and provide a button to the admin saying "mail them" which would send mails to the users to fill the form before the deadline. :)
 
