@@ -23,6 +23,8 @@ def summary(request,formID):
     for a in feedbackAbout:
         if str(a['title']) == str(f.title):
             allowed=True;
+            break;
+
     if allowed is False:
         return HttpResponse("You are not allowed to see this submission ");
     #do we have any submissions for this form ?
@@ -47,7 +49,7 @@ def summary(request,formID):
         #for each AnswerOption:
         for o in qwaleOptions:
                  #count the number of total feedbackSubmissionAnswer...
-                 numberofSubmissionsChoosingThis = feedbackSubmissionAnswer.objects.filter(answer_option = o).count();
+                 numberofSubmissionsChoosingThis = feedbackSubmissionAnswer.objects.filter(answer_option = o).count()
                  summary_inner_dict[str(o.text)]=numberofSubmissionsChoosingThis
         summary_outer_dict[str(q['text'])]=summary_inner_dict;         
     t = loader.get_template('manage_feedback/summary.html')
