@@ -254,7 +254,7 @@ def editsubmit(request,form):
 
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/change_Agent/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = request.session['username'];
     
