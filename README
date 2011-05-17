@@ -1,3 +1,14 @@
-The Change Agent is here!
+Conventions used in the form.html for generation of form and making it easier to process
+========================================================================================
 
-Be the change you want to see! :)
+1. All questions create a hidden field called *qX* where X is the questionID. 
+2. This is further suffixed with a M if the question is mandatory.
+            eg. *qXM
+3. Then the question ID is again stored as a value in the field so that they are POSTed. They are verified on the server to check whether mandatory questions were posted or not.
+4. Radio button options are named as *qX_rdb_opt*. All radio buttons belonging to a question are named similarly.
+5. These radio buttons are given the value P which is the optionID from the original table. Thus the option that is selected will have it's ID stored.
+            eg. qX_rdb_opt = Q
+       will mean that Q option was selected for question X.
+6. Checkboxes are named as *qX_chk_opt_*. 
+
+           

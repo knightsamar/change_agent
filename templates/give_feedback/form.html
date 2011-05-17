@@ -1,4 +1,15 @@
-{% extends "base.html" %}
+<html>
+<head>
+<style type="text/css">
+
+
+
+</style>
+</head>
+</html>{% extends "base.html" %}
+{% block title %}
+ Fill the form
+{% endblock %}
 {% block content %}
 <title> Give Your Feedback..!!</title>
 <script language='javascript'>
@@ -30,7 +41,7 @@ function mandatory()
              //alert(check[i].value);
              if(check[i].checked) 
                {
-                flag=7;
+                  flag=7;
                }
                
            }
@@ -68,10 +79,9 @@ function debug(str)
 <h3 align='left'> Hiya {{ username }} </h3>
 <h3 align='center'> {{ form.title }} </h3>
 <h4 align='center'> Your feedback is valuable to us! </h4>
-
+<div id="form">
 {% if flag == 'show' %}
   <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
- 
 {% else %}  
   <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
@@ -80,16 +90,16 @@ function debug(str)
     {% csrf_token %}
     {% for q in form.questions.all %}
     
-    <h4>{{ q.text }}
+    <q>{{ q.text }}</q>
         {% if q.mandatory %}
             <sup>*</sup>
          {% endif %}
-    </h4>
+    <br>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
             <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
 	             <label for='q{{ q.id }}_rdb_opt'>
-        	           {{ opt.text }}
+        	           <ans>{{ opt.text }}</ans>
 		         </label> <br/>
 		    {% endfor %}
 		{% endif %}
@@ -97,7 +107,7 @@ function debug(str)
             {% for opt in q.feedbackquestionoption_set.values %}
             <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
 	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
-        	            {{ opt.text }}
+        	            <ans>{{ opt.text }}</ans>
                  </label><br/>
         	{% endfor %}
 		{% endif %}
@@ -110,4 +120,5 @@ function debug(str)
      	<input type='submit' value='Submit feedback!'>
 	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
 </form>
+</div>
 {% endblock %}
