@@ -8,7 +8,6 @@ from django.template import Context, loader
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
-#or not filled the form
 
 def summary(request,formID):    
     """summary of feedback for a form..."""
@@ -74,4 +73,24 @@ def summary(request,formID):
 
     return HttpResponse(t.render(c))        
 
-
+def error(request, errorcode):
+    print "errorcode is ", errorcode;
+    print type(errorcode)
+    errorcode=int(errorcode);
+    print type(errorcode)
+    msg=""
+    if errorcode is 1:
+        msg="This form is already filled"
+    elif errorcode is 2:
+        msg="Sorry Deadline Exceeded..!!"
+    elif errorcode is 3:
+        msg = "This url is not meant for u"
+    elif errorcode is 4:
+        msg = "Not all questions are answered"
+    t=loader.get_template('error.html')
+    c=Context(
+    {
+        'msg':msg,    
+    }
+        );
+    return HttpResponse(t.render(c));

@@ -99,14 +99,14 @@ def show(request,form):
     #print 'and unfilled is %s' % (request.session['unfilled']);
 
     if f not in request.session['unfilled']:
-        return HttpResponse("This form is already filled..!!")
+        return redirect("/change_agent/manage_feedback/1/error")
     mandatoryQuestions = f.mandatoryQuestions();
 
     # is the deadline exceded??
     now = datetime.today()
     
     if (f.deadline_for_filling < now ):
-        return HttpResponse("Sorry deadline exceedd..:)");
+        return redirect("/change_agent/manage_feedback/2/error")
     else:
         flag='show'
         t = loader.get_template('give_feedback/form.html');
@@ -145,7 +145,7 @@ def preview(request,submissionID):
     # whether this  form submission is actually owned by the user...
     Submitter = str(f.submitter)
     if Submitter != username:
-    	return HttpResponse("boohoooooooooo..!! caught ya..!!! ")
+    	return redirect("change_agent/manage_feedback/3/error");
 
     now = datetime.today();
     #print "filled forms as per preview...", request.session['filled'];
@@ -221,7 +221,7 @@ def edit(request):
     
     #every user is allowed to edit only 
     if Submitter != username:
-    	return HttpResponse("Create it.. to edit it..!!"); 
+    	return redirect("change_agent/manage_feedback/3/error") 
     
     now = datetime.today()
     ans = feedbackSubmissionAnswer.objects.filter(submission=submissionID);
@@ -231,7 +231,7 @@ def edit(request):
     
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
-        return HttpResponse("Sorry deadline exceeded..:)");
+        return redirect("change_agent/manage_feedback/2/error")
     else:
         flag='edit' #so that we can render the same template for editing as well as filling new forms.
 	
@@ -273,7 +273,7 @@ def editsubmit(request,form):
     #print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return HttpResponse("Not all questions answered..!!"); 
+            return redirect("change_agent/manage_feedback/4/error") 
             break;
     
     submissionObj = feedbackSubmission.objects.get(pk=s['submissionID']); #create a new objecisting answer object
@@ -387,7 +387,7 @@ def submit(request,form):
                
 
         else:
-			return HttpResponse('Form is already filled');       
+			return redirect("/change_agent/manage_feedback/1/error")       
     
     answeredQuestions=list()
 
