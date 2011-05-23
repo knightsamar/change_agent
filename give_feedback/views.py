@@ -47,7 +47,7 @@ def index(request):
     #print "filled firm in index...", request.session['filled']
     
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
-    all_forms = list(feedbackForm.objects.all())
+    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project"))
     #print "all-forms.. ", all_forms
     #print "user.", u
     #print "user groups", u.groups.values()
@@ -56,6 +56,7 @@ def index(request):
         for f in all_forms:
             if g in f.allowed_groups.values():
                 unfilled_forms.extend([f])
+    about_us=feedbackForm.objects.get(title="About This Project");
     #print "unfilled forms..!!", unfilled_forms;
     for form in filled_forms:
     	k = form.feedbackForm
@@ -63,6 +64,8 @@ def index(request):
         if k is not None and k in unfilled_forms:
 		     unfilled_forms.remove(k)
     request.session['unfilled']= list(unfilled_forms);
+    request.session['unfilled'].append(about_us)
+
                 
                 
     # for displaying date and checking for deadline
@@ -74,7 +77,7 @@ def index(request):
                 'username' : username,
 	        	'login' : u.last_login,
                 'filled_list' : request.session['filled'],
-        		'unfilled_list': request.session['unfilled'],
+        		'unfilled_list': list(unfilled_forms),
                 'today' : d,
                 'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template

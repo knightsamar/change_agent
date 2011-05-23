@@ -14,15 +14,13 @@ fieldset {
 </html>
 {% extends "base.html" %}
 {% block title %}
- Home Page
+   Home Page
 {% endblock %}
 {% block content %}
-<style type='css'>
-
-    
-</style>
-<span><input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
-
+<div id="menubar">
+<input type="button" value="Feedback About this Software.." onClick="javascript:location.href='/change_agent/give_feedback/16/show'"><br>
+<input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
+</div>
 <h2> Hi {{username}}! </h2>
 
 <fieldset>
@@ -63,11 +61,9 @@ fieldset {
     {% endif %}   
 </table>
 </fieldset>
+{% if feedback_about_list %}
 <fieldset>
 <legend> View Feedback About</legend>
-{% if not feedback_about_list %}
- <i> You have no feedback to view</i>
-{% else %} 
 <ul align = 'center'>
 {% for f in feedback_about_list %}
  <li><a href ="/change_agent/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
