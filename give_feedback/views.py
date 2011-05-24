@@ -38,16 +38,17 @@ def index(request):
         #feedback_forms_about=feedbackForm.objects.filter(about=ab)
         feedback_about_list.extend([ab])
      
-       
+    about_us=feedbackForm.objects.get(title="About This Project") 
+    Filled=False
     # to fetch the filled forms for previewing and editing 
-    filled_forms = feedbackSubmission.objects.filter(submitter=username);
+    filled_forms = list(feedbackSubmission.objects.filter(submitter=username));
 
     # to remove the filled forms from the list of all forms to get the newly available forms
     request.session['filled']=list(filled_forms)
-    print "filled firm in index...", request.session['filled']
+    print "filled form in index...", request.session['filled']
     
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
-    all_forms = list(feedbackForm.objects.all())
+    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project"))
     print "all-forms.. ", all_forms
     print "user.", u
     print "user groups", u.groups.values()
@@ -59,12 +60,18 @@ def index(request):
     print "unfilled forms..!!", unfilled_forms;
     for form in filled_forms:
     	k = form.feedbackForm
+        if k == about_us:
+            Filled = True
+            filled_forms.remove(form)
 	
         if k is not None and k in unfilled_forms:
 		     unfilled_forms.remove(k)
+     
     request.session['unfilled']= list(unfilled_forms);
-                
-                
+    if Filled is False:
+        print "=-----Filled is False----"
+        request.session['unfilled'].append(about_us)            
+    print request.session['unfilled']            
     # for displaying date and checking for deadline
     d = datetime.today();
     		
@@ -72,9 +79,9 @@ def index(request):
     c = Context (
             {
                 'username' : username,
-	        	'login' : u.last_login,
-                'filled_list' : request.session['filled'],
-        		'unfilled_list': request.session['unfilled'],
+	        	'About_us_filled' : Filled,
+                'filled_list' : list(filled_forms),
+        		'unfilled_list': list(unfilled_forms),
                 'today' : d,
                 'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template
@@ -99,14 +106,14 @@ def show(request,form):
     print 'and unfilled is %s' % (request.session['unfilled']);
 
     if f not in request.session['unfilled']:
-        return HttpResponse("This form is already filled..!!")
+        return redirect('/manage_feedback/1/error');
     mandatoryQuestions = f.mandatoryQuestions();
 
     # is the deadline exceded??
     now = datetime.today()
     
     if (f.deadline_for_filling < now ):
-        return HttpResponse("Sorry deadline exceedd..:)");
+        return redirect("/manage_feedback/2/eror");
     else:
         flag='show'
         t = loader.get_template('give_feedback/form.html');
@@ -145,7 +152,7 @@ def preview(request,submissionID):
     # whether this  form submission is actually owned by the user...
     Submitter = str(f.submitter)
     if Submitter != username:
-    	return HttpResponse("boohoooooooooo..!! caught ya..!!! ")
+    	return redirect("/manage_feedback/3/error")#"boohoooooooooo..!! caught ya..!!! ")
 
     now = datetime.today();
     print "filled forms as per preview...", request.session['filled'];
@@ -221,7 +228,7 @@ def edit(request):
     
     #every user is allowed to edit only 
     if Submitter != username:
-    	return HttpResponse("Create it.. to edit it..!!"); 
+    	return redirect("/manage_feedback/3/error"); 
     
     now = datetime.today()
     ans = feedbackSubmissionAnswer.objects.filter(submission=submissionID);
@@ -231,7 +238,7 @@ def edit(request):
     
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
-        return HttpResponse("Sorry deadline exceeded..:)");
+        return redirect("/manage_feedback/2/error");
     else:
         flag='edit' #so that we can render the same template for editing as well as filling new forms.
 	
@@ -273,7 +280,7 @@ def editsubmit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return HttpResponse("Not all questions answered..!!"); 
+            return redirect("/manage_feedback/4/error"); 
             break;
     
     submissionObj = feedbackSubmission.objects.get(pk=s['submissionID']); #create a new objecisting answer object
@@ -387,7 +394,7 @@ def submit(request,form):
                
 
         else:
-			return HttpResponse('Form is already filled');       
+			return redirect('/manage_feedback/1/error');       
     
     answeredQuestions=list()
 
@@ -401,7 +408,7 @@ def submit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return HttpResponse("Not all questions answered..!!"); 
+            return redirect("/manage_feedback/4/error"); 
             break;
     print "i ma getting printed.."
 

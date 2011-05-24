@@ -1,4 +1,4 @@
-from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
+from give_feedback.models import *
 from django.contrib import admin
 
 #enable in admin site the following

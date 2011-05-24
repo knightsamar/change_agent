@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} Ppl who havenot filled the form {% endblock %}
+{% block content %}
+<html>
+
+{% for k,v in forms_users_dict.items %}
+  <formTitle>{{ k }}<formTitle>
+  <br/>
+  {% if not v %}
+    <i> hurray..!! everybody has filled the form.!!</i><br>
+   {% else %}  
+  <ul>
+  {% for user in v %}
+     <li>{{user.username}}</li>
+  {% endfor %}  
+  </ul>
+  {% endif %}
+{% endfor %}
+<input type = 'button' value="Mail them..!! ">
+{% endblock %}

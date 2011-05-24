@@ -1,22 +1,42 @@
+<html>
+<head>
+<style type="text/css">
 
+fieldset {
+	background-color: #fdfed4;
+	color: black;
+	font-weight: bold;
+	font-family: fantasy;
+}
+
+</style>
+</head>
+</html>
 {% extends "base.html" %}
-
+{% block title %}
+      Home Page
+{% endblock %}
 {% block content %}
-<span><input type='button' onClick="javascript:location.href='/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
+
+<div id="menubar">
+{% if not About_us_filled %}
+<input type="button" value="Feedback About US" onClick="javascript:location.href='/give_feedback/15/show'">
+{% endif %}
+<input type='button' onClick="javascript:location.href='/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
 
 <h2> Hi {{username}}! </h2>
 
 <fieldset>
 <legend> My Feeback forms to be filled </legend>
 
-<table cellpadding='16'>
+<table cellpadding='16' align='center'>
    {% if not unfilled_list %}
       You have no new forms...!!
    {% else %}   
     <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
     {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='red'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a></td><td>{{form.deadline_for_filling}}</td><td>{{form.created_on}}</tr>
+        <tr bgcolor='#b3dlea'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a></td><td>{{form.deadline_for_filling}}</td><td>{{form.created_on}}</tr>
       {% else %}
         <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td><td>{{form.created_on}}</td></tr>
       {% endif %}
@@ -27,7 +47,7 @@
 <fieldset>
 <legend> Feedback you gave </legend>
 
-<table cellpadding='16'>
+<table cellpadding='16' align='center'>
    {% if not filled_list %}
      <i>You have no filled forms</i>
    {% else %}  
@@ -44,12 +64,10 @@
     {% endif %}   
 </table>
 </fieldset>
+{% if feedback_about_list %}
 <fieldset>
 <legend> View Feedback About</legend>
-{% if not feedback_about_list %}
- <i> You have no feedback to view</i>
-{% else %} 
-<ul>
+<ul align = 'center'>
 {% for f in feedback_about_list %}
  <li><a href ="/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
 {% endfor %}

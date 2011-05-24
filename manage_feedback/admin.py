@@ -45,6 +45,7 @@ class feedbackFormAdmin(admin.ModelAdmin):
             #now from this list.. remove ppl who have filled the form...!!
             forms=feedbackSubmission.objects.filter(feedbackForm=existing_form)
             for f in forms:
+                #if f.submitter in user_all:
                 user_all.remove(f.submitter)
             user_dict[str(existing_form.title)]=user_all
         t = loader.get_template('manage_feedback/notFilled.html');
