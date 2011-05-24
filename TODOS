@@ -20,9 +20,12 @@ Requirements by Hg -- 16th may
 * the creator of the form and the course head/ program head (eg kv, hg) are by default the values of who-can-view wala paramater of the forms. 
 * The users for the group can also be synced from ldap, or imported from csv dump or something.
 *??? the admin view should then have option to generate new templates also...???????
+* We need to categorize the forms like Subjects, Techers, fun.. etc (we can use the about wala thing)
 
 -- as per 'us'---
 
+* Make a room for feedback about this s/w
+* Make it more general adding google/ facebook logins. Ldap->for sicsr/ others for outsiders...!!
 *Each user should have the option of creating (editing and del) a new form
     - Either by manually creating an interface for them and customizing the optios for them
     - Or integrating it with the admin view, which means creating a user for each in the admin wala thing also.

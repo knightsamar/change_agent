@@ -40,10 +40,12 @@ def index(request):
      
        
     # to fetch the filled forms for previewing and editing 
-    filled_forms = feedbackSubmission.objects.filter(submitter=username);
+    filled_forms = list(feedbackSubmission.objects.filter(submitter=username));
 
     # to remove the filled forms from the list of all forms to get the newly available forms
-    request.session['filled']=list(filled_forms)
+    about_us=feedbackForm.objects.get(title="About This Project");
+    request.session['filled']=filled_forms
+    Filled=False;
     #print "filled firm in index...", request.session['filled']
     
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
@@ -56,15 +58,18 @@ def index(request):
         for f in all_forms:
             if g in f.allowed_groups.values():
                 unfilled_forms.extend([f])
-    about_us=feedbackForm.objects.get(title="About This Project");
     #print "unfilled forms..!!", unfilled_forms;
     for form in filled_forms:
-    	k = form.feedbackForm
-	
+        k = form.feedbackForm
+        if k == about_us:
+            Filled=True;
+            filled_forms.remove(form)
+
         if k is not None and k in unfilled_forms:
 		     unfilled_forms.remove(k)
     request.session['unfilled']= list(unfilled_forms);
-    request.session['unfilled'].append(about_us)
+    if Filled is False:
+        request.session['unfilled'].append(about_us)
 
                 
                 
@@ -75,9 +80,9 @@ def index(request):
     c = Context (
             {
                 'username' : username,
-	        	'login' : u.last_login,
-                'filled_list' : request.session['filled'],
-        		'unfilled_list': list(unfilled_forms),
+	        	'About_us_filled' : Filled,
+                'filled_list' : filled_forms,
+        		'unfilled_list':list(unfilled_forms),
                 'today' : d,
                 'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template

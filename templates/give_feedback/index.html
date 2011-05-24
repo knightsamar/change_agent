@@ -18,7 +18,9 @@ fieldset {
 {% endblock %}
 {% block content %}
 <div id="menubar">
+{% if not About_us_filled %}
 <input type="button" value="Feedback About this Software.." onClick="javascript:location.href='/change_agent/give_feedback/16/show'"><br>
+{% endif %}
 <input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
 </div>
 <h2> Hi {{username}}! </h2>
