@@ -24,6 +24,7 @@ Requirements by Hg -- 16th may
 
 -- as per 'us'---
 
+* make the others wala text box.. onclick
 * Make a room for feedback about this s/w
 * Make it more general adding google/ facebook logins. Ldap->for sicsr/ others for outsiders...!!
 *Each user should have the option of creating (editing and del) a new form

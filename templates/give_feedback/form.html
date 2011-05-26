@@ -87,12 +87,13 @@ function debug(str)
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 
+<ol>
     {% csrf_token %}
     {% for q in form.questions.all %}
     
-    <q>{{ q.text }}</q>
+    <li><q>{{ q.text }}</q>
         {% if q.mandatory %}
-            <sup>*</sup>
+            <sup><img src="/../media/star.png" height=10 width=10></sup>
          {% endif %}
     <br>
 		{% if q.type == 'multiple-choice-single-answer' %}
@@ -112,7 +113,7 @@ function debug(str)
         	{% endfor %}
 		{% endif %}
 		{% if q.type == 'text' %}
-			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='12' cols=60'></textarea> <br/>
 		{% endif %}
 	    <br/>
    {% endfor %}
