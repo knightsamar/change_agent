@@ -105,11 +105,12 @@ def logout(request):
     if 'username' in request.session:
         #print 'logging you out';
 		#yes,#then log us out!
-        #if len(request.session['unfilled']) is not 0:
+        if len(request.session['unfilled']) is not 0:
             # the person has unfillwd forms
-         #   emailid=[request.session['username']+"@sicsr.ac.in"]
-         #   #print "Sending mail to ",emailid
-            #send_mail("unfilled forms", "You have unfilled forms left.. please fill it before the deadline..!!","info@gnunify.in", emailid)
+            emailid=request.session['username']+"@sicsr.ac.in"
+            emailid=[emailid,];
+            print "Sending mail to ",emailid
+            send_mail("Feedback Forms - Unfilled!", "You have unfilled forms left. Please fill them before the deadline!","root@sdrcserver.sdrc", emailid,fail_silently=True);
         request.session.flush();
     #else:
 		#no,
