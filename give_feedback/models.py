@@ -6,7 +6,7 @@ class feedbackSubmission(models.Model):
     submitter = models.ForeignKey('ldap_login.user',help_text='Submitted by which user?');
     when = models.DateTimeField(auto_now_add=True, help_text='When was this submitted?');
     def __str__(self):
-        return ("%s's submission of form '%s'" % (self.feedbackForm, self.submitter))
+        return ("%s's submission of form '%s'" % (self.submitter, self.feedbackForm))
 
 class feedbackSubmissionAnswer(models.Model):
     submission = models.ForeignKey('feedbackSubmission',help_text='Submission for which this is the answer');

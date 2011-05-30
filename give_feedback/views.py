@@ -409,7 +409,7 @@ def submit(request,form):
     #print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return HttpResponse("Not all questions answered..!!"); 
+            return redirect("/change_agent/manage_feedback/4/error"); 
             break;
     #print "i ma getting #printed.."
 
