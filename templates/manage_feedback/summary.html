@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}
+ Form {{ formName }} Summary
+{% endblock %}
+
+{% block content %}
+<div id="form">
+<h2 align = 'center'> {{ formName }} </h3>
+{% for k,v in summaryDict.items %}
+ <br/><br/><b><q>Q. {{ k }}</q></b>
+ <br/>
+ <ul>
+  {% for option,count in v.items %}
+   {% if count == None %}
+      <li> <ans>{{option}}</ans></li>
+   {% else %}  
+     <li><ans>{{ option }}...........{{count}}</ans></li>
+   {% endif %}
+  {% endfor %}
+ </ul>
+{% endfor %}
+<input type='button' value='back' onClick="history.go(-1); return true;">
+</div>
+{% endblock %}
