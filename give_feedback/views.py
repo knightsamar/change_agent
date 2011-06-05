@@ -153,7 +153,7 @@ def preview(request,submissionID):
     # whether this  form submission is actually owned by the user...
     Submitter = str(f.submitter)
     if Submitter != username:
-    	return redirect("change_agent/manage_feedback/3/error");
+    	return redirect("/change_agent/manage_feedback/3/error");
 
     now = datetime.today();
     #print "filled forms as per preview...", request.session['filled'];

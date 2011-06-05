@@ -24,6 +24,7 @@ Requirements by Hg -- 16th may
 
 -- as per 'us'---
 
+* add a form description.. or atleast print it by taking it from feedback about...
 * make the others wala text box.. onclick
 * Make a room for feedback about this s/w
 * Make it more general adding google/ facebook logins. Ldap->for sicsr/ others for outsiders...!!

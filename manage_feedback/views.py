@@ -11,6 +11,11 @@ from django.template import Context, loader
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def summary(request,formID):    
+   
+    """for rendering the index page for any user who has just logged in"""
+     
+    if 'username' not in request.session or request.session['username'] == None:
+       return redirect('/change_agent/ldap_login');
     """summary of feedback for a form..."""
     #select a form
     f = feedbackForm.objects.get(pk=formID);
