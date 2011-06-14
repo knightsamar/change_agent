@@ -77,9 +77,8 @@ function debug(str)
 
 </script>
 <h3 align='left'> Hiya {{ username }} </h3>
-<h3 align='center'> {{ form.title }} </h3>
-<h4 align='center'> Your feedback is valuable to us! </h4>
 <div id="form">
+<h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
   <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
@@ -121,6 +120,6 @@ function debug(str)
      	<input type='submit' value='Submit feedback!'>
 	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
 </form>
-<p id='disclaimer' align='right'>Please note that all these forms are official feedback forms of SICSR.</p>
+<p id='disclaimer' align='right'>Please note that all these forms are official feedback forms of SICSR.<br/> The questions and thier options are all official and the software holds no responsiblity of the data.</p>
 </div>
 {% endblock %}

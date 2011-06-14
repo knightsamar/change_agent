@@ -333,6 +333,7 @@ def editsubmit(request,form):
                 )
             #print "---> Saving %s" % submissionAnswerObj;
             submissionAnswerObj.save(); #save this answer!
+         
 
             #print "Outside for loop!";
     t = loader.get_template('give_feedback/submit.html');
@@ -467,6 +468,9 @@ def submit(request,form):
     #print "current form ,f ", f
     unfilled.remove(f)
     request.session['unfilled']=unfilled
+    #filled=request.session['filled']
+    #filled.append(submissionObj)
+    #request.session['filled']=filled
     #print "unfilled form ki list after removing..!!", unfilled
 
     t = loader.get_template('give_feedback/submit.html');

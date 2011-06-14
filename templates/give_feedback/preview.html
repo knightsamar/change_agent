@@ -4,16 +4,20 @@
 {% endblock %}
 
 {% block content %}
-<h3 align='center'> {{ form.title }}<br>
-Form Preview :)</h3>
 Submitted by {{sub}}<br>
+<h3 align='center'>Form Preview ;)</h3><br/>
 <div id="form">
+ <h3 align='center'>{{ form.title }}</h3>
 {% regroup submissionDetails by question as question_answers %}
 <ol>
 {% for question in question_answers %}
    <br><li><q>{{ question.grouper }}</q></li>
    {% for item in question.list %}
-      <b>A.</b> <ans>{{ item.answer }} </ans><br/>
+   {% if item.answer %}
+      <img src="/media/bullet" height='15' width=15> <ans>{{ item.answer }} </ans><br/>
+      {% else %}
+      -
+    {% endif %} 
      {% endfor %}
 {% endfor %}      
 </ol>

@@ -11,10 +11,13 @@
  <br/>
  <ul>
   {% for option,count in v.items %}
+  
    {% if count == None %}
-      <li> <ans>{{option}}</ans></li>
+   {% if option != ""%}
+      <li> <div id='ans'>{{option}}</div></li>
+   {% endif%}
    {% else %}  
-     <li><ans>{{ option }}...........{{count}}</ans></li>
+     <li><div id='ans'>{{ option }}...........{{count}}</div></li>
    {% endif %}
   {% endfor %}
  </ul>
