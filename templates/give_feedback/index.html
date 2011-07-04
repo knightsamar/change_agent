@@ -39,7 +39,7 @@ legend{
             <img align='right' src='/../../media/clock' height=40 width=40>
         
         </td>
-        <td>{{form.deadline_for_filling|timeuntil }} left </td></tr>
+        <td>{{ form.deadline_for_filling|timeuntil }} left </td></tr>
       {% else %}
         <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td></tr>
       {% endif %}

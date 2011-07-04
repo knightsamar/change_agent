@@ -1,0 +1,50 @@
+
+<html>
+	<head>
+	<style type="text/css">
+
+	#change {
+		text-align: center;
+		text-decoration: line-through;
+		letter-spacing: -10px;
+		text-shadow: 3px 6px black;
+		font-family: logo;/* Blackmoor LET; 
+        font-src: url(http://projects.sdrclabs.in/media/Woodcut-Cracked.ttf);*/
+		font-size: 80px;
+        /* position:absolute; */
+	}
+    
+    #footer{
+    text-align:right;
+    }
+	hr {
+		text-shadow: 1px 2px black;
+		color: #ff7f00;
+        line-height: 15px;
+    }
+    
+    @font-face {
+            font-family: logo;
+            font-style: normal;
+            src: url('http:/media/fonts/Whatka!.ttf');
+        }
+	
+	#form {
+    width:50%;
+    margin-left:25%;
+	background-image: url('/media/CRINKLEP.JPG');
+    /*background-color:#fdfed4;*/
+    border:15px groove;
+    line-break:strict;
+    -moz-box-shadow:0 0 300px 5px;
+}
+formtitle{
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+}
+
+	q {
+	font-family: Verdana;
+	font-size: 14px;
+}
