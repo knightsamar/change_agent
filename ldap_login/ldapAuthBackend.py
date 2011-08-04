@@ -14,7 +14,7 @@ def authenticate(username=None, password=None):
 
     if not username.endswith("@sicsr.edu"):
            username += "@sicsr.edu";
-           server = "172.17.2.12";
+           server = "10.10.21.3";
            try:
                l = ldap.open(server);
                #print 'Connecting using %s , %s ' % (username, password);
