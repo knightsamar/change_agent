@@ -16,17 +16,22 @@
 
 function mandatory()
 {
-   flag=1;
+   
    {% for id,type in mandatoryQuestions.items %}
+    flag=1
+    alert("next mandatory... {{ type }}")
     {% if type == 'multiple-choice-single-answer' %}
         var radio= document.forms.feedbackForm.q{{id}}_rdb_opt;
+        alert("found radio..!!"+radio.id);
         for(i=0;i<radio.length;i++)
           {          
               if (radio[i].checked) 
-           {
-               flag=4;
-           }
-          } 
+                 {
+                    flag=4;
+                    alert("found checked..."+radio[i].value)
+                 }  
+          }
+        alert("flag = " + flag)  
         if(flag!=4) 
         {   
             alert('Please answer the mandatory radio button questions');
@@ -34,8 +39,8 @@ function mandatory()
             return false;
         }
     {% endif %}  
-    {% if type == 'multiple-choice-multiple-answer' %}
-       var check=document.forms.feedbackForm.q2
+    {% comment %}{% if type == 'multiple-choice-multiple-answer' %}
+       var check=document.forms.feedbackForm.
        for(i=0;i<check.length;i++)
            {
              //alert(check[i].value);
@@ -52,7 +57,7 @@ function mandatory()
            return false;
        }
 
-    {% endif %}     
+    {% endif %}  {% endcomment %}   
     {%if type == 'text'%}
          var a='q{{id}}'
          var text=document.getElementById(a);

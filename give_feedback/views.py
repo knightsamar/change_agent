@@ -181,7 +181,7 @@ def preview(request,submissionID):
     submissionDetails = [];
     #for each answer
     for a in answers:
-        if a.answer_text == '' or a.answer_text is None: 
+        if  a.answer_text is None: 
             d = {'question' : a.question.text, 'answer' : a.answer_option.text };
             #insert into the list
             submissionDetails.append(d);

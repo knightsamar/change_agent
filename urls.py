@@ -19,8 +19,9 @@ urlpatterns = patterns('',
     (r'^give_feedback/edit/$','give_feedback.views.edit'),
     (r'^give_feedback/edit/$','give_feedback.views.edit'),
     (r'^give_feedback/(?P<submissionID>\d+)/preview.html/$','give_feedback.views.preview'),
-#(r'^give_feedback/(?P<form>\d+)/preview/$','give_feedback.views.preview'),
-    (r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    
+    #(r'^manage_feedback/admin/deadline/$','manage_feedback.admin.FeedbackFormAdmin.ChangeDeadline'),
+	#(r'^give_feedback/(?P<form>\d+)/preview/$','give_feedback.views.preview'),
+	(r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

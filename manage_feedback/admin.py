@@ -4,6 +4,8 @@ from django.template import RequestContext, Context, loader
 from ldap_login.models import *
 from give_feedback.models import feedbackSubmission
 from django.http import HttpResponse
+from django.core.context_processors import csrf
+from datetime import datetime
 
 #for displaying options directly underneath the question when creating or editing
 class feedbackQuestionOptionsInline(admin.TabularInline):
@@ -14,7 +16,7 @@ class feedbackQuestionAdmin(admin.ModelAdmin):
     inlines = [feedbackQuestionOptionsInline];
     
 class feedbackFormAdmin(admin.ModelAdmin):
-    actions = ['duplicateForm','notFilled'];
+    actions = ['duplicateForm','notFilled','changeDeadline'];
     list_display=['title', 'deadline_for_filling']
     ordering=['title']
     def duplicateForm(self, request, queryset):
@@ -53,11 +55,36 @@ class feedbackFormAdmin(admin.ModelAdmin):
            {
              'forms_users_dict':user_dict
            }
-         );
+         )
    
         return HttpResponse(t.render(c))
+    def changeDeadline(self, request, queryset):
+            #it means user has entered the new target deadline
+            dd=8            
+            mm='Mar'
+            yyyy=2011
+            #forming the date
+            month={'Jan':1, 'Feb':2,'Mar':3, 'April':4,'May':5,'June':6,'July':7,'Aug':8,'Sept':9,'Oct':10,'Nov':11,'Dec':12}
+            
+            '''dd=int(request.post['date'])
+            mm=request.post['month']
+            yyyy=int(request.post['year'])'''
+            # so for all forms in queryset: 
+            for forms in queryset:
+                #forms.deadline=request.post['date']
+                forms.deadline_for_filling = datetime(yyyy,int(month[mm]),dd);
+                forms.save()
+           
+            #pass    
+
+            '''else:
+            t=loader.get_template('manage_feedback/date.html')
+            c=RequestContext(request,{});
+            return HttpResponse(t.render(c));'''
+
     duplicateForm.short_description = "Duplicate this form";
     notFilled.short_description = "People who have not filled this form";
+    changeDeadline.short_description="Change the deadline";
          
 admin.site.register(feedbackQuestion,feedbackQuestionAdmin);
 

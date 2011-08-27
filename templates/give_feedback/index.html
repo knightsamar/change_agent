@@ -1,5 +1,11 @@
 <html>
 <head>
+<script language='javascript'>
+function a()
+{
+    alert('haha');
+}
+</script>
 <style type="text/css">
 
 fieldset {
@@ -30,27 +36,38 @@ fieldset {
 <legend> My Feeback forms to be filled </legend>
 
 <table cellpadding='16' align='center'>
-   {% if not unfilled_list %}
-      You have no new forms...!!
-   {% else %}   
     <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
     {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='#b3dlea'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a></td><td>{{form.deadline_for_filling}}</td><td>{{form.created_on}}</tr>
+        <tr bgcolor='#b3dlea'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a>
+              {% if form.deadline_for_filling|timeuntil|truncatewords:2 <= '2days'  %}
+              haha
+              {% else %}
+              lala
+              {% endif %}
+              
+        </td>
+        
+          <td>
+        {{form.deadline_for_filling}}
+           </td><td>{{form.created_on|date:"D, d b, Y" }}</tr>
       {% else %}
-        <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td><td>{{form.created_on}}</td></tr>
+       
+        <tr><td>{{ form.title }}</td> <td><i> Sorry, Deadline Exceeded </i></td>
+        <td>{{ form.created_on|date:"D, dS b,Y" }}
+   
+         </td>
+        </tr>
       {% endif %}
+    {% empty %}
+        <br/><i>You have no new forms to fill</i>
     {% endfor %}
-   {% endif %} 
 </table>
 </fieldset>
 <fieldset>
 <legend> Feedback you gave </legend>
 
 <table cellpadding='16' align='center'>
-   {% if not filled_list %}
-     <i>You have no filled forms</i>
-   {% else %}  
     <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
     {% for form in filled_list %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
@@ -59,9 +76,9 @@ fieldset {
         <tr><td><a href = './{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
       {% endif %} 
 	<td>{{form.feedbackForm.deadline_for_filling}}<td>{{form.feedbackForm.created_on}}</td></tr>
-
+       {% empty%}
+        <br><i>You have not filled any forms</i>
        {% endfor %}
-    {% endif %}   
 </table>
 </fieldset>
 {% if feedback_about_list %}
