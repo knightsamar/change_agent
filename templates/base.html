@@ -1,0 +1,96 @@
+
+<html>
+	<head>
+	<style type="text/css">
+
+	#change {
+		text-align: center;
+		text-decoration: line-through;
+		letter-spacing: -10px;
+		text-shadow: 3px 6px black;
+		font-family: logo;// Blackmoor LET; 
+        /*font-src: url(http://projects.sdrclabs.in/media/Woodcut-Cracked.ttf);*/		
+        font-size: 80px;
+        /* position:absolute;  */
+	}
+    
+    #footer{
+    text-align:right;
+    }
+	hr {
+		text-shadow: 1px 2px black;
+		color: #ff7f00;
+        line-height: 15px;
+    }
+    
+    @font-face {
+            font-family: logo;
+            font-style: normal;
+            src: url('http:/media/fonts/Whatka!.ttf');
+        }
+	
+	#form {
+    width:50%;
+    margin-left:25%;
+	background-image: url('/media/CRINKLEP.JPG');
+    //background-color:#fdfed4;
+    border:15px groove;
+    line-break:strict;
+    -moz-box-shadow:0 0 300px 5px;
+}
+formtitle{
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+}
+
+	q {
+	font-family: Verdana;
+	font-size: 14px;
+}
+	#ans {
+	font-family: "comic sans MS";
+    word-wrap: normal;
+}
+
+	</style>
+    
+    <head>
+<!--<link REL=Stylesheet HREF="base.css" TYPE="text/css">-->
+
+		<title>Change Agent :: {% block title %} {% endblock %}</title>
+
+	</head>
+	
+	<body>
+		<div id='change'>
+        <font color="orange">c h</font>
+        <font color="green">a</font>
+        <font color="orange">n</font>
+        <font color="green">g e&nbsp;n t</font>
+        </font>
+         </div>
+      <h5 align='center'>be the change u wanna c</h5>
+      <br><hr><BR>
+
+		<div id='content'>
+		{% block content %}
+		
+		{% endblock %}
+		</div>
+
+		<br/>
+
+		<div id='footer'> 
+		<hr>
+			Developed using <a href='http://www.djangoproject.com'><img src='/../media/django-logo-positive.png' height='40' width='70' alt='Django' border=0></a>which is powered by <a href='http://python.org'><img src='/../media/python_logo_official.png' border=0 height=50 width=90 alt='Python'></a><br/>
+            This is a <a href='http://sdrclabs.in'><img src="/../media/SDRC_logo.gif" height="40" width="80" border=0 alt="SDRCLabs"></a>Labs creation!<br/>
+            Created by <a href='http://www.facebook.com/apoorva.srinivasan1'>Apoorva</a> and <a href='http://www.facebook.com/knightsamar'>Samar</a><br/>
+            MSc.(CA) 2010-12<br/>
+            <a href='http://redwine.sdrclabs.in/projects/sdrc-changeagent'>Version 0.3.5+2</a><br>
+		</div>
+        
+	</body>
+
+</html>
+

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+ Login 
+{% endblock %}
+{% block content %}
+<form action='/change_agent/' method='POST'>
+
+    {% csrf_token %}
+    {% if message != None %}
+    <font color='red' face='comic sans' sizs='10'>
+   	<p align='center'>{{ message }}</p> </font><br/>
+    {% endif %}
+    <BR>
+    <table align='center'>
+    <tr>
+        <td><label for='username'>Username</label></td>
+        <td><input type='text' name='username' value='' maxlength='30'/></td>
+    </tr><tr>
+        <td><label for='password'>Password</label></td>
+        <td><input type='password' name='password' value='' maxlength='255'/></td>
+    </tr>
+    <tr>
+        <td><td><input type='submit' value='Login!'/></td>
+    </tr>
+    </table>
+</form>
+{% endblock %}
