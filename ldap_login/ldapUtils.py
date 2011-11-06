@@ -47,7 +47,7 @@ class ldapManager:
         where = self.base_dn;
         raw_result = self.conn.search_s(where,ldap.SCOPE_SUBTREE,filters,attrs);
         result = []
-        #now is a bit tricky, because we need to extract exact OU Names for usage.
+        
         for r in raw_result:
             if r[0] is None: #I don't know WHY but it is listing such elements!
                 continue;
