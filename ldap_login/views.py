@@ -34,13 +34,13 @@ def login(request):
             request.session['username'] = request.POST['username']; 
             userName=request.session['username']
             request.session.set_expiry(1800)
+            add_user(userName);		
         else:
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
     
         print 'redirecting now...';
 	    #check for user existance... and/or add the use in our feedback database..!!
-        add_user(userName);		
         #redirect to the index view!
         return redirect('/change_agent/give_feedback/');
        

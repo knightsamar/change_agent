@@ -3,6 +3,8 @@
  Login 
 {% endblock %}
 {% block content %}
+<p align='center' style="{font-size: 13pt;}"> Please login using your Windows Active Directory Logins <br/>(the one you use for Cyberoam, Moodle, <a href='http://projects.sdrclabs.in/laresumex'>LaResume-X</a>, <a href='http://live.sdrclabs.in'>SDRCLive</a>)</p>
+
 <form action='/change_agent/' method='POST'>
 
     {% csrf_token %}
@@ -14,10 +16,10 @@
     <table align='center'>
     <tr>
         <td><label for='username'>Username</label></td>
-        <td><input type='text' name='username' value='' maxlength='30'/></td>
+        <td><input type='text' id='username' name='username' value='' maxlength='30' autofocus='true'/></td>
     </tr><tr>
         <td><label for='password'>Password</label></td>
-        <td><input type='password' name='password' value='' maxlength='255'/></td>
+        <td><input type='password' id='password' name='password' value='' maxlength='255'/></td>
     </tr>
     <tr>
         <td><td><input type='submit' value='Login!'/></td>
