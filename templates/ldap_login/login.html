@@ -3,16 +3,15 @@
  Login 
 {% endblock %}
 {% block content %}
-<p align='center' style="{font-size: 13pt;}"> Please login using your Windows Active Directory Logins <br/>(the one you use for Cyberoam, Moodle, <a href='http://projects.sdrclabs.in/laresumex'>LaResume-X</a>, <a href='http://live.sdrclabs.in'>SDRCLive</a>)</p>
+<p align='center' style="{font-size: 13pt;}"> Please login using your SICSR Authentication<br/>(the one you use for Internet access, Moodle, <a href='http://projects.sdrclabs.in/laresumex'>LaResume-X</a>, <a href='http://live.sdrclabs.in'>SDRCLive</a>)</p>
 
 <form action='/change_agent/' method='POST'>
 
     {% csrf_token %}
     {% if message != None %}
     <font color='red' face='comic sans' sizs='10'>
-   	<p align='center'>{{ message }}</p> </font><br/>
+   	<p align='center'>{{ message }}</p> </font>
     {% endif %}
-    <BR>
     <table align='center'>
     <tr>
         <td><label for='username'>Username</label></td>

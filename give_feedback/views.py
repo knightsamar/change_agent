@@ -49,7 +49,9 @@ def index(request):
     #print "filled firm in index...", request.session['filled']
     
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
-    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project"))
+    
+    #forms ordered in descending order of deadlines and ascending orders of about what they are
+    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").order_by('deadline_for_filling','about'))
     #print "all-forms.. ", all_forms
     #print "user.", u
     #print "user groups", u.groups.values()
@@ -80,6 +82,7 @@ def index(request):
     c = Context (
             {
                 'username' : username,
+                'fullname' : u.fullname,
 	        	'About_us_filled' : Filled,
                 'filled_list' : filled_forms,
         		'unfilled_list':list(unfilled_forms),

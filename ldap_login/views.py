@@ -35,20 +35,19 @@ def login(request):
             userName=request.session['username']
             request.session.set_expiry(1800)
             add_user(userName);		
+            print 'redirecting now...';
+        	#check for user existance... and/or add the use in our feedback database..!!
+            #redirect to the index view!
+            return redirect('/change_agent/give_feedback/');
         else:
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
-    
-        print 'redirecting now...';
-	    #check for user existance... and/or add the use in our feedback database..!!
-        #redirect to the index view!
-        return redirect('/change_agent/give_feedback/');
-       
+        
     else:
-   
-    # print request.POST['username']
-    # print request.POST['password']
-      print "nothing is  true hence showint the login teplate again"
+        # print request.POST['username']
+        # print request.POST['password']
+        print "nothing is  true hence showint the login teplate again"
+    
     #we aren't either procesing a login attempt OR the user had a failed login attempt!
     t = loader.get_template('ldap_login/login.html');
     c = RequestContext (request,
