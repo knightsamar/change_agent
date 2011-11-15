@@ -34,6 +34,7 @@ class feedbackForm(models.Model):
         questions = models.ManyToManyField(feedbackQuestion);
         allowed_groups = models.ManyToManyField('ldap_login.group', help_text='Groups which are allowed to view and fill this form') #groups which are allowed to fill this form!
         about = models.ForeignKey('feedbackAbout');
+        isofficial = models.BooleanField(default=True,blank=False,null=False, help_text="Is this an official form of SICSR or you are creating it just for your own non-official purpose?");
 
         def __str__(self):
             return self.title; 
