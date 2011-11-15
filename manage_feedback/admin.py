@@ -1,4 +1,4 @@
-from manage_feedback.models import feedbackQuestion,feedbackQuestionOption,feedbackForm,feedbackAbout
+from manage_feedback.models import *#feedbackQuestion,feedbackQuestionOption,feedbackForm,feedbackAbout
 from django.contrib import admin
 from django.template import RequestContext, Context, loader
 from ldap_login.models import *
@@ -57,11 +57,14 @@ class feedbackFormAdmin(admin.ModelAdmin):
         return HttpResponse(t.render(c))
     duplicateForm.short_description = "Duplicate this form";
     notFilled.short_description = "People who have not filled this form";
-         
+
+
 admin.site.register(feedbackQuestion,feedbackQuestionAdmin);
 
 #enable in admin site the following other things
 admin.site.register(feedbackQuestionOption);
 admin.site.register(feedbackForm,feedbackFormAdmin);
 admin.site.register(feedbackAbout);
+admin.site.register(Batches);
+admin.site.register(Subjects);
 

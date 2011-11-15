@@ -62,3 +62,20 @@ class feedbackAbout(models.Model):
         
         def __str__(self):
             return self.title;
+
+class Batches(models.Model):
+    sem = ((1,1),(2,2),(3,3),(4,4),(5,5),(6,6))
+    Programme = models.CharField('Programme', max_length =10)
+    Stream = models.CharField(max_length = 16);
+    Sem = models.IntegerField(choices = sem)
+    course_coordinator = models.ForeignKey('ldap_login.user')
+    sub = models.ManyToManyField('Subjects') 
+
+
+class Subjects(models.Model):
+    name = models.CharField(max_length =100);
+    #for_batch = models.ForeignKey('Batches')
+    taughtby = models.CharField("USe comma seperated for morw than one teacher",max_length =100)
+    def __str__(self):
+        return self.name + 'by' + self.taughtby
+

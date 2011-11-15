@@ -18,12 +18,12 @@ def login(request):
         #print 'processing login attempt';
         try:
             #comment this line when you ARE OUTSIDE SICSR!
-            status = authenticate(request.POST['username'],request.POST['password']);
+            #status = authenticate(request.POST['username'],request.POST['password']);
             #UNCOMMENT this lin when you are outside SICSR!
-            #status = True;
+            status = True;
             print status;
             #print 'auth process completed'
-        except e as Exception:
+        except Exception as e:
             return HttpResponse('Error!!! %s' %  e.message());
         
         if status is True:
