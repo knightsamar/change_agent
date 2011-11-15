@@ -1,5 +1,5 @@
 #comment this line when you ARE OUTSIDE SICSR!
-from ldapAuthBackend import authenticate;
+#from ldapAuthBackend import authenticate;
 from django.http import HttpResponse;
 from django.shortcuts import redirect;
 from django.template import RequestContext, loader;
