@@ -1,7 +1,7 @@
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponse,HttpResponseNotFound
 from django.shortcuts import redirect
-from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout, Batch, Subject
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
 
@@ -107,42 +107,66 @@ def adminindex(request):
     for p,v in post.iteritems():
             print p,"==",v;
     
-    '''
-    b = Batches.objects.filter(programme = post['programme']).filter(sem = post[sem])
-    s=list()
-    for bb in b:
-        s = bb.sub.all();
-        for ss in s:
-             if createform = all or subject:
-                sub = true
-                newForm = FeedbackForm();
-                newForm.title = s.name - b.programme - post[SEM] - post[year] 
-                g = group.get(pk = bb.stream)
-                if g = []:
-                    g= group.get(pk = bb.programme)
-                newForm.allowd_groups = g
-                newForm.deadline = datetime.datetime(post['deadline'])
-                newForm.isofficial = True;
-                newForm.save()
-                #   manage to copy the questions from somewhere now.
-    
-            if createform = all or teacher:
-                for each tea in s.taughtby.split(','):
-                    newForm = FeedbackForm();
-                    newForm.title = tea - b.programme - post[SEM] - post[year] 
-                    g = group.get(pk = bb.stream)
-                    if g = []:
-                        g= group.get(pk = bb.programme)
-                    newForm.allowd_groups = g
-                    newForm.deadline = datetime.datetime(post['deadline'])
-                    newForm.isofficial = True;
-                    newForm.save()
-                    #   manage to copy the questions from somewhere now.
-    
-    '''
+    createforms = post['createforms'];
+    deadline = datetime.datetime(post['deadline']);
+    semester = post['semester']
+    prog = post['programme']
+    batchname = post['batch'] 
 
-    
-    return HttpResponse('sdf')
+    subject_qnos = [10043,10044,10045,10046,10047,10048,10049,10050]
+    teacher_qnos = [10052,10053,10054,10055,10056,10057,10058,10064,10065,10066]
+    subject_questions = []
+    teacher_questions = []
+    for q in subject_qnos:
+        subject_questions.append(feedbackQuestion.objects.get(pk=q));
+
+    for q in teacher_qnos:
+        teacher_questions.append(feedbackQuestion.objects.get(pk=q));
+
+    teacherAbout = feedbackAbout.objects.get(title__startswith='Teacher');
+    subjectAbout = feedbackAbout.objects.get(title__startswith='Subject');
+
+    #get all batches for this semester in this prog
+    batches = Batches.objects.filter(programme = prog).filter(sem = semester).filter(batchname = batch)
+    s = list()
+    for b in batches:
+        subjects = subject.all();  #get the subjects for this batch 
+
+        for s in subjects:
+            if createforms == 'all' or createforms == 'subject':
+                newForm = FeedbackForm();
+                newForm.title = "%s (%s - %s %s)" % (s.name,b.programme,b.batchname,b.division)
+                
+                #get the proper groups for this batch
+                g = group.get(pk = "%s - Div %s " % (b.programme, b.division))
+                if g == []:
+                    g = group.get(pk = bb.programme)
+
+                newForm.allowed_groups = g
+                newForm.deadline = deadline
+                newForm.isofficial = True;
+                newForm.about = teacherAbout;
+                newForm.questions.add(subject_questions); 
+                newForm.save()
+
+                #   manage to copy the questions from somewhere now.
+                createdForSubject = True;
+
+            if createforms == 'all' or createforms == 'teacher':
+                for t in s.taughtby.split(','): #for multiple teachers
+                    newForm = FeedbackForm();
+                    newForm.title = "%s (%s - %s %s)" % (t, b.programme, b.batchname, b.division)
+                    g = group.get(pk = b.division)
+                    if g == []:
+                        g = group.get(pk = b.division)
+                    newForm.allowed_groups = g
+                    newForm.deadline = deadline
+                    newForm.isofficial = True;
+                    newForm.about = subjectAbout;
+                    newForm.questions.add(teacher_questions); 
+                    newForm.save()
+                    createdForTeacher = True;
+
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     
     #are you allowed to VIEW this feedback form?
@@ -157,8 +181,8 @@ def show(request,form):
     f = feedbackForm.objects.get(pk=form);
     # is this form actually unfilled??
 
-    print 'I am in show and f is %s' % (f);
-    print 'and unfilled is %s' % (request.session['unfilled']);
+    print 'I am in show and f is %s' % (f);sdasddasd
+    print 'and unfilled is %s' % (request.sessiasdasasdon['unfilled']);
 
     if f not in request.session['unfilled']:
         return redirect('/manage_feedback/1/error');

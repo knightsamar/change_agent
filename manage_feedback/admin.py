@@ -65,6 +65,6 @@ admin.site.register(feedbackQuestion,feedbackQuestionAdmin);
 admin.site.register(feedbackQuestionOption);
 admin.site.register(feedbackForm,feedbackFormAdmin);
 admin.site.register(feedbackAbout);
-admin.site.register(Batches);
-admin.site.register(Subjects);
+admin.site.register(Batch);
+admin.site.register(Subject);
 

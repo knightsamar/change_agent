@@ -53,7 +53,7 @@ Programme
 
 <select onfocus = 'fillOptions(this)'></select>
 SEM
-<select name = 'Sem'>
+<select name = 'semester'>
     <option>I
     <option>II
     <option>III
@@ -65,11 +65,28 @@ SEM
 <BR>
 
 Create
-All <input type = 'radio' name = 'createforms' value = 'all'>
-Teachers forms <input type = 'radio' name = 'createforms' value = 'teachers'>
-Subject Forms <input type = 'radio' name = 'createforms' value = 'Subject'>
+<input type = 'radio' name = 'createforms' value = 'all'> All 
+<input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers'
+<input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
 <br>
 Deadline for submissions - <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2011-11-15'><bR>
+
 <input type = 'submit' value = 'create forms'>
+</form>
+<hr>
+<BR><BR>
+
+<form method = 'post' action = 'manage_feedback/studentsummary'>
+{% csrf_token %}
+Programme
+<select name = 'programme'>
+    <option>MSc(CA)
+    <option>MBA(IT)
+    <option>BBA(IT)
+    <option>BCA
+</select>
+
+<select onfocus = 'fillOptions(this)'></select>
+<input type = 'submit' value = 'view Summary'>
 </form>
 {% endblock %}
