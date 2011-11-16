@@ -1,12 +1,13 @@
 #from manage_feedback.models import *
 import csv
 from manage_feedback.models import Batch , Subject
+from django.db.models import exceptions
 from datetime import date
 from ldap_login.models import user
 #FIXED_DEADLINE = Thursday 
 def getBatchPrefix(prog,batch):
     pass
-
+print "=========================="
 def a():
     #open the csv file
     csvFile = csv.DictReader(open('change_agent-data.csv','rb'));
@@ -14,7 +15,9 @@ def a():
     for record in csvFile:
         subject = record['Subject'];
         teacher = record['Faculty'];
+        div = ''
         div = record['Division'];
+        print "Division NOw is" , div;
         #batch = getBatchPrefix(record['Programme'],record['Batch']);
         batch = record['Batch']
         d = date.today()
@@ -36,10 +39,8 @@ def a():
             #if m >=3 and m <=12: oops
             #else: Sem = 6
             pass;
-        
         print subject, teacher, batch, Sem, div
         print "================="
-        print 
         u = user.objects.get(pk = '10030142031')
         coursecode = '';
         try:
@@ -48,19 +49,15 @@ def a():
             
             if div:
                 print "we got DIV as...", div
-                
-                b = Batch.objects.filter(programme = record['Programme']).filter(batchname = batch).filter(sem = Sem).get(division=div);
-                print "already had",b
-            else:
-                print "Sorry NO Division"
-                b = Batch.objects.filter(programme = record['Programme']).filter(batchname = batch).get(sem = Sem);
-                print "already had",b
-                
-        except Exception as e:
-            print e;
-            
-            print record['Programme']
-            sleep(3);
+            else:   
+                print 'Sorry No Division'
+                div = 'all'
+
+            b = Batch.objects.get(division=div, programme = record['Programme'], batchname = batch, sem = Sem);
+            print "already have ",b 
+        except exceptions.ObjectDoesNotExist:
+            sleep(3)
+            print "creating new"
             b = Batch(
                 programme = record['Programme'],
                 division = div,
@@ -75,7 +72,8 @@ def a():
             except Exception as e:
                 print "Exception is ",e
                 coursecode = ""
-        
+        except exceptions.MultipleObjectsReturned:
+            print b
         s = Subject(
             name = subject,
             for_batch = b,
