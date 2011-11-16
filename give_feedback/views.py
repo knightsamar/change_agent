@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 
 #from accepting submissions;
 from give_feedback.models import *;
-from ldap_login.models import user;
+from ldap_login.models import user,group;
 from settings import COORDINATORS
 #for date
 from datetime import datetime
@@ -107,64 +107,107 @@ def adminindex(request):
     for p,v in post.iteritems():
             print p,"==",v;
     
+    
     createforms = post['createforms'];
-    deadline = datetime.datetime(post['deadline']);
-    semester = post['semester']
+    d = post['deadline'].split('-')
+    deadline = datetime(int(d[0]),int(d[1]),int(d[2]));
+    print deadline
     prog = post['programme']
     batchname = post['batch'] 
-
-    subject_qnos = [10043,10044,10045,10046,10047,10048,10049,10050]
-    teacher_qnos = [10052,10053,10054,10055,10056,10057,10058,10064,10065,10066]
-    subject_questions = []
-    teacher_questions = []
-    for q in subject_qnos:
-        subject_questions.append(feedbackQuestion.objects.get(pk=q));
-
-    for q in teacher_qnos:
-        teacher_questions.append(feedbackQuestion.objects.get(pk=q));
-
-    teacherAbout = feedbackAbout.objects.get(title__startswith='Teacher');
-    subjectAbout = feedbackAbout.objects.get(title__startswith='Subject');
-
+    
+    
+    try:
+        teacherAbout = feedbackAbout.objects.get(title__startswith='Teacher');
+    except:
+        print 'creating teacherAbut'
+        teacherAbout = feedbackAbout(title = 'Teacher', description = 'Feedback about teachers')
+        teacherAbout.save()
+    try:
+        subjectAbout = feedbackAbout.objects.get(title__startswith='Subject');
+    except:
+        print 'creating StudentAbout'
+        subjectAbout = feedbackAbout(title = 'Subject', description = 'Feedback about students');
+        subjectAbout.save();
     #get all batches for this semester in this prog
-    batches = Batches.objects.filter(programme = prog).filter(sem = semester).filter(batchname = batch)
+    batches = Batch.objects.filter(programme = prog).filter(batchname = batchname)
+    print "found batches === ", batches;
+    if len(batches)==0:
+        return HttpResponse('no batches')
     s = list()
+    count =0
+    subjectquestions = feedbackQuestion.objects.filter(name__startswith='subject')
+    print "SUBJECT QUES == ", subjectquestions
+    teacherquestions = feedbackQuestion.objects.filter(name__startswith='teacher')
+    print "TEACHER QUESTIONS = ",teacherquestions
     for b in batches:
-        subjects = subject.objects.filter(for_batch=b);  #get the subjects for this batch 
-
+        subjects = Subject.objects.filter(for_batch=b);  #get the subjects for this batch 
+        print "subject list for", b , subjects
         for s in subjects:
             if createforms == 'all' or createforms == 'subject':
-                newForm = FeedbackForm();
+                newForm = feedbackForm();
                 newForm.title = "%s (%s - %s %s)" % (s.name,b.programme,b.batchname,b.division)
                 
                 #get the proper groups for this batch
-                g = group.get(pk = "%s - Div %s " % (b.programme, b.division))
-                if g == []:
-                    g = group.get(pk = bb.programme)
+                print 'division WAs', b.division
+                if len(b.division) == 1:
+                    groupname = "%s %s Div-%s" %(b.programme, b.batchname,b.division) # MBA 2010-12 Div-A
+                elif b.division == 'all':
+                    c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+                    yr = b.batchname[2:4]
+                    course = str(c[b.programme])
+                    groupname = yr+'030'+course
 
-                newForm.allowed_groups = g
+                else:
+                    groupname = "%s %s %s" %(prog,b.batchname,b.division)# MSc CA 2010-12 SA
+                print "groupname",groupname
+                try:
+                    g = group.objects.get(name = groupname) #preference is given to the STREAM or division than the whole batch
+                except:        
+                    print "got the geoup",groupname
+                    g = group(name = groupname)
+                    g.save();
+
                 newForm.deadline = deadline
                 newForm.isofficial = True;
-                newForm.about = teacherAbout;
-                newForm.questions.add(subject_questions); 
+                newForm.about = subjectAbout;
+                newForm.deadline_for_filling = deadline
                 newForm.save()
+                count = count+1
                 createdForSubject = True;
+                newForm.allowed_groups.add(g)
+                for q in subjectquestions:
+                    newForm.questions.add(q); 
 
             if createforms == 'all' or createforms == 'teacher':
                 for t in s.taughtby.split(','): #for multiple teachers
-                    newForm = FeedbackForm();
-                    newForm.title = "%s (%s - %s %s)" % (t, b.programme, b.batchname, b.division)
-                    g = group.get(pk = b.division)
-                    if g == []:
-                        g = group.get(pk = b.division)
-                    newForm.allowed_groups = g
+                    newForm = feedbackForm();
+                    newForm.title = "%s (%s - %s %s)" % (t,b.programme,b.batchname,b.division)
+                
+                    #get the proper groups for this batch
+                    if len(b.division) == 1:
+                        groupname = "%s %s Div-%s" %(b.programme, b.batchname,b.division) # MBA 2010-12 Div-A
+                    else:
+                        groupname = "%s %s %s" %(prog,b.batchname,b.division)# MSc CA 2010-12 SA
+                    try:
+                        g = group.objects.get(name = groupname) #preference is given to the STREAM or division than the whole batch
+                    except:
+                        c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+                        yr = b.batchname[2:4]
+                        course = str(c[b.programme])
+                        groupname = yr+'030'+course
+                        print "got the geoup",groupname
+                        g = group.objects.get(name = groupname)
+
                     newForm.deadline = deadline
                     newForm.isofficial = True;
-                    newForm.about = subjectAbout;
-                    newForm.questions.add(teacher_questions); 
+                    newForm.about = teacherAbout;
+                    newForm.deadline_for_filling = deadline
                     newForm.save()
-                    createdForTeacher = True;
-
+                    count = count +1
+                    for t in teacherquestions:
+                        newForm.questions.add(t)
+                    newForm.allowed_groups.add(g)
+    return HttpResponse('%s forms created' %count)        
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     
     #are you allowed to VIEW this feedback form?

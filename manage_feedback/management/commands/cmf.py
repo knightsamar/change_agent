@@ -36,16 +36,31 @@ def a():
             #if m >=3 and m <=12: oops
             #else: Sem = 6
             pass;
-        print "We got Sem as" , Sem;
-        print subject, teacher, batch, Sem
+        
+        print subject, teacher, batch, Sem, div
         print "================="
+        print 
         u = user.objects.get(pk = '10030142031')
         coursecode = '';
         try:
-            b = Batch.objects.filter(programme = record['Programme']).filter(batchname = batch).get(sem = Sem);
+            print div
+            from time import sleep
+            
+            if div:
+                print "we got DIV as...", div
+                
+                b = Batch.objects.filter(programme = record['Programme']).filter(batchname = batch).filter(sem = Sem).get(division=div);
+                print "already had",b
+            else:
+                print "Sorry NO Division"
+                b = Batch.objects.filter(programme = record['Programme']).filter(batchname = batch).get(sem = Sem);
+                print "already had",b
+                
         except Exception as e:
             print e;
-
+            
+            print record['Programme']
+            sleep(3);
             b = Batch(
                 programme = record['Programme'],
                 division = div,

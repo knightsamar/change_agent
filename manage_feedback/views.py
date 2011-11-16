@@ -11,6 +11,8 @@ from django.template import Context, loader
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def stusummary(request):
+    batch = request.POST['batch']
+    
     return HttpResponse('dfdsfsad')
 
 

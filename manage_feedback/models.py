@@ -72,7 +72,7 @@ class Batch(models.Model):
     course_coordinator = models.ForeignKey('ldap_login.user')
     #subjects = models.ForeignKey('Subject')
     def __str__(self):
-        return "%s %s for Sem %d" %(self.programme ,self.batchname ,self.sem)
+        return "%s %s for Sem %d - %s" %(self.programme ,self.batchname ,self.sem, self.division)
 
 class Subject(models.Model):
     name = models.CharField(max_length = 100);

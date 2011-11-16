@@ -18,22 +18,22 @@ function fillOptions(o)
     if (c == 'MSc(CA)' || c == 'MBA(IT)')
        {
            options = document.createElement('option')
-           options.text = y-1 + ' - ' + y;
+           options.text = y-1 + '-' + (y%100);
            o.add(options,null)
            options = document.createElement('option')
-           options.text = y + ' - ' + (y+1);
+           options.text = y + '-' + ((y+1)%100);
            o.add(options,null)
        }
     else
     {
          options = document.createElement('option')
-         options.text = (y-2) + ' - ' + y;
+         options.text = (y-2) + '-' + y%100;
          o.add(options,null)
         options = document.createElement('option')
-        options.text = (y-1) + ' - ' + (y+1);
+        options.text = (y-1) + '-' + (y+1)%100;
         o.add(options,null)
         options = document.createElement('option')
-        options.text = y + ' - ' + (y+2);
+        options.text = y + '-' + (y+2)%100;
         o.add(options,null)
     }
 
@@ -45,27 +45,19 @@ function fillOptions(o)
 {% csrf_token %}
 Programme
 <select name = 'programme'>
-    <option>MSc(CA)
-    <option>MBA(IT)
-    <option>BBA(IT)
+    <option>MSc. (CA)
+    <option>MBA-IT
+    <option>BBA-IT
     <option>BCA
 </select>
 
 <select name = 'batch' onfocus = 'fillOptions(this)'></select>
-SEM
-<select name = 'semester'>
-    <option>I
-    <option>II
-    <option>III
-    <option>IV
-    <option>V
-    <option>VI
-</select>
+
 
 <BR>
 
 Create
-<input type = 'radio' name = 'createforms' value = 'all'> All 
+<input type = 'radio' name = 'createforms' value = 'all' checked> All 
 <input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers'
 <input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
 <br>
