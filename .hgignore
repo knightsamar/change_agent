@@ -1,0 +1,10 @@
+# use glob syntax.
+syntax: glob
+
+TODOS
+settings.py
+change_agent.*
+*.pyc
+*~
+.*.swp
+.DS_Store
