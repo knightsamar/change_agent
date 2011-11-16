@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}
+ Preview {{form.title}}
+{% endblock %}
+
+{% block content %}
+Submitted by {{sub}}<br>
+<h3 align='center'>Form Preview ;)</h3><br/>
+<div id="form">
+ <h3 align='center'>{{ form.title }}</h3>
+{% regroup submissionDetails by question as question_answers %}
+<ol>
+{% for question in question_answers %}
+   <br><li><q>{{ question.grouper }}</q></li>
+   {% for item in question.list %}
+   {% if item.answer %}
+      <img src="/media/bullet" height='15' width=15> <ans>{{ item.answer }} </ans><br/>
+      {% else %}
+      -
+    {% endif %} 
+     {% endfor %}
+{% endfor %}      
+</ol>
+
+{% if form.deadline_for_filling < date %}
+  <br/> <font color='red'>The deadline for fillling has exceeded. you cannot edit the form..!!<br/></font>
+  <br/>
+{% else %}
+
+<form action = "/change_agent/give_feedback/edit/" method='post'>
+{% csrf_token %}
+<input type='hidden' name='submissionID' value= '{{submissionID}}'>
+<input type = "submit" value = "Edit Form">
+</form>
+{% endif %}
+<input type = "submit" value = "Go back to main menu" onclick="javascript:location.href='/change_agent/give_feedback/'">
+{% if nextform != None %}
+<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/{{nextform.id}}/preview.html'" value='next'>
+{% endif %}
+</div>
+{% endblock %}
+
