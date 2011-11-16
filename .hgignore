@@ -3,6 +3,7 @@ syntax: glob
 
 TODOS
 settings.py
+Other/*
 change_agent.*
 *.pyc
 *~

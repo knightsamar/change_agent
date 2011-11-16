@@ -1,90 +1,94 @@
 <html>
 <head>
+<script language='javascript'>
+function a()
+{
+    alert('haha');
+}
+</script>
 <style type="text/css">
 
 fieldset {
 	background-color: #fdfed4;
 	color: black;
-	font-family: purisa;
-}
-legend{
-    font-weight:bold;
+	font-weight: bold;
+	font-family: fantasy;
 }
 
 </style>
 </head>
-<body>
+</html>
 {% extends "base.html" %}
 {% block title %}
-   Home Page
+      Home Page
 {% endblock %}
 {% block content %}
+
 <div id="menubar">
 {% if not About_us_filled %}
-<input type="button" value="Feedback About this Software.." onClick="javascript:location.href='/change_agent/give_feedback/16/show'"><br>
+<input type="button" value="Feedback About US" onClick="javascript:location.href='/give_feedback/1/show'">
 {% endif %}
-<input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
-</div>
-<h2> Hi {{fullname}}! </h2>
+<input type='button' onClick="javascript:location.href='/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
 
-                <!-- New feedback forms -->
+<h2> Hi {{username}}! </h2>
 
 <fieldset>
-<legend> Feedback forms to be filled </legend>
+<legend> My Feeback forms to be filled </legend>
 
 <table cellpadding='16' align='center'>
+    <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
     {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
         <tr bgcolor='#b3dlea'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a>
-            <img align='right' src='/../../media/clock' height=40 width=40>
-        
+              {% if form.deadline_for_filling|timeuntil|truncatewords:2 <= '2days'  %}
+              haha
+              {% else %}
+              lala
+              {% endif %}
+              
         </td>
-        <td>{{ form.deadline_for_filling|timeuntil }} left </td></tr>
+        
+          <td>
+        {{form.deadline_for_filling}}
+           </td><td>{{form.created_on|date:"D, d b, Y" }}</tr>
       {% else %}
-        <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td></tr>
+       
+        <tr><td>{{ form.title }}</td> <td><i> Sorry, Deadline Exceeded </i></td>
+        <td>{{ form.created_on|date:"D, dS b,Y" }}
+   
+         </td>
+        </tr>
       {% endif %}
     {% empty %}
-        <i>You have no new feedback forms </i>
+        <br/><i>You have no new forms to fill</i>
     {% endfor %}
 </table>
-{% comment %}
-<p id='disclaimer' align='right'>Please note that all these forms are official feedback forms of SICSR.<br/>The questions, and options are all offical and the sofware hold no responsibilty for the data.</p>
-{% endcomment %}
 </fieldset>
-
-
-                <!-- For Preview....-->
-
-
 <fieldset>
 <legend> Feedback you gave </legend>
 
 <table cellpadding='16' align='center'>
+    <th>Form Name</th><th>Deadline for filling</th><th>Created on</th>
     {% for form in filled_list %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
          <tr> <td><a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
       {% else %}
         <tr><td><a href = './{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
       {% endif %} 
-	  <td> {{form.feedbackForm.deadline_for_filling|timeuntil }} left</tr>
-     {% empty%}
-         <i> You have not filled any forms</i>
-     {% endfor %}
+	<td>{{form.feedbackForm.deadline_for_filling}}<td>{{form.feedbackForm.created_on}}</td></tr>
+       {% empty%}
+        <br><i>You have not filled any forms</i>
+       {% endfor %}
 </table>
 </fieldset>
-
-            <!-- Feedback About -->
-
 {% if feedback_about_list %}
 <fieldset>
-<legend> Feedback Summary you can view</legend>
+<legend> View Feedback About</legend>
 <ul align = 'center'>
 {% for f in feedback_about_list %}
- <li><a href ="/change_agent/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
+ <li><a href ="/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
 {% endfor %}
 {% endif %}
 </ul>
 </fieldset>
 {% endblock %}
-</body>
-</html>

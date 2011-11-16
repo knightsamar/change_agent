@@ -62,3 +62,22 @@ class feedbackAbout(models.Model):
         
         def __str__(self):
             return self.title;
+
+class Batch(models.Model):
+    sem = ((1,1),(2,2),(3,3),(4,4),(5,5),(6,6))
+    batchname = models.CharField(help_text='eg. 2010-12, 2006-09', max_length=7);
+    programme = models.CharField('Programme', max_length =10)
+    division = models.CharField(help_text='Division or Stream', max_length = 16);
+    sem = models.IntegerField(choices = sem)
+    course_coordinator = models.ForeignKey('ldap_login.user')
+    #subjects = models.ForeignKey('Subject')
+    def __str__(self):
+        return "%s %s for Sem %d - %s" %(self.programme ,self.batchname ,self.sem, self.division)
+
+class Subject(models.Model):
+    name = models.CharField(max_length = 100);
+    code = models.CharField(max_length = 15);
+    for_batch = models.ForeignKey('Batch')
+    taughtby = models.CharField(help_text="Use comma seperated for more than one teacher.",max_length=100)
+    def __str__(self):
+        return self.name + 'by' + self.taughtby
