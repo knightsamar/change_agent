@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title%} Home{% endblock%}
+{% block content%}
+
+<script language = 'javascript'>
+function fillOptions(o)
+{
+    if (o.children.length >= 1) 
+       { 
+         while(o.firstChild)
+             o.removeChild(o.firstChild)
+       }
+    
+    c = o.previousElementSibling.value
+    d = new Date();
+    y = d.getFullYear();
+   
+    if (c == 'MSc(CA)' || c == 'MBA(IT)')
+       {
+           options = document.createElement('option')
+           options.text = y-1 + ' - ' + y;
+           o.add(options,null)
+           options = document.createElement('option')
+           options.text = y + ' - ' + (y+1);
+           o.add(options,null)
+       }
+    else
+    {
+         options = document.createElement('option')
+         options.text = (y-2) + ' - ' + y;
+         o.add(options,null)
+        options = document.createElement('option')
+        options.text = (y-1) + ' - ' + (y+1);
+        o.add(options,null)
+        options = document.createElement('option')
+        options.text = y + ' - ' + (y+2);
+        o.add(options,null)
+    }
+
+}
+
+</script>
+
+<form method = 'post' action = 'createmassforms'>
+{% csrf_token %}
+Programme
+<select name = 'programme'>
+    <option>MSc(CA)
+    <option>MBA(IT)
+    <option>BBA(IT)
+    <option>BCA
+</select>
+
+<select onfocus = 'fillOptions(this)'></select>
+SEM
+<select name = 'Sem'>
+    <option>I
+    <option>II
+    <option>III
+    <option>IV
+    <option>V
+    <option>VI
+</select>
+
+<BR>
+
+Create
+All <input type = 'radio' name = 'createforms' value = 'all'>
+Teachers forms <input type = 'radio' name = 'createforms' value = 'teachers'>
+Subject Forms <input type = 'radio' name = 'createforms' value = 'Subject'>
+<br>
+Deadline for submissions - <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2011-11-15'><bR>
+<input type = 'submit' value = 'create forms'>
+</form>
+{% endblock %}
