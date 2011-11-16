@@ -6,7 +6,7 @@ from datetime import datetime;
 class Command(BaseCommand):
     args = None;
     help = "imports LDAP users from Active Directory into database"
-
+    
     def handle(self, *args, **options):
         #*args is a tuple of positional parameters beyond those defined
         #**options is a dictionary of keyword parameters beyond those defined
@@ -38,3 +38,7 @@ class Command(BaseCommand):
                         except Exception as e:
                             print 'An unknown exception occured! ';
                             print e;
+        except Exception as e:
+            print 'Some unexpected exception occured!';
+            print e;
+            
