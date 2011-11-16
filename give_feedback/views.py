@@ -27,7 +27,7 @@ def index(request):
 
     if username in COORDINATORS:
         print 'haha'
-        t = loader.get_template('give_feedback/adminindex.html');
+        t = loader.get_template('manage_feedback/adminindex.html');
         c = RequestContext(request,{});
         return HttpResponse(t.render(c));
     # to fetch the all the forms
@@ -130,7 +130,7 @@ def adminindex(request):
     batches = Batches.objects.filter(programme = prog).filter(sem = semester).filter(batchname = batch)
     s = list()
     for b in batches:
-        subjects = subject.all();  #get the subjects for this batch 
+        subjects = subject.objects.filter(for_batch=b);  #get the subjects for this batch 
 
         for s in subjects:
             if createforms == 'all' or createforms == 'subject':
@@ -148,8 +148,6 @@ def adminindex(request):
                 newForm.about = teacherAbout;
                 newForm.questions.add(subject_questions); 
                 newForm.save()
-
-                #   manage to copy the questions from somewhere now.
                 createdForSubject = True;
 
             if createforms == 'all' or createforms == 'teacher':
