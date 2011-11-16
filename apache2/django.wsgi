@@ -2,10 +2,10 @@
 import os
 import sys
 #print sys.path
-path = '/home/sdrc/change_agent'
+path = '/home/sdrc/projects/change_agent'
 if path not in sys.path:
         sys.path.append(path)
-        sys.path.append('/home/sdrc');
+        sys.path.append('/home/sdrc/projects');
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

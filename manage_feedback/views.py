@@ -39,7 +39,7 @@ def summary(request,formID):
     """for rendering the index page for any user who has just logged in"""
      
     if 'username' not in request.session or request.session['username'] == None:
-       return redirect('/change_agent/ldap_login');
+       return redirect('/change_agent_testbed/ldap_login');
     """summary of feedback for a form..."""
     #select a form
     f = feedbackForm.objects.get(pk=formID);
@@ -59,7 +59,7 @@ def summary(request,formID):
     print "no of submissions are..!!!", submissions
     #if number of submissions is less than 0,
     if submissions <= 0:
-       return redirect("/change_agent/manage_feedback/5/error");
+       return redirect("/change_agent_testbed/manage_feedback/5/error");
          
     #print whether deadline is gone or not for submitting...
     if f.deadline_for_filling < datetime.now():

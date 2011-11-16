@@ -13,14 +13,14 @@ def login(request):
     #are we processing login attempt ?
     message = None;
     if 'username' in request.session:
-        return redirect('/change_agent/give_feedback/');
+        return redirect('/change_agent_testbed/give_feedback/');
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
             #comment this line when you ARE OUTSIDE SICSR!
-            #status = authenticate(request.POST['username'],request.POST['password']);
+            status = authenticate(request.POST['username'],request.POST['password']);
             #UNCOMMENT this lin when you are outside SICSR!
-            status = True;
+            #status = True;
             print status;
             #print 'auth process completed'
         except Exception as e:
@@ -80,7 +80,7 @@ def login(request):
                 userexists[0].last_login=datetime.today();
                 userexists[0].save();
              #redirect to the index view!
-            return redirect('/change_agent/give_feedback/');
+            return redirect('/change_agent_testbed/give_feedback/');
        
         else:#status is false
             message="Incorrect Username Password..!!"
@@ -118,7 +118,7 @@ def logout(request):
 			#then tell me to login first, using the message if possible 
 			#message = "Hey, you need to go in before you can go out :P :P";
 
-    return redirect('/change_agent/ldap_login/');	
+    return redirect('/change_agent_testbed/ldap_login/');	
 
 def tester(request):
     return HttpResponse('=====>LOVE YOU DJANGO<======');

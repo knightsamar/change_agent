@@ -1,4 +1,4 @@
-from manage_feedback.models import *#feedbackQuestion,feedbackQuestionOption,feedbackForm,feedbackAbout
+from manage_feedback.models import *
 from django.contrib import admin
 from django.template import RequestContext, Context, loader
 from ldap_login.models import *
@@ -15,8 +15,11 @@ class feedbackQuestionAdmin(admin.ModelAdmin):
     
 class feedbackFormAdmin(admin.ModelAdmin):
     actions = ['duplicateForm','notFilled'];
-    list_display=['title', 'deadline_for_filling']
+    list_display=['title', 'deadline_for_filling', 'about']
     ordering=['title']
+    list_filter = ['allowed_groups','about'];
+    search_fields = ['title']
+
     def duplicateForm(self, request, queryset):
         for existing_form in queryset:
              new_form = feedbackForm();
@@ -58,13 +61,20 @@ class feedbackFormAdmin(admin.ModelAdmin):
     duplicateForm.short_description = "Duplicate this form";
     notFilled.short_description = "People who have not filled this form";
 
+class BatchAdmin(admin.ModelAdmin):
+    model = Batch;
+    list_filter = ['programme']
+
+class SubjectAdmin(admin.ModelAdmin):
+    model = Subject;
+    list_display = ['name','taughtby','code'];
+    list_filter = ['for_batch'];
 
 admin.site.register(feedbackQuestion,feedbackQuestionAdmin);
-
 #enable in admin site the following other things
+admin.site.register(Batch,BatchAdmin);
+admin.site.register(Subject,SubjectAdmin);
 admin.site.register(feedbackQuestionOption);
 admin.site.register(feedbackForm,feedbackFormAdmin);
 admin.site.register(feedbackAbout);
-admin.site.register(Batch);
-admin.site.register(Subject);
 

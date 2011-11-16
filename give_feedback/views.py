@@ -143,27 +143,35 @@ def adminindex(request):
         subjects = Subject.objects.filter(for_batch=b);  #get the subjects for this batch 
         print "subject list for", b , subjects
         for s in subjects:
+            #whole batch because in cases like current when we DO NOT have division or stream wise list of students
+            c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+            yr = b.batchname[2:4]
+            course = str(c[b.programme])
+            groupname = yr+'030'+course
+            whole_batch_group = group.objects.get(name=groupname);
+ 
             if createforms == 'all' or createforms == 'subject':
                 newForm = feedbackForm();
                 newForm.title = "%s (%s - %s %s)" % (s.name,b.programme,b.batchname,b.division)
                 
                 #get the proper groups for this batch
-                print 'division WAs', b.division
-                if len(b.division) == 1:
+                print 'division was', b.division
+                if len(b.division) == 1: #for one-letter divisions
                     groupname = "%s %s Div-%s" %(b.programme, b.batchname,b.division) # MBA 2010-12 Div-A
-                elif b.division == 'all':
+                elif b.division == 'all': #for divisions with value 'all'
                     c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
                     yr = b.batchname[2:4]
                     course = str(c[b.programme])
                     groupname = yr+'030'+course
-
-                else:
+                else: #in all other cases
                     groupname = "%s %s %s" %(prog,b.batchname,b.division)# MSc CA 2010-12 SA
                 print "groupname",groupname
+
                 try:
                     g = group.objects.get(name = groupname) #preference is given to the STREAM or division than the whole batch
                 except:        
-                    print "got the geoup",groupname
+                    print "got the group which isn't in ldap_login.groups...",groupname
+                    print 'creating it...'
                     g = group(name = groupname)
                     g.save();
 
@@ -175,6 +183,7 @@ def adminindex(request):
                 count = count+1
                 createdForSubject = True;
                 newForm.allowed_groups.add(g)
+                newForm.allowed_groups.add(whole_batch_group) #only for now, see above for reason
                 for q in subjectquestions:
                     newForm.questions.add(q); 
 
@@ -195,7 +204,7 @@ def adminindex(request):
                         yr = b.batchname[2:4]
                         course = str(c[b.programme])
                         groupname = yr+'030'+course
-                        print "got the geoup",groupname
+                        print "got the group",groupname
                         g = group.objects.get(name = groupname)
 
                     newForm.deadline = deadline
@@ -207,6 +216,7 @@ def adminindex(request):
                     for t in teacherquestions:
                         newForm.questions.add(t)
                     newForm.allowed_groups.add(g)
+                    newForm.allowed_groups.add(whole_batch_group) #only for now, see above for reason
     return HttpResponse('%s forms created' %count)        
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     

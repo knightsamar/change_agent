@@ -9,18 +9,21 @@ ADMINS = (
 )
 
 COORDINATORS = [
-    'kulkarni.vidya',
+#    'kulkarni.vidya',
     'moodleldap',
+#    'sayali.joshi',
+#    'mamta.guram',
+#    'kanchan.bhide',
     ]
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'change_agent',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'change_agent_testbed',                      # Or path to database file if using sqlite3.
         'USER': 'change_agent',                      # Not used with sqlite3.
-        'PASSWORD': 'change',                  # Not used with sqlite3.
+        'PASSWORD': '4NA3h2r4nZxsza6h',              # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -51,17 +54,17 @@ USE_L10N = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/Users/apoorva/change_agent/media'
+MEDIA_ROOT = '/home/sdrc/projects/change_agent/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost/change_agent_media/'
+MEDIA_URL = 'http://projects.sdrclabs.in/change_agent_media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '=#la7@=jw@sri_$zzb_(puj*8ad88664z7bs4x#bj)^o=s81z$'
@@ -89,7 +92,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/Users/apoorva/change_agent/templates'
+    '/home/sdrc/projects/change_agent/templates'
 )
 
 INSTALLED_APPS = (

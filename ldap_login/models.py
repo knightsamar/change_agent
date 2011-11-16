@@ -3,7 +3,7 @@ from django.db import models
 
 #one group has many users
 class group(models.Model):
-    name = models.CharField(max_length=20,unique=True);
+    name = models.CharField(max_length=40,unique=True);
     created_on = models.DateTimeField(auto_now_add=True);
 
     def __str__(self):
