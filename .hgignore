@@ -6,5 +6,6 @@ settings.py
 change_agent.*
 *.pyc
 *~
+*.orig
 .*.swp
 .DS_Store
