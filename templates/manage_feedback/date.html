@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}
+    Change the Deadline
+{% endblock %}
+{% block content %}
+
+<script language = "javascript">
+    function fillOptions(o)
+    {
+        //o=document.getElementById('month');
+        if (o.name == 'month')
+        {
+            var months=new Array('Jan','Feb','Mar','April','May','June','July','Aug','Sept','Oct','Nov','Dec');
+          
+            for (var i =0;i<12;i++)
+            //o.innerHTML += "<option>"+months[i]+"</option>";
+            {
+                 var option=document.createElement("option");
+                 option.text=months[i];
+                 o.add(option,null)
+
+            }
+        }
+        else if(o.name == 'date')
+        {
+             for (var i =1;i<=31;i++)
+            //o.innerHTML += "<option>"+months[i]+"</option>";
+            {
+                 var option=document.createElement("option");
+                 option.text=i;
+                 o.add(option,null)
+
+            }
+        }
+        else if(o.name == 'year')
+            {  for (var i =2011;i<2022;i++)
+            //o.innerHTML += "<option>"+months[i]+"</option>";
+            {
+                 var option=document.createElement("option");
+                 option.text=i;
+                 o.add(option,null)
+
+            }
+           }
+      }
+</script>     
+
+<form action="/manage_feedback/admin/deadline/" method="post">
+Select a New Deadline for filling 	
+  {% csrf_token %}
+  <select name = "date"  onFocus="fillOptions(this);"> </select>
+  <select name = "month" onFocus="fillOptions(this);"> </select>
+  <select name = "year"  onFocus="fillOptions(this);"> </select>  
+ <BR>Date Month Year
+ <br><BR>
+ <input type="submit" value="Change">       
+</form>
+
+
+{% endblock %}
+
+
+

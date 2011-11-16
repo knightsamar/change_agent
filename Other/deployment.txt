@@ -1,0 +1,8 @@
+Deployment of Django - find out:
+
+How to :
+1. Have a seperate setting for development and deployment databases in settings.py
+2. Have not to restart apache everytime cdoe changes 
+ -- use WSGIDaemonProcess
+3. Have print statements work without causing exception of sys.stdout with mod_wsgi
+http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIRestrictStdout
