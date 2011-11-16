@@ -80,9 +80,9 @@ function debug(str)
 <div id="form">
 <h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 

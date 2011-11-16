@@ -1,17 +1,35 @@
 # Create your views here.
-from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption;
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, Batch, Subject;
 from give_feedback.models import feedbackSubmission,feedbackSubmissionAnswer
-from ldap_login.models import user
+from ldap_login.models import user,group
 from django.http import HttpResponse;
 from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import Context, loader
+from django.db.models import Q
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def stusummary(request):
+    def getlist(g,value):
+        f = feedbackForm.objects.filter(allowed_group = g).filter(about = value);
+        return f
+
     batch = request.POST['batch']
+    prgm = request.POST['programme']
+    
+    c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+    yr = batch[2:4]
+    course = str(c[prgm])
+    groupname = yr+'030'+course
+    print groupname
+    g = group.objects.get(name = groupname)
+    commonsub   = getlist(g,'subject')
+
+    g = group.objects.filter(name__contains = batch,name__startswith = prgm);
+    for curr_group in g:
+        print "Group", g
     
     return HttpResponse('dfdsfsad')
 

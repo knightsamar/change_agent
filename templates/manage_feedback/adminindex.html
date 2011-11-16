@@ -15,7 +15,7 @@ function fillOptions(o)
     d = new Date();
     y = d.getFullYear();
    
-    if (c == 'MSc(CA)' || c == 'MBA(IT)')
+    if (c == 'MSc. (CA)' || c == 'MBA-IT')
        {
            options = document.createElement('option')
            options.text = y-1 + '-' + (y%100);
@@ -68,13 +68,13 @@ Deadline for submissions - <input type = 'text' name = 'deadline'size = 10 maxle
 <hr>
 <BR><BR>
 
-<form method = 'post' action = 'manage_feedback/studentsummary'>
+<form method = 'post' action = '/manage_feedback/studentsummary'>
 {% csrf_token %}
 Programme
 <select name = 'programme'>
-    <option>MSc(CA)
-    <option>MBA(IT)
-    <option>BBA(IT)
+    <option>MSc. (CA)
+    <option>MBA-IT
+    <option>BBA-IT
     <option>BCA
 </select>
 

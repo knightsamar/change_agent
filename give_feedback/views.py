@@ -222,8 +222,8 @@ def show(request,form):
     f = feedbackForm.objects.get(pk=form);
     # is this form actually unfilled??
 
-    print 'I am in show and f is %s' % (f);sdasddasd
-    print 'and unfilled is %s' % (request.sessiasdasasdon['unfilled']);
+    print 'I am in show and f is %s' % (f);
+    print 'and unfilled is %s' % (request.session['unfilled']);
 
     if f not in request.session['unfilled']:
         return redirect('/manage_feedback/1/error');
@@ -275,8 +275,8 @@ def preview(request,submissionID):
     	return redirect("/manage_feedback/3/error")#"boohoooooooooo..!! caught ya..!!! ")
 
     now = datetime.today();
-    print "filled forms as per preview...", request.session['filled'];
-    
+    #print "filled forms as per preview...", request.session['filled'];
+    nextform = None 
     #preview function also allows navigation to next preview
     if 'filled' in request.session:
         if len(request.session['filled']) is 0:
