@@ -8,7 +8,7 @@ from django.core.context_processors import csrf
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user;
-from settings import COORDINATORS
+
 #for date
 from datetime import datetime
 
@@ -25,41 +25,28 @@ def index(request):
         print 'username in session object';
         username = request.session['username'];
 
-    if username in COORDINATORS:
-        print 'haha'
-        t = loader.get_template('give_feedback/adminindex.html');
-        c = RequestContext(request,{});
-        return HttpResponse(t.render(c));
+    u=user.objects.get(pk=username);
     # to fetch the all the forms
     # for feedback About
     
     #TO ADD:- check for group as staff... not that important...:) 
-    u=user.objects.get(pk=username)
+    u=user.objects.get(username=username)
     feedback_about_list=list()
     feedback_about=u.allowed_viewing_feedback_about.values();
     for a in feedback_about:
-        try:
-            ab=feedbackForm.objects.get(pk=a['id'])
-            #feedback_forms_about=feedbackForm.objects.filter(about=ab)
-            feedback_about_list.extend([ab])
-        except:
-            continue;
-    try:
-        about_us=feedbackForm.objects.get(title="About This Project") 
-    except:
-        print "create the about us form...;)"
-        about_us = ""
-        Filled = True;
+        ab=feedbackForm.objects.get(pk=a['id'])
+        #feedback_forms_about=feedbackForm.objects.filter(about=ab)
+        feedback_about_list.extend([ab])
+     
+    about_us=feedbackForm.objects.get(title="About This Project") 
     Filled=False
     # to fetch the filled forms for previewing and editing 
-    
     filled_forms = list(feedbackSubmission.objects.filter(submitter=username));
 
     # to remove the filled forms from the list of all forms to get the newly available forms
-    if filled_forms:
-        request.session['filled']=list(filled_forms)
-        print "filled form in index...", request.session['filled']
-    print "dsadAS"
+    request.session['filled']=list(filled_forms)
+    print "filled form in index...", request.session['filled']
+    
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
     all_forms = list(feedbackForm.objects.all().exclude(title="About This Project"))
     print "all-forms.. ", all_forms
@@ -101,48 +88,6 @@ def index(request):
  
     return HttpResponse(t.render(c));
 
-def adminindex(request):
-    post = request.POST;
-    print "==post=="
-    for p,v in post.iteritems():
-            print p,"==",v;
-    
-    '''
-    b = Batches.objects.filter(programme = post['programme']).filter(sem = post[sem])
-    s=list()
-    for bb in b:
-        s = bb.sub.all();
-        for ss in s:
-             if createform = all or subject:
-                sub = true
-                newForm = FeedbackForm();
-                newForm.title = s.name - b.programme - post[SEM] - post[year] 
-                g = group.get(pk = bb.stream)
-                if g = []:
-                    g= group.get(pk = bb.programme)
-                newForm.allowd_groups = g
-                newForm.deadline = datetime.datetime(post['deadline'])
-                newForm.isofficial = True;
-                newForm.save()
-                #   manage to copy the questions from somewhere now.
-    
-            if createform = all or teacher:
-                for each tea in s.taughtby.split(','):
-                    newForm = FeedbackForm();
-                    newForm.title = tea - b.programme - post[SEM] - post[year] 
-                    g = group.get(pk = bb.stream)
-                    if g = []:
-                        g= group.get(pk = bb.programme)
-                    newForm.allowd_groups = g
-                    newForm.deadline = datetime.datetime(post['deadline'])
-                    newForm.isofficial = True;
-                    newForm.save()
-                    #   manage to copy the questions from somewhere now.
-    
-    '''
-
-    
-    return HttpResponse('sdf')
 def show(request,form):
     '''show feedback form FOR the FIRST TIME so that user can edit it'''     
     #are you allowed to VIEW this feedback form?

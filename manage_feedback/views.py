@@ -3,7 +3,6 @@ from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestio
 from give_feedback.models import feedbackSubmission,feedbackSubmissionAnswer
 from ldap_login.models import user
 from django.http import HttpResponse;
-from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import Context, loader
 
@@ -11,11 +10,6 @@ from django.template import Context, loader
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def summary(request,formID):    
-   
-    """for rendering the index page for any user who has just logged in"""
-     
-    if 'username' not in request.session or request.session['username'] == None:
-       return redirect('/change_agent/ldap_login');
     """summary of feedback for a form..."""
     #select a form
     f = feedbackForm.objects.get(pk=formID);
@@ -35,7 +29,7 @@ def summary(request,formID):
     print "no of submissions are..!!!", submissions
     #if number of submissions is less than 0,
     if submissions <= 0:
-       return redirect("/change_agent/manage_feedback/5/error");
+       return HttpResponse("No submissions were made for this form!");
          
     #print whether deadline is gone or not for submitting...
     if f.deadline_for_filling < datetime.now():
@@ -93,8 +87,6 @@ def error(request, errorcode):
         msg = "This url is not meant for u"
     elif errorcode is 4:
         msg = "Not all questions are answered"
-    elif errorcode is 5:
-        msg="No Submissions were made for this Form"
     t=loader.get_template('error.html')
     c=Context(
     {

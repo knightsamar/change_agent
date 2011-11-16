@@ -16,17 +16,22 @@
 
 function mandatory()
 {
-   flag=1;
+   
    {% for id,type in mandatoryQuestions.items %}
+    flag=1
+    alert("next mandatory... {{ type }}")
     {% if type == 'multiple-choice-single-answer' %}
         var radio= document.forms.feedbackForm.q{{id}}_rdb_opt;
+        alert("found radio..!!"+radio.id);
         for(i=0;i<radio.length;i++)
           {          
               if (radio[i].checked) 
-           {
-               flag=4;
-           }
-          } 
+                 {
+                    flag=4;
+                    alert("found checked..."+radio[i].value)
+                 }  
+          }
+        alert("flag = " + flag)  
         if(flag!=4) 
         {   
             alert('Please answer the mandatory radio button questions');
@@ -34,8 +39,8 @@ function mandatory()
             return false;
         }
     {% endif %}  
-    {% if type == 'multiple-choice-multiple-answer' %}
-       var check=document.forms.feedbackForm.q2
+    {% comment %}{% if type == 'multiple-choice-multiple-answer' %}
+       var check=document.forms.feedbackForm.
        for(i=0;i<check.length;i++)
            {
              //alert(check[i].value);
@@ -52,7 +57,7 @@ function mandatory()
            return false;
        }
 
-    {% endif %}     
+    {% endif %}  {% endcomment %}   
     {%if type == 'text'%}
          var a='q{{id}}'
          var text=document.getElementById(a);
@@ -76,34 +81,31 @@ function debug(str)
 
 
 </script>
-{% comment %}
-<!-- commented by Samar to let people know we aren't spying on them -->
-<h3 align='left'> Hi {{ username }} </h3>
-{% endcomment %}
+<h3 align='left'> Hiya {{ username }} </h3>
+<h4 align='left'> Your feedback is valuable to us! </h4>
+<h2 align= 'center'><formTitle>{{ form.title }}</formTitle></h2>
+
 <div id="form">
-<h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
-
 <ol>
     {% csrf_token %}
     {% for q in form.questions.all %}
     
-    <li><span><q>{{ q.text }}</q></span>
+    <li><q>{{ q.text }}</q>
         {% if q.mandatory %}
-            <sup><img src="/../media/star.png" height=10 width=10></sup>
+            <sup>*</sup>
          {% endif %}
-    </li>
     <br>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
             <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
 	             <label for='q{{ q.id }}_rdb_opt'>
-        	           <span><ans>{{ opt.text }}</ans></span>
+        	           <ans>{{ opt.text }}</ans>
 		         </label> <br/>
 		    {% endfor %}
 		{% endif %}
@@ -111,24 +113,18 @@ function debug(str)
             {% for opt in q.feedbackquestionoption_set.values %}
             <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
 	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
-        	            <span><ans>{{ opt.text }}</ans></span>
+        	            <ans>{{ opt.text }}</ans>
                  </label><br/>
         	{% endfor %}
 		{% endif %}
 		{% if q.type == 'text' %}
-			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='12' cols='40' width='30%'></textarea> <br/>
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='8' cols='120'></textarea> <br/>
 		{% endif %}
 	    <br/>
    {% endfor %}
           <input type='hidden' name='formid' value='{{ form.id }}'> 
      	<input type='submit' value='Submit feedback!'>
-	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
+	<input type='button' onclick="javascript:location.href='/give_feedback/'" value='Cancel'>
 </form>
-{% if form.isofficial %}
-    <p id='disclaimer' align='right'>Please note that this form is official feedback form of SICSR.<br/> The questions and their options are all official and the software holds no responsiblity of it.</p>
-{% else %}
-    <p id='disclaimer' align='right'>Please note that this is an unofficial feedback form and the responses recorded will be available only to the assigned people.</p>
-{% endif %}
-
 </div>
 {% endblock %}

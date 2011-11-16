@@ -4,24 +4,21 @@
 {% endblock %}
 
 {% block content %}
+<h2 align= 'center'><formTitle>{{ formName }} </formTitle></h2>
 <div id="form">
-<h2 align = 'center'> {{ formName }} </h3>
 {% for k,v in summaryDict.items %}
  <br/><br/><b><q>Q. {{ k }}</q></b>
  <br/>
  <ul>
   {% for option,count in v.items %}
-  
    {% if count == None %}
-   {% if option != ""%}
-      <li> <div id='ans'>{{option}}</div></li>
-   {% endif%}
+      <pre id='ans'><li>{{option}}</li></pre>
    {% else %}  
-     <li><div id='ans'>{{ option }}...........{{count}}</div></li>
+     <li><div id = "ans">{{ option }}...........{{count}}</div></li>
    {% endif %}
   {% endfor %}
  </ul>
 {% endfor %}
-<input type='button' value='back' onClick="history.go(-1); return true;">
+ <input type='button' value="back" onclick="history.go(-1)">
 </div>
 {% endblock %}

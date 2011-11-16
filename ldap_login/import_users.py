@@ -13,11 +13,12 @@ def importUsers(CSVFile,Newgroup):
 
     handler=csv.reader(open(CSVFile,'rb'),delimiter=',',quotechar=',')
     for row in handler:
-        a=row[1].lstrip()[:11];
-        print a,".....", a.isdigit();
-        newuser=add_user(a);
-        if g :
-            
+        print row[1][:11];
+        newuser=add_user(row[1][:11]);
+        if(g):
             newuser.groups.add(groupexists[0]);
             newuser.save();
          
+
+
+
