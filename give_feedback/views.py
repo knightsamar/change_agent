@@ -20,7 +20,7 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         print 'username in session object';
         username = request.session['username'];
@@ -226,7 +226,7 @@ def show(request,form):
 
     #user is not logged in 
     if 'username' not in request.session or request.session['username'] == None: 
-        return redirect('/ldap_login/'); 
+        return redirect('/change_agent/ldap_login/'); 
     else: #is logged in!
         username = str(request.session['username']);
        
@@ -238,14 +238,14 @@ def show(request,form):
     print 'and unfilled is %s' % (request.session['unfilled']);
 
     if f not in request.session['unfilled']:
-        return redirect('/manage_feedback/1/error');
+        return redirect('/change_agent/manage_feedback/1/error');
     mandatoryQuestions = f.mandatoryQuestions();
 
     # is the deadline exceded??
     now = datetime.today()
     
     if (f.deadline_for_filling < now ):
-        return redirect("/manage_feedback/2/eror");
+        return redirect("/change_agent/manage_feedback/2/eror");
     else:
         flag='show'
         t = loader.get_template('give_feedback/form.html');
@@ -261,7 +261,7 @@ def show(request,form):
 
 def preview(request,submissionID):
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
 
@@ -284,7 +284,7 @@ def preview(request,submissionID):
     # whether this  form submission is actually owned by the user...
     Submitter = str(f.submitter)
     if Submitter != username:
-    	return redirect("/manage_feedback/3/error")#"boohoooooooooo..!! caught ya..!!! ")
+    	return redirect("/change_agent/manage_feedback/3/error")#"boohoooooooooo..!! caught ya..!!! ")
 
     now = datetime.today();
     #print "filled forms as per preview...", request.session['filled'];
@@ -343,7 +343,7 @@ def edit(request):
     # if the user is lot logged in.. redirect to login page
 
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
     
@@ -360,7 +360,7 @@ def edit(request):
     
     #every user is allowed to edit only 
     if Submitter != username:
-    	return redirect("/manage_feedback/3/error"); 
+    	return redirect("/change_agent/manage_feedback/3/error"); 
     
     now = datetime.today()
     ans = feedbackSubmissionAnswer.objects.filter(submission=submissionID);
@@ -370,7 +370,7 @@ def edit(request):
     
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
-        return redirect("/manage_feedback/2/error");
+        return redirect("/change_agent/manage_feedback/2/error");
     else:
         flag='edit' #so that we can render the same template for editing as well as filling new forms.
 	
@@ -393,7 +393,7 @@ def editsubmit(request,form):
 
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = request.session['username'];
     
@@ -412,7 +412,7 @@ def editsubmit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return redirect("/manage_feedback/4/error"); 
+            return redirect("/change_agent/manage_feedback/4/error"); 
             break;
     
     submissionObj = feedbackSubmission.objects.get(pk=s['submissionID']); #create a new objecisting answer object
@@ -479,7 +479,7 @@ def submit(request,form):
     
     #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/ldap_login/');
+        return redirect('/change_agent/ldap_login/');
     else:
         username = str(request.session['username']);
     
@@ -526,7 +526,7 @@ def submit(request,form):
                
 
         else:
-			return redirect('/manage_feedback/1/error');       
+			return redirect('change_agent//manage_feedback/1/error');       
     
     answeredQuestions=list()
 
@@ -540,7 +540,7 @@ def submit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return redirect("/manage_feedback/4/error"); 
+            return redirect("change_agent/manage_feedback/4/error"); 
             break;
     print "i ma getting printed.."
 

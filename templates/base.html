@@ -32,11 +32,18 @@
 	#form {
     width:50%;
     margin-left:25%;
+    {% comment %}
+    To ensure that summary page doesnot get the background
+    {% endcomment %}
+    {% if not summaryDict %}
 	background-image: url('/change_agent_media/CRINKLEP.JPG');
-    //background-color:#fdfed4;
+    {% endif %}
+    /* background-color:#fdfed4; */
     border:15px groove;
     line-break:strict;
+    {% if not summaryDict %}
     -moz-box-shadow:0 0 300px 5px;
+    {% endif %}
 }
 formtitle{
     text-align:center;
