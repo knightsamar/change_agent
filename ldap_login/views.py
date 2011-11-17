@@ -41,18 +41,18 @@ def login(request):
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
             #print "because status was", status, "hence message is", message;
-    else:   
+       
     # #print request.POST['username']
     # #print request.POST['password']
-     print "nothing is  true hence showint the login teplate again"
+    print "nothing is  true hence showint the login teplate again"
     #we aren't either procesing a login attempt OR the user had a failed login attempt!
-     t = loader.get_template('ldap_login/login.html');
-     c = RequestContext (request,
-         {
-           'message' : message
-         });
+    t = loader.get_template('ldap_login/login.html');
+    c = RequestContext (request,
+        {
+          'message' : message
+        });
          
-     return HttpResponse(t.render(c));
+    return HttpResponse(t.render(c));
           
         
     #unsuccessful ldap login

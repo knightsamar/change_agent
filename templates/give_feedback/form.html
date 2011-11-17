@@ -83,9 +83,9 @@ function debug(str)
 <div id="form">
 <h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
-  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
-  <form name='feedbackForm' action='/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 
@@ -93,16 +93,17 @@ function debug(str)
     {% csrf_token %}
     {% for q in form.questions.all %}
     
-    <li><q>{{ q.text }}</q>
+    <li><span><q>{{ q.text }}</q></span>
         {% if q.mandatory %}
             <sup><img src="/../media/star.png" height=10 width=10></sup>
          {% endif %}
+    </li>
     <br>
 		{% if q.type == 'multiple-choice-single-answer' %}
 			{% for opt in q.feedbackquestionoption_set.values %}
             <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
 	             <label for='q{{ q.id }}_rdb_opt'>
-        	           <ans>{{ opt.text }}</ans>
+        	           <span><ans>{{ opt.text }}</ans></span>
 		         </label> <br/>
 		    {% endfor %}
 		{% endif %}
@@ -110,21 +111,21 @@ function debug(str)
             {% for opt in q.feedbackquestionoption_set.values %}
             <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
 	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
-        	            <ans>{{ opt.text }}</ans>
+        	            <span><ans>{{ opt.text }}</ans></span>
                  </label><br/>
         	{% endfor %}
 		{% endif %}
 		{% if q.type == 'text' %}
-			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='12' cols=60'></textarea> <br/>
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='12' cols='40' width='30%'></textarea> <br/>
 		{% endif %}
 	    <br/>
    {% endfor %}
           <input type='hidden' name='formid' value='{{ form.id }}'> 
      	<input type='submit' value='Submit feedback!'>
-	<input type='button' onclick="javascript:location.href='/change_agent_testbed/give_feedback/'" value='Cancel'>
+	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
 </form>
 {% if form.isofficial %}
-    <p id='disclaimer' align='right'>Please note that this form is official feedback form of SICSR.<br/> The questions and thier options are all official and the software holds no responsiblity of it.</p>
+    <p id='disclaimer' align='right'>Please note that this form is official feedback form of SICSR.<br/> The questions and their options are all official and the software holds no responsiblity of it.</p>
 {% else %}
     <p id='disclaimer' align='right'>Please note that this is an unofficial feedback form and the responses recorded will be available only to the assigned people.</p>
 {% endif %}

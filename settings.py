@@ -1,6 +1,6 @@
 # Django settings for change_agent project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
