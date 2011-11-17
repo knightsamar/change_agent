@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}
+ Done..
+{% endblock %}
+
+{% block content %}
+<h3 align='center'> {{ form.title }} </h3>
+<h4 align='center'> Thank you for giving us your feedback..!!!! <br> Your feedback is valuable to us..!!</h4>
+<br><br><BR>
+<!--your submission id is : {{submissionID}}-->
+<form action = "/change_agent/give_feedback/{{submissionID}}/preview.html" method = "get">
+  <input type="submit" value="View Form Preview">
+ 
+</form>
+<input type='button' onclick="javascript:location.href='/give_feedback/'" value="Please go back to the main menu"><br>
+{% if nextform != None %}
+<input type='button' onclick="javascript:location.href='/give_feedback/{{nextform.id}}/show'", value="Next Form">
+{% endif %}
+{% endblock %}
