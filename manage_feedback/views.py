@@ -21,7 +21,7 @@ def stusummary(request):
         p,b = g.getBatch()
         mybatch = Batch.objects.filter(programme = p, batchname = b)
         mysubs  = Subject.objects.filter(for_batch__in = mybatch)
-            return mysubs
+        return mysubs
     try:
         batch = request.POST['batch']
         prgm = request.POST['programme']
@@ -39,9 +39,11 @@ def stusummary(request):
             for QO in questionOptions:
                 returnstring += QO.text
             
-            yield returnstring;    
+            yield returnstring, question;    
             
-    
+    # u pass the question and the Subject, this will return the option
+    #def ithink(question,sub):
+        
 
     wb = Workbook();
     w_sub = wb.add_sheet('Feedback for subjects by %s %s' %(prgm ,batch));
@@ -93,8 +95,8 @@ def stusummary(request):
             teachers  = subs.taughtby.split(',')
             if len(teachers)>1:
                 for t in teachers:
-                    w_tea.write(row,tcol,str(t))
-                    tcol = tcol +1
+                        w_tea.write(row,tcol,str(t))
+                        tcol = tcol +1
             else:        
                 w_tea.write(row,tcol,subs.taughtby)
                 tcol = tcol+1
@@ -105,8 +107,8 @@ def stusummary(request):
 
         try:
             while 1:    
-                w_sub.write(row,co
-                l,subjectQuestions.next())
+                t,q = subjectQuestions.next()
+                w_sub.write(row,col,t)
                 row = row+1
                 #w_tea.write(row,col,str(u.username))
         except StopIteration:
@@ -116,7 +118,8 @@ def stusummary(request):
             
         try:
             while 1:    
-                w_tea.write(row,col,teacherQuestions.next())
+                t,q = teacherQuestions.next()
+                w_tea.write(row,col,t)
                 row = row+1
                 #w_tea.write(row,col,str(u.username))
         except StopIteration:
