@@ -76,7 +76,10 @@ function debug(str)
 
 
 </script>
+{% comment %}
+<!-- commented by Samar to let people know we aren't spying on them -->
 <h3 align='left'> Hi {{ username }} </h3>
+{% endcomment %}
 <div id="form">
 <h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
