@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import Context, loader
 #from django.db.models import Q
-
+from django.db.models import exceptions
 from pyExcelerator import *
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
@@ -22,11 +22,7 @@ def stusummary(request):
         mybatch = Batch.objects.filter(programme = p, batchname = b)
         mysubs  = Subject.objects.filter(for_batch__in = mybatch)
         return mysubs
-    try:
-        batch = request.POST['batch']
-        prgm = request.POST['programme']
-    except KeyError:
-        return HttpResponse('fill all fields :)')
+ 
     
     
     # function to get the list of the questions that the student shoudl have answered for EACH subject/teacher
@@ -43,7 +39,13 @@ def stusummary(request):
             
     # u pass the question and the Subject, this will return the option
     #def ithink(question,sub):
-        
+    
+    
+    try:
+        batch = request.POST['batch']
+        prgm = request.POST['programme']
+    except KeyError as e:
+        return HttpResponse('fill all fields :)....%s'%e)  
 
     wb = Workbook();
     w_sub = wb.add_sheet('Feedback for subjects by %s %s' %(prgm ,batch));
@@ -57,21 +59,48 @@ def stusummary(request):
     g = group.objects.get(name = groupname)
     print "group", g
     commonsub   = getlist(g)
-    
+   
+
 
     def wow(u,forwhat):
+        '''iterator = []
+        if forwhat == 'subject':
+            iterator=commonsub;
+        else:
+            for ss in commonsub:
+                l = ss.taughtby.split(',')
+                iterator.extend(l)
+                
+        print "ITERATOR ====", iterator       '''
+        
         for s in commonsub:
-            #u = user.objects.get(username = '10030142031')
-            f = feedbackForm.objects.get(title__contains = s.name)
+            u = user.objects.get(username = '10030142031')
+            if forwhat == 'subject':
+                Title = "%s (%s - %s" % (s.name,prgm,batch) 
+                d = datetime.today()
+                d = datetime(d.year,d.month-3,d.day)
+                f = feedbackForm.objects.get(title__startswith = s.name , created_on__gt = d)
+                print 'feedbackform',f
+            #else:
+            #    f = feedbackForm.objects.filter(title__contains = str(s))
             try:
-                fs = feedbackSubmission.objects.get(feedbackForm = f, submitter = u)
+                fs = feedbackSubmission.objects.get(feedbackForm =  f, submitter = u, when__gt = d)
+                print "feeback submission",fs
                 fsa = feedbackSubmissionAnswer.objects.filter(submission = fs)
+                print "Answer",fsa
                 toreturn = {}
+               
                 for answers in fsa:
-                    if answers.question.type != 'text':
+                    if answers.question.type == 'multiple-choice-single-answer':
                         toreturn[answers.question] = answers.answer_option.text
-            except Exception as e:
-                print e;
+                    elif answers.question.type == 'multiple-choice-multiple-answer':
+                        try:
+                            toreturn[answers.question]+=answers.answer_option.text
+                        except KeyError:
+                            toreturn[answers.question] = answers.answer_option.text
+
+            except exceptions.ObjectDoesNotExist:
+                #print e;
                 toreturn = '-'
             yield toreturn;
 
@@ -124,10 +153,10 @@ def stusummary(request):
         ques = []
         try:
             while 1:
-                t,q = subjectQuestions.next()
+                s,q = subjectQuestions.next()
                 ques.append(q)
                 col = 0
-                w_sub.write(row,col,t)
+                w_sub.write(row,col,s)
                 row = row+1
                 #w_tea.write(row,col,str(u.username))
         except StopIteration:
@@ -151,6 +180,7 @@ def stusummary(request):
             col = col+1
         row = bckr
         col = 0
+        
         q_ans = wow(u, 'teacher')
         try:
             while 1:    
@@ -160,7 +190,27 @@ def stusummary(request):
                 #w_tea.write(row,col,str(u.username))
         except StopIteration:
             pass;
-            
+        
+        '''ncol =1
+        try:
+            while 1:
+                row = bckr
+                value = q_ans.next()
+                for r in range(len(ques)):
+                    if value == '-':
+                        w_tea.write(row,ncol,'-')
+                    else:
+                        if ques[r] in value and value[ques[r]]:
+                            a = value[ques[r]]
+                        else:
+                            a = '-'
+                        w_tea.write(row,ncol,a)
+                    row = row+1
+                col = col+1
+        except StopIteration:
+            row = bckr
+            col = 0'''
+    
     wb.save('media/lala.xls')    
     return HttpResponse('<a href = "http://localhost:8888/change_agent_media/lala.xls">click</a>')
 
