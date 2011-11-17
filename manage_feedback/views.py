@@ -31,7 +31,7 @@ def stusummary(request):
     
     # function to get the list of the questions that the student shoudl have answered for EACH subject/teacher
     def getQuest(forwhat):
-        questionlist = feedbackQuestion.objects.filter(name__startswith = forwhat);
+        questionlist = feedbackQuestion.objects.filter(name__startswith = forwhat).exclude(type = 'text');
         
         for question in questionlist:
             returnstring = question.text + '\n'
@@ -57,13 +57,29 @@ def stusummary(request):
     g = group.objects.get(name = groupname)
     print "group", g
     commonsub   = getlist(g)
+    
 
+    def wow(u,forwhat):
+        for s in commonsub:
+            #u = user.objects.get(username = '10030142031')
+            f = feedbackForm.objects.get(title__contains = s.name)
+            try:
+                fs = feedbackSubmission.objects.get(feedbackForm = f, submitter = u)
+                fsa = feedbackSubmissionAnswer.objects.filter(submission = fs)
+                toreturn = {}
+                for answers in fsa:
+                    if answers.question.type != 'text':
+                        toreturn[answers.question] = answers.answer_option.text
+            except Exception as e:
+                print e;
+                toreturn = '-'
+            yield toreturn;
 
     
     
     f = str(prgm+batch) 
-    w_sub.write(0,12,f)
-    w_tea.write(0,12,f)
+    w_sub.write(0,6,f)
+    w_tea.write(0,6,f)
 
     row = 3
     col = 2
@@ -77,7 +93,7 @@ def stusummary(request):
         subjectQuestions = getQuest('subject')
         teacherQuestions = getQuest('teacher')
     
-    
+        row = row+2; 
         print "USER== ",u;
         print "="*50;
         col = 2
@@ -103,19 +119,39 @@ def stusummary(request):
             scol = scol+1
         row = row +1;
         bckr = row
-        col = 0
-
+        
+        q_ans = wow(u,'subject')
+        ques = []
         try:
-            while 1:    
+            while 1:
                 t,q = subjectQuestions.next()
+                ques.append(q)
+                col = 0
                 w_sub.write(row,col,t)
                 row = row+1
                 #w_tea.write(row,col,str(u.username))
         except StopIteration:
+            lrow = row
             row = bckr
-            col = 0
             pass;
-            
+        
+        for ncol in range(1,len(commonsub)):
+            row = bckr
+            value = q_ans.next()
+            for r in range(len(ques)):
+                if value == '-':
+                    w_sub.write(row,ncol,'-')
+                else:
+                    if value[ques[r]]:
+                        a = value[ques[r]]
+                    else:
+                        a = '-'
+                    w_sub.write(row,ncol,a)
+                row = row+1
+            col = col+1
+        row = bckr
+        col = 0
+        q_ans = wow(u, 'teacher')
         try:
             while 1:    
                 t,q = teacherQuestions.next()
@@ -125,8 +161,8 @@ def stusummary(request):
         except StopIteration:
             pass;
             
-    wb.save('lala.xls')    
-    return HttpResponse('dfdsfsad')
+    wb.save('media/lala.xls')    
+    return HttpResponse('<a href = "http://localhost:8888/change_agent_media/lala.xls">click</a>')
 
 
 def summary(request,formID):    
