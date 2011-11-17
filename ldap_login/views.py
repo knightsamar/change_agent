@@ -13,7 +13,7 @@ def login(request):
     #are we processing login attempt ?
     message = None;
     if 'username' in request.session:
-        return redirect('/change_agent_testbed_testbed/give_feedback/');
+        return redirect('/change_agent/give_feedback/');
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
@@ -36,7 +36,7 @@ def login(request):
             request.session.set_expiry(1800)
             add_user(userName);		
             print 'redirecting now...';
-            return redirect('/change_agent_testbed/give_feedback/');
+            return redirect('/change_agent/give_feedback/');
         else:
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
@@ -120,7 +120,7 @@ def logout(request):
 			#then tell me to login first, using the message if possible 
 			#message = "Hey, you need to go in before you can go out :P :P";
 
-    return redirect('/change_agent_testbed/ldap_login/');	
+    return redirect('/change_agent/ldap_login/');	
 
 def tester(request):
     return HttpResponse('=====>LOVE YOU DJANGO<======');

@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     # (r'^change_agent/', include('change_agent.foo.urls')),
-    (r'^change_agent_testbed/','ldap_login.views.login'),
+    (r'^change_agent/','ldap_login.views.login'),
     (r'^$','ldap_login.views.login'),
     (r'^give_feedback/$','give_feedback.views.index'),
     (r'^give_feedback/createmassforms$','give_feedback.views.adminindex'),
