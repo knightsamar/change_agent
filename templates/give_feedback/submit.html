@@ -12,8 +12,8 @@
   <input type="submit" value="View Form Preview">
  
 </form>
-<input type='button' onclick="javascript:location.href='/give_feedback/'" value="Please go back to the main menu"><br>
+<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value="Please go back to the main menu"><br>
 {% if nextform != None %}
-<input type='button' onclick="javascript:location.href='/give_feedback/{{nextform.id}}/show'", value="Next Form">
+<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/{{nextform.id}}/show'", value="Next Form">
 {% endif %}
 {% endblock %}

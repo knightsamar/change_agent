@@ -1,11 +1,12 @@
 #comment this line when you ARE OUTSIDE SICSR!
 from ldapAuthBackend import authenticate;
 from django.http import HttpResponse;
-from django.shortcuts import redirect;
+from django.shortcuts import redirect, render_to_response;
 from django.template import RequestContext, loader;
 from ldap_login.models import user,group;
 from datetime import datetime
 from django.core.mail import send_mail
+from django.views.decorators.cache import cache_page
 
 #from django_auth_ldap.config import LDAPSearch
 #ldap_login
@@ -122,6 +123,14 @@ def logout(request):
 
     return redirect('/change_agent/ldap_login/');	
 
+#cache this view's output for 6 hrs, needs to be specified in seconds
+@cache_page(6 * 60 * 60)
+def passwordHelp(request):
+    if 'username' in request.session:
+        return redirect('/change_agent/give_feedback/');
+    else:
+        return render_to_response('ldap_login/passwordhelp.html');
+     
 def tester(request):
     return HttpResponse('=====>LOVE YOU DJANGO<======');
 
