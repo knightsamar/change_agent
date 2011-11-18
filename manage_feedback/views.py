@@ -63,7 +63,7 @@ def stusummary(request):
 
 
     def wow(u,forwhat):
-        '''iterator = []
+        iterator = []
         if forwhat == 'subject':
             iterator=commonsub;
         else:
@@ -71,18 +71,20 @@ def stusummary(request):
                 l = ss.taughtby.split(',')
                 iterator.extend(l)
                 
-        print "ITERATOR ====", iterator       '''
+        print "ITERATOR ====", iterator       
         
-        for s in commonsub:
+        for s in iterator:
             u = user.objects.get(username = '10030142031')
+            Title = "%s (%s - %s" % (s,prgm,batch) 
+            d = datetime.today()
+            d = datetime(d.year,d.month-3,d.day)
+
             if forwhat == 'subject':
-                Title = "%s (%s - %s" % (s.name,prgm,batch) 
-                d = datetime.today()
-                d = datetime(d.year,d.month-3,d.day)
                 f = feedbackForm.objects.get(title__startswith = s.name , created_on__gt = d)
                 print 'feedbackform',f
-            #else:
-            #    f = feedbackForm.objects.filter(title__contains = str(s))
+            else:
+                print Title
+                f = feedbackForm.objects.get(title__contains = str(Title.strip()),created_on__gt = d)
             try:
                 fs = feedbackSubmission.objects.get(feedbackForm =  f, submitter = u, when__gt = d)
                 print "feeback submission",fs
@@ -191,7 +193,7 @@ def stusummary(request):
         except StopIteration:
             pass;
         
-        '''ncol =1
+        ncol =1
         try:
             while 1:
                 row = bckr
@@ -209,7 +211,7 @@ def stusummary(request):
                 col = col+1
         except StopIteration:
             row = bckr
-            col = 0'''
+            col = 0
     
     wb.save('media/lala.xls')    
     return HttpResponse('<a href = "http://localhost:8888/change_agent_media/lala.xls">click</a>')
