@@ -245,9 +245,9 @@ def show(request,form):
     # is this form actually unfilled??
 
     print 'I am in show and f is %s' % (f);
-    print 'and unfilled is %s' % (request.session['unfilled']);
+    #print 'and unfilled is %s' % (request.session['unfilled']);
 
-    if f not in request.session['unfilled']:
+    if 'unfilled' in request.session and f not in request.session['unfilled']:
         return redirect('/change_agent/manage_feedback/1/error');
     mandatoryQuestions = f.mandatoryQuestions();
 

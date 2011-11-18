@@ -13,7 +13,7 @@ change_agent.*
 .DS_Store
 *chnge_agent.dump
 *cmf.py
-*lala.xls
+*.xls
 *manage_feedback_feedbackquestion.csv
 *media/lala.xls
 *wow.py

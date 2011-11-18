@@ -48,7 +48,7 @@ function fillOptions(o)
 
 <h3> hi..{{u.fullname}}..!!</h3>
 {% if formfilled %}
-<input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "/give_feedback/f.id/show"'>
+<input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "/give_feedback/{{f.id}}/show"'>
 {% endif %}
 <form method = 'post' action = 'createmassforms'>
 {% csrf_token %}
