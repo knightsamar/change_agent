@@ -229,8 +229,8 @@ def stusummary(request):
              row = row +2
         '''     
     
-    wb.save('media/lala.xls')    
-    return HttpResponse('<a href = "http://localhost:8888/change_agent_media/lala.xls">click</a>')
+    wb.save('media/%s - %s.xls'%(prgm,batch))    
+    return HttpResponse('<a href = "http://localhost:8888/change_agent_media/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)"'%(prgm,batch))
 
 
 def summary(request,formID):    

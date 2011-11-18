@@ -108,7 +108,7 @@ def logout(request):
     if 'username' in request.session:
         #print 'logging you out';
 		#yes,#then log us out!
-        if len(request.session['unfilled']) is not 0:
+        if 'unfilled' in request.session and len(request.session['unfilled']) is not 0:
             # the person has unfillwd forms
             emailid=request.session['username']+"@sicsr.ac.in"
             emailid=[emailid,];

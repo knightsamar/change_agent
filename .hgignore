@@ -11,3 +11,9 @@ change_agent.*
 *~
 .*.swp
 .DS_Store
+*chnge_agent.dump
+*cmf.py
+*lala.xls
+*manage_feedback_feedbackquestion.csv
+*media/lala.xls
+*wow.py
