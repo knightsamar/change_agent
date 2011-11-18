@@ -35,7 +35,7 @@ def stusummary(request):
             for QO in questionOptions:
                 returnstring += QO.text
             
-                yield returnstring , question;    
+            yield returnstring , question;    
             
             
     # u pass the question and the Subject, this will return the option
@@ -75,7 +75,6 @@ def stusummary(request):
         #print "ITERATOR ====", iterator       
         
         for s in iterator:
-            u = user.objects.get(username = '10030142031')
             Title = "%s (%s - %s" % (s,prgm,batch) 
             d = datetime.today()
             d = datetime(d.year,d.month-3,d.day)
@@ -93,9 +92,9 @@ def stusummary(request):
                 pass;
             try:
                 fs = feedbackSubmission.objects.get(feedbackForm__in =  f, submitter = u, when__gt = d)
-                print "feeback submission",fs
+                #print "feeback submission",fs
                 fsa = feedbackSubmissionAnswer.objects.filter(submission = fs)
-                print "Answer",fsa
+                #print "Answer",fsa
                 toreturn = {}
                
                 for answers in fsa:
@@ -185,7 +184,7 @@ def stusummary(request):
                 if value == '-':
                     w_sub.write(row,ncol,'-')
                 else:
-                    if value[ques[r]]:
+                    if ques[r] in value and value[ques[r]]:
                         a = value[ques[r]]
                     else:
                         a = '-'
@@ -193,9 +192,9 @@ def stusummary(request):
                 row = row+1
             col = col+1
             print "to", row, col
-        row = bckr
+        row = row+2
         col = 0
-        
+        '''
         q_ans = wow(u, 'teacher')
         try:
             while 1:    
@@ -206,8 +205,8 @@ def stusummary(request):
         except StopIteration:
             pass;
 
-        row = row+2    
-        '''  
+        row = bckr   
+        
         ncol =1
         try:
             while 1:
@@ -226,8 +225,9 @@ def stusummary(request):
                 col = col+1
         except StopIteration:
             
-            col = 0'''
-            
+             col = 0
+             row = row +2
+        '''     
     
     wb.save('media/lala.xls')    
     return HttpResponse('<a href = "http://localhost:8888/change_agent_media/lala.xls">click</a>')
