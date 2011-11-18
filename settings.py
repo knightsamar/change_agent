@@ -9,8 +9,10 @@ ADMINS = (
 )
 
 COORDINATORS = [
-    'moodleldap'
+    'kulkarni.vidya',
+    'moodleldap',
     ]
+
 MANAGERS = ADMINS
 
 DATABASES = {

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     (r'^give_feedback/createmassforms$','give_feedback.views.adminindex'),
     (r'^ldap_login/$','ldap_login.views.login'), #for authentication
     (r'^ldap_login/logout$','ldap_login.views.logout'), #for loggin out
+    (r'^ldap_login/passwordHelp$','ldap_login.views.passwordHelp'),
     (r'^manage_feedback/(?P<errorcode>\d+)/error/$','manage_feedback.views.error'), 
     (r'^manage_feedback/studentsummary$','manage_feedback.views.stusummary'), 
     (r'^give_feedback/(?P<form>\d+)/show/$','give_feedback.views.show'), 
@@ -27,7 +28,7 @@ urlpatterns = patterns('',
 	(r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
+       
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
     
