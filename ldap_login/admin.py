@@ -5,8 +5,11 @@ class UsersInline(admin.TabularInline):
     model = user;
     extra = 1;
 
+class userAdmin(admin.ModelAdmin):
+    search_fields = ['username','fullname'];
+
 class groupAdmin(admin.ModelAdmin):
 	inlines = [UsersInline];
 
 admin.site.register(group);
-admin.site.register(user);
+admin.site.register(user,userAdmin);

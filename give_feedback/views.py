@@ -72,7 +72,8 @@ def index(request):
     print "dsadAS"
     #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
     #forms ordered in descending order of deadlines and ascending orders of about what they are
-    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").order_by('deadline_for_filling','about'))
+    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").order_by('-deadline_for_filling','about'))
+
     print "all-forms.. ", all_forms
     print "user.", u
     print "user groups", u.groups.values()
@@ -98,7 +99,8 @@ def index(request):
     print request.session['unfilled']            
     # for displaying date and checking for deadline
     d = datetime.today();
-    		
+    n = datetime.now()		
+
     t = loader.get_template('give_feedback/index.html');
     c = Context (
             {
@@ -108,6 +110,7 @@ def index(request):
                 'filled_list' : list(filled_forms),
         		'unfilled_list': list(unfilled_forms),
                 'today' : d,
+                'rightnow' : n, #because template api already has tag called now
                 'feedback_about_list':feedback_about_list
             }  ) #pass the list to the template
  
@@ -536,7 +539,7 @@ def submit(request,form):
                
 
         else:
-			return redirect('change_agent//manage_feedback/1/error');       
+			return redirect('/change_agent/manage_feedback/1/error');       
     
     answeredQuestions=list()
 
@@ -550,7 +553,7 @@ def submit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return redirect("change_agent/manage_feedback/4/error"); 
+            return redirect("/change_agent/manage_feedback/4/error"); 
             break;
     print "i ma getting printed.."
 

@@ -179,7 +179,10 @@ def stusummary(request):
         for ncol in range(1,len(commonsub)):
             row = bckr
             print "writing from",row, col,
-            value = q_ans.next()
+            try:
+                value = q_ans.next()
+            except StopIteration:
+                break;
             for r in range(len(ques)):
                 if value == '-':
                     w_sub.write(row,ncol,'-')
@@ -191,7 +194,7 @@ def stusummary(request):
                     w_sub.write(row,ncol,a)
                 row = row+1
             col = col+1
-            print "to", row, col
+            #print "to", row, col
         row = row+2
         col = 0
         '''
@@ -229,8 +232,9 @@ def stusummary(request):
              row = row +2
         '''     
     
-    wb.save('media/%s - %s.xls'%(prgm,batch))    
-    return HttpResponse('<a href = "http://localhost:8888/change_agent_media/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)"'%(prgm,batch))
+    from change_agent.settings import MEDIA_ROOT,MEDIA_URL
+    wb.save('%s/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
+    return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)"'%(MEDIA_URL,prgm,batch))
 
 
 def summary(request,formID):    
