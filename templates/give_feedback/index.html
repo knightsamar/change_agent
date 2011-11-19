@@ -35,7 +35,7 @@ legend{
 <table cellpadding='16' align='center'>
     {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='#b3dlea'><td> <a href='./{{form.id}}/show'>{{ form.title }}</a>
+        <tr bgcolor='#b3dlea'><td> <a href='/change_agent/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
             <img align='right' src='/../../change_agent_media/clock' height=40 width=40>
         
         </td>
@@ -62,9 +62,9 @@ legend{
 <table cellpadding='16' align='center'>
     {% for form in filled_list %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
-         <tr> <td><a href='./{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
+         <tr> <td><a href='/change_agent/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
       {% else %}
-        <tr><td><a href = './{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
+        <tr><td><a href = '/change_agent/give_feedback/{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
       {% endif %} 
 	  <td> {{form.feedbackForm.deadline_for_filling|timeuntil }} left</tr>
      {% empty%}

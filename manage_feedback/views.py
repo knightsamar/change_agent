@@ -1,37 +1,240 @@
 # Create your views here.
-from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, Batch, Subject;
+from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout,Batch, Subject;
 from give_feedback.models import feedbackSubmission,feedbackSubmissionAnswer
 from ldap_login.models import user,group
 from django.http import HttpResponse;
 from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import Context, loader
-from django.db.models import Q
+#from django.db.models import Q
+from django.db.models import exceptions
+from pyExcelerator import *
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def stusummary(request):
-    def getlist(g,value):
-        f = feedbackForm.objects.filter(allowed_group = g).filter(about = value);
-        return f
-
-    batch = request.POST['batch']
-    prgm = request.POST['programme']
     
+    
+    # function to get the list of the subject for the entire batch.-all divisions and common.
+    def getlist(g):
+        p,b = g.getBatch()
+        mybatch = Batch.objects.filter(programme = p, batchname = b)
+        mysubs  = Subject.objects.filter(for_batch__in = mybatch)
+        return mysubs
+ 
+    
+    
+    # function to get the list of the questions that the student shoudl have answered for EACH subject/teacher
+    def getQuest(forwhat):
+        questionlist = feedbackQuestion.objects.filter(name__startswith = forwhat).exclude(type = 'text');
+        toreturn = {} 
+        for question in questionlist:
+            returnstring = question.text + '\n'
+            questionOptions = feedbackQuestionOption.objects.filter(question = question)
+            for QO in questionOptions:
+                returnstring += QO.text
+            
+            yield returnstring , question;    
+            
+            
+    # u pass the question and the Subject, this will return the option
+    #def ithink(question,sub):
+    
+    
+    try:
+        batch = request.POST['batch']
+        prgm = request.POST['programme']
+    except KeyError as e:
+        return HttpResponse('fill all fields :)....%s'%e)  
+
+    wb = Workbook();
+    w_sub = wb.add_sheet('Feedback for subjects by %s %s' %(prgm ,batch));
+    w_tea = wb.add_sheet('Feedback for teachers by %s %s' %(prgm ,batch));
+
     c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
     yr = batch[2:4]
     course = str(c[prgm])
     groupname = yr+'030'+course
     print groupname
     g = group.objects.get(name = groupname)
-    commonsub   = getlist(g,'subject')
+    print "group", g
+    commonsub   = getlist(g)
+   
 
-    g = group.objects.filter(name__contains = batch,name__startswith = prgm);
-    for curr_group in g:
-        print "Group", g
+
+    def wow(u,forwhat):
+        iterator = []
+        if forwhat == 'subject':
+            iterator=commonsub;
+        else:
+            for ss in commonsub:
+                l = ss.taughtby.split(',')
+                iterator.extend(l)
+                
+        #print "ITERATOR ====", iterator       
+        
+        for s in iterator:
+            Title = "%s (%s - %s" % (s,prgm,batch) 
+            d = datetime.today()
+            d = datetime(d.year,d.month-3,d.day)
+            try:
+                if forwhat == 'subject':
+                    f = feedbackForm.objects.filter(title__startswith = s.name , created_on__gt = d)
+                    #print 'feedbackform',f
+                else:
+                    print Title
+                
+                    f = feedbackForm.objects.filter(title__contains = str(Title.strip()),created_on__gt = d)
+            except exceptions.MultipleObjectsReturned as e:
+                    print e
+            except exceptions.ObjectDoesNotExist:
+                pass;
+            try:
+                fs = feedbackSubmission.objects.get(feedbackForm__in =  f, submitter = u, when__gt = d)
+                #print "feeback submission",fs
+                fsa = feedbackSubmissionAnswer.objects.filter(submission = fs)
+                #print "Answer",fsa
+                toreturn = {}
+               
+                for answers in fsa:
+                    if answers.question.type == 'multiple-choice-single-answer':
+                        toreturn[answers.question] = answers.answer_option.text
+                    elif answers.question.type == 'multiple-choice-multiple-answer':
+                        try:
+                            toreturn[answers.question]+=answers.answer_option.text
+                        except KeyError:
+                            toreturn[answers.question] = answers.answer_option.text
+
+            except exceptions.ObjectDoesNotExist:
+                #print e;
+                toreturn = '-'
+            yield toreturn;
+
     
-    return HttpResponse('dfdsfsad')
+    
+    f = str(prgm+batch) 
+    w_sub.write(0,6,f)
+    w_tea.write(0,6,f)
+    
+    
+    
+    row = 3
+    col = 2
+    print "Subject List==", commonsub;
+
+    #g = group.objects.filter(name__contains = batch,name__startswith = prgm);
+    #for curr_group in g:
+    #    print "Group", g
+    for u in g.user_set.all():
+    
+        subjectQuestions = getQuest('subject')
+        teacherQuestions = getQuest('teacher')
+
+            
+        row = row+2; 
+        print "USER== ",u, row, col;
+        print "="*50;
+        col = 2
+        w_sub.write(row,col-1,"Studnt's Name")
+        w_sub.write(row,col,str(u.username))
+        w_tea.write(row,col-1,"Student's Name")
+        w_tea.write(row,col,str(u.username))
+
+        row = row + 2
+        scol = 1
+        tcol = 1
+        for subs in commonsub:
+            w_sub.write(row,scol,subs.name)
+
+            teachers  = subs.taughtby.split(',')
+            if len(teachers)>1:
+                for t in teachers:
+                        w_tea.write(row,tcol,str(t))
+                        tcol = tcol +1
+            else:        
+                w_tea.write(row,tcol,subs.taughtby)
+                tcol = tcol+1
+            scol = scol+1
+        print "we have total of ",scol,"subjects and ",tcol,"teachers";    
+        row = row +1;
+        bckr = row
+        #print "startng to write the subs from row.", row 
+        q_ans = wow(u,'subject')
+        ques = []
+        try:
+            while 1:
+                s,q = subjectQuestions.next()
+                ques.append(q)
+                col = 0
+                w_sub.write(row,col,s)
+                row = row+1
+                #w_tea.write(row,col,str(u.username))
+        except StopIteration:
+           # print "Ended at",row
+            lrow = row
+            row = bckr
+            pass;
+        print "fiished with the questions" 
+        for ncol in range(1,len(commonsub)):
+            row = bckr
+            print "writing from",row, col,
+            try:
+                value = q_ans.next()
+            except StopIteration:
+                break;
+            for r in range(len(ques)):
+                if value == '-':
+                    w_sub.write(row,ncol,'-')
+                else:
+                    if ques[r] in value and value[ques[r]]:
+                        a = value[ques[r]]
+                    else:
+                        a = '-'
+                    w_sub.write(row,ncol,a)
+                row = row+1
+            col = col+1
+            #print "to", row, col
+        row = row+2
+        col = 0
+        '''
+        q_ans = wow(u, 'teacher')
+        try:
+            while 1:    
+                t,q = teacherQuestions.next()
+                w_tea.write(row,col,t)
+                row = row+1
+                #w_tea.write(row,col,str(u.username))
+        except StopIteration:
+            pass;
+
+        row = bckr   
+        
+        ncol =1
+        try:
+            while 1:
+                row = bckr
+                value = q_ans.next()
+                for r in range(len(ques)):
+                    if value == '-':
+                        w_tea.write(row,ncol,'-')
+                    else:
+                        if ques[r] in value and value[ques[r]]:
+                            a = value[ques[r]]
+                        else:
+                            a = '-'
+                        w_tea.write(row,ncol,a)
+                    row = row+1
+                col = col+1
+        except StopIteration:
+            
+             col = 0
+             row = row +2
+        '''     
+    
+    from change_agent.settings import MEDIA_ROOT,MEDIA_URL
+    wb.save('%s/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
+    return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)"'%(MEDIA_URL,prgm,batch))
 
 
 def summary(request,formID):    

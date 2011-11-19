@@ -24,17 +24,33 @@ def index(request):
     else:
         print 'username in session object';
         username = request.session['username'];
+        u=user.objects.get(pk=username)
+    
+    try:
+        about_us=feedbackForm.objects.get(title="About This Project") 
+    except:
+        print "create the about us form...;)"
+        about_us = ""
+        Filled = True;
 
     if username in COORDINATORS:
         print 'haha'
+        try:
+            fsa = feedbackSubmission.objects.get(feedbackForm = about_us, submitter = u)
+            formfilled  = False
+        except feedbackSubmission().DoesNotExist:
+            formfilled = True;
         t = loader.get_template('manage_feedback/adminindex.html');
-        c = RequestContext(request,{});
+        c = RequestContext(request,{
+                'formfilled' : formfilled,
+                'f':about_us,
+                'u':u
+                });
         return HttpResponse(t.render(c));
     # to fetch the all the forms
     # for feedback About
     
     #TO ADD:- check for group as staff... not that important...:) 
-    u=user.objects.get(pk=username)
     feedback_about_list=list()
     feedback_about=u.allowed_viewing_feedback_about.values();
     for a in feedback_about:
@@ -44,12 +60,6 @@ def index(request):
             feedback_about_list.extend([ab])
         except:
             continue;
-    try:
-        about_us=feedbackForm.objects.get(title="About This Project") 
-    except:
-        print "create the about us form...;)"
-        about_us = ""
-        Filled = True;
     Filled=False
     # to fetch the filled forms for previewing and editing 
     
@@ -238,9 +248,9 @@ def show(request,form):
     # is this form actually unfilled??
 
     print 'I am in show and f is %s' % (f);
-    print 'and unfilled is %s' % (request.session['unfilled']);
+    #print 'and unfilled is %s' % (request.session['unfilled']);
 
-    if f not in request.session['unfilled']:
+    if 'unfilled' in request.session and f not in request.session['unfilled']:
         return redirect('/change_agent/manage_feedback/1/error');
     mandatoryQuestions = f.mandatoryQuestions();
 

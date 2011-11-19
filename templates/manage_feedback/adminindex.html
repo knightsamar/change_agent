@@ -5,6 +5,7 @@
 <script language = 'javascript'>
 function fillOptions(o)
 {
+    alert(o)
     if (o.children.length >= 1) 
        { 
          while(o.firstChild)
@@ -43,9 +44,24 @@ function fillOptions(o)
     }
 
 }
+function enable(c)
+{
+    
+    var ans = confirm('Are you sure??')
+    if (ans)
+    {
+        o = document.getElementById('submit')
+        o.removeAttribute('disabled')
+        c.value = 'Disable again'
+    }
+}
 
 </script>
 
+<h3> hi..{{u.fullname}}..!!</h3>
+{% if formfilled %}
+<input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "/change_agent/give_feedback/{{f.id}}/show"'>
+{% endif %}
 <form method = 'post' action = 'createmassforms'>
 {% csrf_token %}
 Programme
@@ -67,13 +83,16 @@ Create
 <input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
 <br>
 Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2011-11-15'><bR>
-
-<input type = 'submit' value = 'create forms'>
+{% if u.username = 'moodleldap' %}
+<input id ='submit' type = 'submit' value = 'create forms' disabled>
+<input type = 'button' value = 'enable and create forms' onclick = 'enable(this)'>
+{% else%}
+<input type = 'button' value = 'create forms' onclick = 'alert("not now ;) .. forms already created")'>
+{%endif %}
 </form>
 <hr>
 <BR><BR>
-
-<form method = 'post' action = '/manage_feedback/studentsummary'>
+<form method = 'post' action = '/change_agent/manage_feedback/studentsummary'>
 {% csrf_token %}
 Programme
 <select name = 'programme'>
@@ -86,4 +105,6 @@ Programme
 <select name = 'batch' onfocus = 'fillOptions(this)'></select>
 <input type = 'submit' value = 'view Summary'>
 </form>
+
+<input type = 'button' value = 'logout' onclick = 'javascript:location.href = "/change_agent/ldap_login/logout"'>
 {% endblock %}
