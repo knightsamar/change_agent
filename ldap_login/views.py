@@ -1,5 +1,7 @@
 #comment this line when you ARE OUTSIDE SICSR!
-#from ldapAuthBackend import authenticate;
+from change_agent.settings import ROOT
+if ROOT !="":
+    from ldapAuthBackend import authenticate;
 from django.http import HttpResponse;
 from django.shortcuts import redirect, render_to_response;
 from django.template import RequestContext, loader;
@@ -14,15 +16,17 @@ def login(request):
     #are we processing login attempt ?
     message = None;
     if 'username' in request.session:
-        return redirect('/change_agent/give_feedback/');
+        return redirect('%s/give_feedback/'%ROOT);
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
             #comment this line when you ARE OUTSIDE SICSR!
-            #status = authenticate(request.POST['username'],request.POST['password']);
-            #UNCOMMENT this lin when you are outside SICSR!
-            status = True;
-            print status;
+            if ROOT != "":
+                status = authenticate(request.POST['username'],request.POST['password']);
+            else:
+                #UNCOMMENT this lin when you are outside SICSR!
+                status = True;
+            print ROOT,status;
             #print 'auth process completed'
         except Exception as e:
             return HttpResponse('Error!!! %s' % e.message);
@@ -37,7 +41,7 @@ def login(request):
             request.session.set_expiry(1800)
             add_user(userName);		
             print 'redirecting now...';
-            return redirect('/change_agent/give_feedback/');
+            return redirect('%s/give_feedback/'%ROOT);
         else:
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
@@ -50,7 +54,9 @@ def login(request):
     t = loader.get_template('ldap_login/login.html');
     c = RequestContext (request,
         {
-          'message' : message
+          'message' : message,
+          'ROOT':ROOT
+
         });
          
     return HttpResponse(t.render(c));
@@ -121,13 +127,13 @@ def logout(request):
 			#then tell me to login first, using the message if possible 
 			#message = "Hey, you need to go in before you can go out :P :P";
 
-    return redirect('/change_agent/ldap_login/');	
+    return redirect('%s/ldap_login/'%ROOT);	
 
 #cache this view's output for 6 hrs, needs to be specified in seconds
 @cache_page(6 * 60 * 60)
 def passwordHelp(request):
     if 'username' in request.session:
-        return redirect('/change_agent/give_feedback/');
+        return redirect('%s/give_feedback/'%ROOT);
     else:
         return render_to_response('ldap_login/passwordhelp.html');
      

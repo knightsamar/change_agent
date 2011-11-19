@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 <p align='center' style="{font-size: 13pt;}"> Please login using your SICSR Authentication<br/>(the one you use for Internet access, Moodle, <a href='http://projects.sdrclabs.in/laresumex'>LaResume-X</a>, <a href='http://live.sdrclabs.in'>SDRCLive</a>)</p>
-<form action='/change_agent/' method='POST'>
+<form action='{{ROOT}}/' method='POST'>
 
     {% csrf_token %}
     {% if message != None %}
@@ -24,5 +24,5 @@
     </tr>
     </table>
 </form>
-<div align='center' style='font-family: purisa'><a href='/change_agent/ldap_login/passwordHelp'>Forgot Password ?</a></div>
+<div align='center' style='font-family: purisa'><a href='{{ROOT}}/ldap_login/passwordHelp'>Forgot Password ?</a></div>
 {% endblock %}
