@@ -9,3 +9,5 @@ change_agent.*
 *~
 .*.swp
 .DS_Store
+GARBAGE/*
+GARBAGE
