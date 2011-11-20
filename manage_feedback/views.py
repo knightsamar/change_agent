@@ -29,14 +29,17 @@ def stusummary(request):
     # function to get the list of the questions that the student shoudl have answered for EACH subject/teacher
     def getQuest(forwhat):
         questionlist = feedbackQuestion.objects.filter(name__startswith = forwhat).exclude(type = 'text');
-        toreturn = {} 
+        toret = [] 
+        toretQ = []
         for question in questionlist:
             returnstring = question.text + '\n'
             questionOptions = feedbackQuestionOption.objects.filter(question = question)
             for QO in questionOptions:
                 returnstring += QO.text
+            toret.append(returnstring)
+            toretQ.append(question)
             
-            yield returnstring , question;    
+        return toret, toretQ;    
             
             
     # u pass the question and the Subject, this will return the option
@@ -119,119 +122,144 @@ def stusummary(request):
     w_tea.write(0,6,f)
     
     
-    
-    row = 3
-    col = 2
+    #rows and columns for subject 
+    Srow = 3
+    Scol = 2
+    #rows and columns for teachers
+    Trow = 3
+    Tcol = 2
+
     print "Subject List==", commonsub;
+
+    subjectQuestions, quesS = getQuest('subject')
+    teacherQuestions, quesT = getQuest('teacher')
+
 
     #g = group.objects.filter(name__contains = batch,name__startswith = prgm);
     #for curr_group in g:
     #    print "Group", g
     for u in g.user_set.all():
-    
-        subjectQuestions = getQuest('subject')
-        teacherQuestions = getQuest('teacher')
 
+        
             
-        row = row+2; 
-        print "USER== ",u, row, col;
+        Trow = Trow+2; 
+        Srow = Srow+2;
+        print "USER== ",u, Srow, Scol;
         print "="*50;
-        col = 2
-        w_sub.write(row,col-1,"Studnt's Name")
-        w_sub.write(row,col,str(u.username))
-        w_tea.write(row,col-1,"Student's Name")
-        w_tea.write(row,col,str(u.username))
+        Scol = 2
+        Tcol = 2
 
-        row = row + 2
-        scol = 1
-        tcol = 1
+        w_sub.write(Srow,Scol-1,"Studnt's Name")
+        w_sub.write(Srow,Scol,str(u.username))
+        w_sub.write(Srow,Scol+1,str(u.fullname))
+        w_tea.write(Trow,Tcol-1,"Student's Name")
+        w_tea.write(Trow,Tcol,str(u.username))
+        w_sub.write(Trow,Tcol+1,str(u.fullname))
+
+        Srow = Srow + 2
+        Trow = Trow + 2
+        Scol = 1
+        Tcol = 1
+
+
+        ################# SUBJECT ###########################
+        
+        
         for subs in commonsub:
-            w_sub.write(row,scol,subs.name)
+            w_sub.write(Srow,Scol,subs.name)
 
             teachers  = subs.taughtby.split(',')
             if len(teachers)>1:
                 for t in teachers:
-                        w_tea.write(row,tcol,str(t))
-                        tcol = tcol +1
+                        w_tea.write(Trow,Tcol,str(t))
+                        Tcol = Tcol +1
             else:        
-                w_tea.write(row,tcol,subs.taughtby)
-                tcol = tcol+1
-            scol = scol+1
-        print "we have total of ",scol,"subjects and ",tcol,"teachers";    
-        row = row +1;
-        bckr = row
+                w_tea.write(Trow,Tcol,subs.taughtby)
+                Tcol = Tcol+1
+            Scol = Scol+1
+        #print "we have total of ",Scol,"subjects and ",Tcol,"teachers";    
+        Srow = Srow +1;
+        Trow = Trow +1
+        bckr = Srow 
+        backup = Trow
         #print "startng to write the subs from row.", row 
         q_ans = wow(u,'subject')
-        ques = []
-        try:
-            while 1:
-                s,q = subjectQuestions.next()
-                ques.append(q)
-                col = 0
-                w_sub.write(row,col,s)
-                row = row+1
+        # first print the question strint at col0
+        Scol = 0
+        
+        for i in range(0,len(subjectQuestions)):
+           try: 
+                print subjectQuestions[i]
+                
+                w_sub.write(Srow,Scol, subjectQuestions[i])
+                Srow = Srow+1
                 #w_tea.write(row,col,str(u.username))
-        except StopIteration:
-           # print "Ended at",row
-            lrow = row
-            row = bckr
-            pass;
+           except IndexError:
+                continue
         print "fiished with the questions" 
         for ncol in range(1,len(commonsub)):
-            row = bckr
-            print "writing from",row, col,
+            print "ncol==",ncol,"row", Srow
+            Srow = bckr
+            #print "writing Subject from",Srow, Scol,
             try:
                 value = q_ans.next()
             except StopIteration:
                 break;
-            for r in range(len(ques)):
+            for r in range(len(quesS)):
                 if value == '-':
-                    w_sub.write(row,ncol,'-')
+                    w_sub.write(Srow,ncol,'-')
                 else:
-                    if ques[r] in value and value[ques[r]]:
-                        a = value[ques[r]]
-                    else:
-                        a = '-'
-                    w_sub.write(row,ncol,a)
-                row = row+1
-            col = col+1
+                    try:#print "VVVV",value
+                        w_sub.write(Srow,ncol,value[quesS[r]])
+                    except KeyError:
+                        w_sub.write(Srow,ncol,'-')
+                Srow = Srow+1
+            Scol = Scol+1
             #print "to", row, col
-        row = row+2
-        col = 0
-        '''
-        q_ans = wow(u, 'teacher')
-        try:
-            while 1:    
-                t,q = teacherQuestions.next()
-                w_tea.write(row,col,t)
-                row = row+1
-                #w_tea.write(row,col,str(u.username))
-        except StopIteration:
-            pass;
-
-        row = bckr   
+        Srow = Srow+2
+        Scol = 0
+        # end of subject Saving....... now only on next ireration..
         
-        ncol =1
+        #####################  TEACHER  #########################
+        
+        q_ans = wow(u, 'teacher')
+        Trow = Trow +1
+        
+        Tcol = 0
         try:
-            while 1:
-                row = bckr
-                value = q_ans.next()
-                for r in range(len(ques)):
+            Trow = backup
+            i = 0
+            for i in range(0,len(teacherQuestions)):
+                #teacherQuestions[i]
+                w_tea.write(Trow,Tcol,teacherQuestions[i])
+                Trow = Trow+1
+                i = i+1
+                #w_tea.write(row,col,str(u.username))
+        except Exception as e:
+            print "had found an exception..",e
+        #Trow = Trow+1 
+        Trow = Trow + 2 
+        
+        Tcol = 1
+        
+        while 1:
+                Trow = backup
+                try:
+                    value = q_ans.next()
+                except StopIteration:
+                    break;
+                for r in range(len(quesT)):
                     if value == '-':
-                        w_tea.write(row,ncol,'-')
+                        w_tea.write(Trow,Tcol,'-')
                     else:
-                        if ques[r] in value and value[ques[r]]:
-                            a = value[ques[r]]
-                        else:
-                            a = '-'
-                        w_tea.write(row,ncol,a)
-                    row = row+1
-                col = col+1
-        except StopIteration:
-            
-             col = 0
-             row = row +2
-        '''     
+                        try:
+                            w_tea.write(Trow,Tcol,value[quesT[r]])
+                        except KeyError:   
+                            print "found no answer to THIS qestions......",quesT[r]
+                    Trow = Trow+1
+                Tcol = Tcol + 1
+        
+        Trow = Trow +10
     
     wb.save('%s/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
     return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)">'%(MEDIA_URL,prgm,batch))

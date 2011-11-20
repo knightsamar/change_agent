@@ -28,6 +28,7 @@ def index(request):
     
     try:
         about_us=feedbackForm.objects.get(title="About This Project") 
+        Filled = False
     except:
         print "create the about us form...;)"
         about_us = ""
