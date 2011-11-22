@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+ Login 
+{% endblock %}
+{% block content %}
+<p align='center' style="{font-size: 13pt;}"> Please login using your SICSR Authentication<br/>(the one you use for Internet access, Moodle, <a href='http://projects.sdrclabs.in/laresumex'>LaResume-X</a>, <a href='http://live.sdrclabs.in'>SDRCLive</a>)</p>
+<form action='{{ROOT}}/' method='POST'>
+
+    {% csrf_token %}
+    {% if message != None %}
+    <font color='red' face='comic sans' sizs='10'>
+   	<p align='center'>{{ message }}</p> </font>
+    {% endif %}
+   <table align='center'>
+    <tr>
+        <td><label for='username'>Username</label></td>
+        <td><input type='text' id='username' name='username' value='' maxlength='30' autofocus='true'/></td>
+    </tr><tr>
+        <td><label for='password'>Password</label></td>
+        <td><input type='password' id='password' name='password' value='' maxlength='255'/></td>
+    </tr>
+    <tr>
+        <td><td><input type='submit' value='Login!'/></td>
+    </tr>
+    </table>
+</form>
+<div align='center' style='font-family: purisa'><a href='{{ROOT}}/ldap_login/passwordHelp'>Forgot Password ?</a></div>
+{% endblock %}
