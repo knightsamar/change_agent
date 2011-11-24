@@ -272,6 +272,8 @@ def summary(request,formID):
 
     summary_outer_dict=dict()
     #for each feedbackQuestion in the form
+    from pygooglechart import PieChart3D;
+
     for q in f.questions.values():
         summary_inner_dict=dict();
         Options=feedbackQuestionOption.objects.filter(question=q['id'])
@@ -291,17 +293,28 @@ def summary(request,formID):
                  # adding the count to the inner dictionry
                  if opt.answer_text is not None:
                      summary_inner_dict[opt.answer_text]=None;
-                     pass;
+                     continue;
                  else:    
                      summary_inner_dict[opt.answer_option] = summary_inner_dict[opt.answer_option] + 1
-        summary_outer_dict[str(q['text'])]=summary_inner_dict;         
+        chart = PieChart3D(250,100);
+        def text(x): return x.text;
+        print summary_inner_dict.values()
+        print summary_inner_dict.keys()
+        chart.add_data(summary_inner_dict.values())
+        chart.set_pie_labels(list(map(text,summary_inner_dict.keys())))
+        try:
+            chart.download('%s/%s.png'%(MEDIA_ROOT,q['id']))
+        except:
+            pass;
+        summary_outer_dict[Options[0].question]=summary_inner_dict;         
     t = loader.get_template('manage_feedback/summary.html')
     c=Context(
                  {
                      'deadlinegone':deadlineGone, # idk why we had put this condition...!! ??
                      'formName':f.title,
                      'summaryDict':summary_outer_dict,
-                     'ROOT':ROOT
+                     'ROOT':ROOT,
+                     'MEDIA_URL':MEDIA_URL
                  }
                  )
 

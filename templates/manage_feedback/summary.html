@@ -1,15 +1,23 @@
-{% extends "base.html" %}
-{% block title %}
- Form {{ formName }} Summary
-{% endblock %}
-
-{% block content %}
+ <title>change_agent::Form {{ formName }} Summary</title>
+ <style type = 'text/css'>
+    img{
+        float:right;
+    }
+    .one{
+        border:2px solid black;
+        padding:12;
+    }
+    .id{
+        float:left;
+    }
+</style>
 <div id="form">
 <h2 align = 'center'> {{ formName }} </h3>
 {% for k,v in summaryDict.items %}
- <br/><br/><b><q>Q. {{ k }}</q></b>
+ <br/><br/><b><q>Q. {{ k.text }}</q></b>
  <br/>
  <ul>
+ <div id = 'one'>
   {% for option,count in v.items %}
   
    {% if count == None %}
@@ -17,11 +25,12 @@
       <li> <div id='ans'>{{option}}</div></li>
    {% endif%}
    {% else %}  
-     <li><div id='ans'>{{ option }}...........{{count}}</div></li>
+     <li><div id='ans'>{{ option }}...........{{count}}</li>
    {% endif %}
   {% endfor %}
  </ul>
+   <img src = '{{MEDIA_URL}}/{{k.id}}.png' height = 100 width = 150>
+   </div>
 {% endfor %}
 <input type='button' value='back' onClick="history.go(-1); return true;">
 </div>
-{% endblock %}

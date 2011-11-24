@@ -10,7 +10,7 @@ ADMINS = (
 )
 
 COORDINATORS = [
-    'kulkarni.vidya',
+    'vidya.kulkarni',
     'moodleldap',
     ]
 
@@ -20,7 +20,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
          #'NAME': 'change_agent.sqlite3',                      # Or path to database file if using sqlite3.
-        'NAME': 'change_agent',                      # Or path to database file if using sqlite3.
+        'NAME': 'change_agent.sqlite3',                      # Or path to database file if using sqlite3.
         'USER': 'change_agent',                      # Not used with sqlite3.
         'PASSWORD': 'change',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -58,7 +58,7 @@ MEDIA_ROOT = '/Users/apoorva/change_agent/media'
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost/change_agent_media/'
+MEDIA_URL = 'http://localhost:8888/change_agent_media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

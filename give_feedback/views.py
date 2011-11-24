@@ -20,7 +20,7 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('%s/ldap_login/',%ROOT);
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         print 'username in session object';
         username = request.session['username'];
@@ -35,6 +35,7 @@ def index(request):
 
     
     if username in COORDINATORS:
+        print "wecome coordinator"
         is_coordinator = True; 
     else:
         is_coordinator = False;
