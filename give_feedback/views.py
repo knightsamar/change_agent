@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout, Batch, Subject
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
-
+from change_agent.settings import ROOT
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
@@ -20,7 +20,7 @@ def index(request):
     """for rendering the index page for any user who has just logged in"""
     
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('/change_agent/ldap_login/');
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         print 'username in session object';
         username = request.session['username'];
@@ -104,6 +104,7 @@ def index(request):
                 'rightnow' : n, #because template api already has tag called now
                 'feedback_about_list':feedback_about_list,
                 'is_coordinator' : is_coordinator,
+                'ROOT':ROOT
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
@@ -244,14 +245,14 @@ def show(request,form):
     #print 'and unfilled is %s' % (request.session['unfilled']);
 
     if 'unfilled' in request.session and f not in request.session['unfilled']:
-        return redirect('/change_agent/manage_feedback/1/error');
+        return redirect('%s/manage_feedback/1/error'%ROOT);
     mandatoryQuestions = f.mandatoryQuestions();
 
     # is the deadline exceded??
     now = datetime.today()
     
     if (f.deadline_for_filling < now ):
-        return redirect("/change_agent/manage_feedback/2/eror");
+        return redirect("%s/manage_feedback/2/error"%ROOT);
     else:
         flag='show'
         t = loader.get_template('give_feedback/form.html');
@@ -260,6 +261,7 @@ def show(request,form):
              'username': username,
              'form' : f,
              'flag' : flag,
+             'ROOT':ROOT,
              'mandatoryQuestions':mandatoryQuestions,
            }
          );
@@ -268,7 +270,7 @@ def show(request,form):
 def preview(request,submissionID):
     if 'username' not in request.session or request.session['username'] == None:
         request.session['redirect'] = request.get_full_path()
-        return redirect('/change_agent/ldap_login/');
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);
 
@@ -291,7 +293,7 @@ def preview(request,submissionID):
     # whether this  form submission is actually owned by the user...
     Submitter = str(f.submitter)
     if Submitter != username:
-    	return redirect("/change_agent/manage_feedback/3/error")#"boohoooooooooo..!! caught ya..!!! ")
+    	return redirect("%s/manage_feedback/3/error"%ROOT)#"boohoooooooooo..!! caught ya..!!! ")
 
     now = datetime.today();
     #print "filled forms as per preview...", request.session['filled'];
@@ -340,7 +342,8 @@ def preview(request,submissionID):
 		'sub':Submitter,
 		'username':username,
 		'nextform':nextform,
-        'submissionDetails':submissionDetails
+        'submissionDetails':submissionDetails,
+        'ROOT':ROOT
         }
 	);
     return HttpResponse(t.render(c));
@@ -351,7 +354,7 @@ def edit(request):
 
     if 'username' not in request.session or request.session['username'] == None:
         request.session['redirect'] = request.get_full_path()
-        return redirect('/change_agent/ldap_login/');
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);
     
@@ -368,7 +371,7 @@ def edit(request):
     
     #every user is allowed to edit only 
     if Submitter != username:
-    	return redirect("/change_agent/manage_feedback/3/error"); 
+    	return redirect("%s/manage_feedback/3/error"%ROOT); 
     
     now = datetime.today()
     ans = feedbackSubmissionAnswer.objects.filter(submission=submissionID);
@@ -378,7 +381,7 @@ def edit(request):
     
     #have we exceeded the deadline already ???
     if (form.deadline_for_filling < now ):
-        return redirect("/change_agent/manage_feedback/2/error");
+        return redirect("%s/manage_feedback/2/error"%ROOT);
     else:
         flag='edit' #so that we can render the same template for editing as well as filling new forms.
 	
@@ -390,7 +393,8 @@ def edit(request):
              'answer':ans,
              'submissionID':submissionID,
              'mandatoryQuestions':mandatoryQuestions,
-    	     'username':username
+    	     'username':username,
+             'ROOT':ROOT
            }
          );
 
@@ -402,7 +406,7 @@ def editsubmit(request,form):
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
         request.session['redirect'] = request.get_full_path()
-        return redirect('/change_agent/ldap_login/');
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         username = request.session['username'];
     
@@ -421,7 +425,7 @@ def editsubmit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return redirect("/change_agent/manage_feedback/4/error"); 
+            return redirect("%s/manage_feedback/4/error"%ROOT); 
             break;
     
     submissionObj = feedbackSubmission.objects.get(pk=s['submissionID']); #create a new objecisting answer object
@@ -479,6 +483,7 @@ def editsubmit(request,form):
     c = RequestContext(request,
              {
                     'submissionID' : submissionObj.id,
+                    'ROOT':ROOT
              }
            );
     return HttpResponse(t.render(c));
@@ -489,7 +494,7 @@ def submit(request,form):
     #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
         request.session['redirect'] = request.get_full_path()
-        return redirect('/change_agent/ldap_login/');
+        return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);
     
@@ -536,7 +541,7 @@ def submit(request,form):
                
 
         else:
-			return redirect('/change_agent/manage_feedback/1/error');       
+			return redirect('%s/manage_feedback/1/error'%ROOT);       
     
     answeredQuestions=list()
 
@@ -550,7 +555,7 @@ def submit(request,form):
     print type(M)
     for mq in M:
         if mq not in answeredQuestions:
-            return redirect("/change_agent/manage_feedback/4/error"); 
+            return redirect("%s/manage_feedback/4/error"%ROOT); 
             break;
     print "i ma getting printed.."
 
@@ -615,6 +620,7 @@ def submit(request,form):
          {
                 'submissionID' : submissionObj.id,
                 'nextform' : nextform,
+                'ROOT':ROOT
          }
         );
 

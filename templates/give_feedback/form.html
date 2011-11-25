@@ -2,7 +2,12 @@
 <head>
 <style type="text/css">
 
-
+#disclaimer{
+    font-family:verdana;
+    size:10;
+    text-align:justify;
+    color:maroon;
+}
 
 </style>
 </head>
@@ -83,9 +88,9 @@ function debug(str)
 <div id="form">
 <h3 align='center'> {{ form.title }} </h3>
 {% if flag == 'show' %}
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='{{ROOT}}/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
 {% else %}  
-  <form name='feedbackForm' action='/change_agent/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <form name='feedbackForm' action='{{ROOT}}/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
   <input type='hidden' name='submissionID' value='{{ submissionID }}'>
 {% endif %}
 
@@ -122,7 +127,7 @@ function debug(str)
    {% endfor %}
           <input type='hidden' name='formid' value='{{ form.id }}'> 
      	<input type='submit' value='Submit feedback!'>
-	<input type='button' onclick="javascript:location.href='/change_agent/give_feedback/'" value='Cancel'>
+	<input type='button' onclick="javascript:location.href='{{ROOT}}/give_feedback/'" value='Cancel'>
 </form>
 {% if form.isofficial %}
     <p id='disclaimer' align='right'>Please note that this form is official feedback form of SICSR.<br/> The questions and their options are all official and the software holds no responsiblity of it.</p>

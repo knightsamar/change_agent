@@ -21,9 +21,9 @@ legend{
 {% block content %}
 <div id="menubar">
 {% if not About_us_filled %}
-<input type="button" value="Feedback About this Software" onClick="javascript:location.href='/change_agent/give_feedback/16/show'"><br>
+<input type="button" value="Feedback About this Software" onClick="javascript:location.href='{{ROOT}}/give_feedback/16/show'"><br>
 {% endif %}
-<input type='button' onClick="javascript:location.href='/change_agent/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
+<input type='button' onClick="javascript:location.href='{{ROOT}}/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
 </div>
 <h2> Hi {{fullname}}! </h2>
 
@@ -35,7 +35,7 @@ legend{
 <table cellpadding='16' align='center'>
     {% for form in unfilled_list %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='#b3dlea'><td> <a href='/change_agent/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
+        <tr bgcolor='#b3dlea'><td> <a href='{{ROOT}}/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
             <img align='right' src='/../../change_agent_media/clock' height=40 width=40>
         
         </td>
@@ -62,9 +62,9 @@ legend{
 <table cellpadding='16' align='center'>
     {% for form in filled_list %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
-         <tr> <td><a href='/change_agent/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
+         <tr> <td><a href='{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
       {% else %}
-        <tr><td><a href = '/change_agent/give_feedback/{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
+        <tr><td><a href = '{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
       {% endif %} 
 	  <td> {{form.feedbackForm.deadline_for_filling|timeuntil }} left</tr>
      {% empty%}
@@ -80,7 +80,7 @@ legend{
 <legend> Feedback Form Summary you can view</legend>
 <ul align = 'center'>
 {% for f in feedback_about_list %}
- <li><a href ="/change_agent/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
+ <li><a href ="{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
 {% endfor %}
 {% endif %}
 </ul>
