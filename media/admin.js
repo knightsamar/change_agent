@@ -1,16 +1,14 @@
 function fillOptions(o)
 {
-//    alert(o)
     if (o.children.length >= 1) 
        { 
          while(o.firstChild)
              o.removeChild(o.firstChild)
        }
     
-    c = o.previousElementSibling.value
+    c = document.getElementById('SamarXandY').value
     d = new Date();
     y = d.getFullYear(); //current year
-   
     if (c == 'MSc. (CA)' || c == 'MBA-IT')
        {
            //for sem 1 and 2

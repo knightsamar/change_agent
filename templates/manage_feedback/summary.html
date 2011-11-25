@@ -29,7 +29,11 @@
    {% endif %}
   {% endfor %}
  </ul>
+   {% if k.type != 'text' %}
    <img src = '{{MEDIA_URL}}/{{k.id}}.png' height = 100 width = 150>
+   {% else %}
+   <!-- no images for text-based question! -->
+   {% endif %}
    </div>
 {% endfor %}
 <input type='button' value='back' onClick="history.go(-1); return true;">

@@ -2,6 +2,7 @@
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ROOT = '/change_agent'
 
 ADMINS = (
      ('Samar', 'samar@sicsr.ac.in'),
@@ -9,11 +10,11 @@ ADMINS = (
 )
 
 COORDINATORS = [
-#    'kulkarni.vidya',
+    'vidya.kulkarni',
     'moodleldap',
-#    'sayali.joshi',
-#    'mamta.guram',
-#    'kanchan.bhide',
+    'sayali.joshi',
+    'mamta.guram',
+    'kanchan.bhide',
     ]
 
 MANAGERS = ADMINS

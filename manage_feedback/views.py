@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import Context, loader
 #from django.db.models import Q
+from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT
 from django.db.models import exceptions
 from pyExcelerator import *
 
@@ -277,9 +278,9 @@ def summary(request,formID):
     #for each feedbackQuestion in the form
     from pygooglechart import PieChart3D;
 
-    for q in f.questions.values():
+    for q in f.questions.all():
         summary_inner_dict=dict();
-        Options=feedbackQuestionOption.objects.filter(question=q['id'])
+        Options=feedbackQuestionOption.objects.filter(question=q)
         # to set the dictionalry initial value to 0. and the key to the question options
         for o in Options:
             summary_inner_dict[o]=0
@@ -289,7 +290,7 @@ def summary(request,formID):
         sub=feedbackSubmission.objects.filter(feedbackForm=f)
         for s in sub:
             # the options to be counted is to be related to a partcular submission made for this partucal form.
-            qwaleOptions = feedbackSubmissionAnswer.objects.filter(question = q['id']).filter(submission=s);
+            qwaleOptions = feedbackSubmissionAnswer.objects.filter(question = q).filter(submission=s);
             #for each AnswerOption:
             for opt in qwaleOptions:
                  #count the number of total feedbackSubmissionAnswer...
@@ -299,17 +300,23 @@ def summary(request,formID):
                      continue;
                  else:    
                      summary_inner_dict[opt.answer_option] = summary_inner_dict[opt.answer_option] + 1
-        chart = PieChart3D(250,100);
-        def text(x): return x.text;
-        print summary_inner_dict.values()
-        print summary_inner_dict.keys()
-        chart.add_data(summary_inner_dict.values())
-        chart.set_pie_labels(list(map(text,summary_inner_dict.keys())))
-        try:
-            chart.download('%s/%s.png'%(MEDIA_ROOT,q['id']))
-        except:
-            pass;
-        summary_outer_dict[Options[0].question]=summary_inner_dict; 
+        try:    
+            chart = PieChart3D(250,100);
+        
+            def text(x): return x.text;
+        
+            print summary_inner_dict.values()
+            print summary_inner_dict.keys()
+        
+            chart.add_data(summary_inner_dict.values())
+            chart.set_pie_labels(list(map(text,summary_inner_dict.keys())))
+            try:
+                chart.download('%s/%s.png'%(MEDIA_ROOT,q.id))
+            except:
+                pass;
+        except: pass;       
+    
+        summary_outer_dict[q]=summary_inner_dict;
     t = loader.get_template('manage_feedback/summary.html')
     c=Context(
                  {
