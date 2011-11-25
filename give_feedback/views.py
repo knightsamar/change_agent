@@ -4,11 +4,10 @@ from django.shortcuts import redirect
 from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout, Batch, Subject
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
-
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
-from settings import COORDINATORS, ROOT
+from change_agent.settings   import COORDINATORS, ROOT
 #for date
 from datetime import datetime
 
@@ -35,7 +34,7 @@ def index(request):
 
     
     if username in COORDINATORS:
-        print "wecome coordinator"
+        print "welcome coordinator"
         is_coordinator = True; 
     else:
         is_coordinator = False;
@@ -89,7 +88,7 @@ def index(request):
         print "=-----Filled is False----"
         request.session['unfilled'].append(about_us)            
     print request.session['unfilled']            
-    # for displaying date and checking /for deadline
+    # for displaying date and checking for deadline
     d = datetime.today();
     n = datetime.now()		
 
@@ -105,6 +104,7 @@ def index(request):
                 'rightnow' : n, #because template api already has tag called now
                 'feedback_about_list':feedback_about_list,
                 'is_coordinator' : is_coordinator,
+                'ROOT':ROOT
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
@@ -232,7 +232,8 @@ def show(request,form):
 
     #user is not logged in 
     if 'username' not in request.session or request.session['username'] == None: 
-        return redirect('%s/ldap_login/'%ROOT); 
+        request.session['redirect'] = request.get_full_path()
+        return redirect('/change_agent/ldap_login/'); 
     else: #is logged in!
         username = str(request.session['username']);
        
@@ -251,7 +252,7 @@ def show(request,form):
     now = datetime.today()
     
     if (f.deadline_for_filling < now ):
-        return redirect("%s/manage_feedback/2/eror"%ROOT);
+        return redirect("%s/manage_feedback/2/error"%ROOT);
     else:
         flag='show'
         t = loader.get_template('give_feedback/form.html');
@@ -260,6 +261,7 @@ def show(request,form):
              'username': username,
              'form' : f,
              'flag' : flag,
+             'ROOT':ROOT,
              'mandatoryQuestions':mandatoryQuestions,
            }
          );
@@ -267,6 +269,7 @@ def show(request,form):
 
 def preview(request,submissionID):
     if 'username' not in request.session or request.session['username'] == None:
+        request.session['redirect'] = request.get_full_path()
         return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);
@@ -339,9 +342,8 @@ def preview(request,submissionID):
 		'sub':Submitter,
 		'username':username,
 		'nextform':nextform,
-        'ROOT':ROOT,
-        'submissionDetails':submissionDetails
-        
+        'submissionDetails':submissionDetails,
+        'ROOT':ROOT
         }
 	);
     return HttpResponse(t.render(c));
@@ -351,6 +353,7 @@ def edit(request):
     # if the user is lot logged in.. redirect to login page
 
     if 'username' not in request.session or request.session['username'] == None:
+        request.session['redirect'] = request.get_full_path()
         return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);
@@ -402,6 +405,7 @@ def editsubmit(request,form):
 
     #are we logged in ?
     if 'username' not in request.session or request.session['username'] == None:
+        request.session['redirect'] = request.get_full_path()
         return redirect('%s/ldap_login/'%ROOT);
     else:
         username = request.session['username'];
@@ -480,7 +484,7 @@ def editsubmit(request,form):
              {
                     'submissionID' : submissionObj.id,
                     'ROOT':ROOT
-           }
+             }
            );
     return HttpResponse(t.render(c));
 
@@ -489,6 +493,7 @@ def submit(request,form):
     
     #is the user NOT logged in ?
     if 'username' not in request.session or request.session['username'] == None:
+        request.session['redirect'] = request.get_full_path()
         return redirect('%s/ldap_login/'%ROOT);
     else:
         username = str(request.session['username']);

@@ -16,7 +16,10 @@ def login(request):
     #are we processing login attempt ?
     message = None;
     if 'username' in request.session:
-        return redirect('%s/give_feedback/'%ROOT);
+        if 'redirect' in request.session:
+            return redirect(request.session['redirect'])
+        else:    
+            return redirect('%s/give_feedback/'%ROOT);
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
@@ -41,7 +44,10 @@ def login(request):
             request.session.set_expiry(1800)
             add_user(userName);		
             print 'redirecting now...';
-            return redirect('%s/give_feedback/'%ROOT);
+            if 'redirect' in request.session:
+                return redirect(request.session['redirect'])
+            else:    
+                return redirect('%s/give_feedback/'%ROOT);
         else:
             message = 'Wrong Username/password';
             print "because status was", status, "hence message is", message;
@@ -56,7 +62,6 @@ def login(request):
         {
           'message' : message,
           'ROOT':ROOT
-
         });
          
     return HttpResponse(t.render(c));

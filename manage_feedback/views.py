@@ -9,14 +9,15 @@ from django.template import Context, loader
 #from django.db.models import Q
 from django.db.models import exceptions
 from pyExcelerator import *
-from change_agent.settings import ROOT, MEDIA_ROOT, MEDIA_URL
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 
 def stusummary(request):
-    
-    
+    if 'username' not in request.session:
+       
+        request.session['redirect'] = request.get_full_path()
+        return redirect('%s/ldap_login/login'%ROOT) 
     # function to get the list of the subject for the entire batch.-all divisions and common.
     def getlist(g):
         p,b = g.getBatch()
@@ -233,8 +234,9 @@ def stusummary(request):
              row = row +2
         '''     
     
+    from change_agent.settings import MEDIA_ROOT,MEDIA_URL
     wb.save('%s/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
-    return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR><input type = "button" value = "back" onclick = "history.go(-1)">'%(MEDIA_URL,prgm,batch))
+    return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR> <input type = "button" value = "back" onclick = "history.go(-1)">'%(MEDIA_URL,prgm,batch))
 
 
 def summary(request,formID):    
@@ -242,7 +244,8 @@ def summary(request,formID):
     """for rendering the index page for any user who has just logged in"""
      
     if 'username' not in request.session or request.session['username'] == None:
-       return redirect('%s/ldap_login'%ROOT);
+        request.session['redirect'] = request.get_full_path()
+        return redirect('%s/ldap_login'%ROOT);
     """summary of feedback for a form..."""
     #select a form
     f = feedbackForm.objects.get(pk=formID);
@@ -306,7 +309,7 @@ def summary(request,formID):
             chart.download('%s/%s.png'%(MEDIA_ROOT,q['id']))
         except:
             pass;
-        summary_outer_dict[Options[0].question]=summary_inner_dict;         
+        summary_outer_dict[Options[0].question]=summary_inner_dict; 
     t = loader.get_template('manage_feedback/summary.html')
     c=Context(
                  {

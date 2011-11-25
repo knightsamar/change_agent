@@ -77,7 +77,7 @@ legend{
 
 {% if feedback_about_list %}
 <fieldset>
-<legend> Feedback Summary you can view</legend>
+<legend> Feedback Form Summary you can view</legend>
 <ul align = 'center'>
 {% for f in feedback_about_list %}
  <li><a href ="{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
@@ -85,6 +85,26 @@ legend{
 {% endif %}
 </ul>
 </fieldset>
+
+{% if is_coordinator %}
+<fieldset> 
+<legend> Student's Feedback Form Printout </legend>
+<form method = 'post' action = '/change_agent/manage_feedback/studentsummary'>
+{% csrf_token %}
+<b>Select Programme:</b>
+<select name = 'programme'>
+    <option>MSc. (CA)
+    <option>MBA-IT
+    <option>BBA-IT
+    <option>BCA
+</select><br/>
+<b>Select Batch:</b>
+<select name = 'batch' onfocus = 'fillOptions(this)'></select><br/>
+<input type='submit' id='submitbtn' value = "Get Students' Feedback Forms" disabled> <br/>
+<i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
+</form>
+</fieldset> 
+{% endif %}
 {% endblock %}
 </body>
 </html>
