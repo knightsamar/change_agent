@@ -18,8 +18,9 @@ def login(request):
     if 'username' in request.session:
         if 'redirect' in request.session:
             return redirect(request.session['redirect'])
-        else:    
+        else:
             return redirect('%s/give_feedback/'%ROOT);
+
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
