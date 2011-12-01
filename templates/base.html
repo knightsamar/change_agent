@@ -1,0 +1,120 @@
+
+<html>
+	<head>
+	<meta names = 'keywords' language = 'en-US' content = 'feedback, SICSR, project, sdrclabs, improvement,apoorva,samar'>
+    <style>
+	#change {
+		text-align: center;
+		text-decoration: line-through;
+		letter-spacing: -10px;
+		text-shadow: 3px 6px black;
+		font-family: logo;// Blackmoor LET; 
+        /*font-src: url(http://projects.sdrclabs.in/change_agent_media/Woodcut-Cracked.ttf);*/		
+        font-size: 80px;
+        /* position:absolute;  */
+	}
+    
+    #footer{
+    text-align:right;
+    }
+	hr {
+		text-shadow: 1px 2px black;
+		color: #ff7f00;
+        line-height: 15px;
+    }
+    
+    @font-face {
+            font-family: logo;
+            font-style: normal;
+            src: url('http:/change_agent_media/fonts/Whatka!.ttf');
+        }
+	
+	#form {
+    width:50%;
+    margin-left:25%;
+    {% comment %}
+    To ensure that summary page doesnot get the background
+    {% endcomment %}
+    {% if not summaryDict %}
+	background-image: url('/change_agent_media/CRINKLEP.JPG');
+    {% endif %}
+    /* background-color:#fdfed4; */
+    border:15px groove;
+    line-break:strict;
+    {% if not summaryDict %}
+    -moz-box-shadow:0 0 300px 5px;
+    {% endif %}
+}
+formtitle{
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+}
+
+	q {
+	font-family: Verdana;
+	font-size: 14px;
+}
+	#ans {
+	font-family: "comic sans MS";
+    word-wrap: normal;
+}
+
+	</style>
+   <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26739811-1']);
+     _gaq.push(['_trackPageview']);
+
+     (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+    </script>
+<!--<link REL=Stylesheet HREF="base.css" TYPE="text/css">-->
+
+		<title>Change Agent :: {% block title %} {% endblock %}</title>
+    <script language='javascript'>
+        usernameEl = document.getElementById('username');
+        if (usernameEl)
+            usernameEl.focus(); //only run on the login page
+    </script>
+    
+    <script language='javascript' src='http://localhost:8888/change_agent_media/admin.js'></script>
+	</head>
+	
+	<body>
+		<div id='change'>
+        <font color="orange">c h</font>
+        <font color="green">a</font>
+        <font color="orange">n</font>
+        <font color="green">g e&nbsp;n t</font>
+        </font>
+         </div>
+      <h5 align='center'>be the change u wanna c</h5>
+      <hr><BR>
+
+		<div id='content'>
+		{% block content %}
+		
+		{% endblock %}
+		</div>
+
+		<br/>
+
+		<div id='footer'> 
+		<hr>
+			Developed using <a href='http://www.djangoproject.com'><img src='/change_agent_media/django-logo-positive.png' height='40' width='70' alt='Django' border=0></a>which is powered by <a href='http://python.org'><img src='/change_agent_media/python_logo_official.png' border=0 height=50 width=90 alt='Python'></a><br/>
+            This is a <a href='http://sdrclabs.in'><img src="/change_agent_media/SDRC_logo.gif" height="40" width="80" border=0 alt="SDRCLabs"></a>Labs creation!<br/>
+            Created by <a href='http://www.facebook.com/apoorva.srinivasan1'>Apoorva</a> and <a href='http://www.facebook.com/knightsamar'>Samar</a><br/>
+            MSc.(CA) 2010-12<br/>
+            <a href='http://redwine.sdrclabs.in/projects/sdrc-changeagent'>Version 0.73</a><br>
+		</div>
+        
+	</body>
+
+</html>
+
