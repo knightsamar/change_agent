@@ -10,6 +10,7 @@ from django.template import Context, loader
 from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS
 from django.db.models import exceptions
 from pyExcelerator import *
+from django.views.decorators.cache import cache_page
 
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
@@ -236,10 +237,10 @@ def stusummary(request):
         '''     
     
     from change_agent.settings import MEDIA_ROOT,MEDIA_URL
-    wb.save('%s/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
-    return HttpResponse('<a href = "%s/%s - %s.xls">click</a><BR> <input type = "button" value = "back" onclick = "history.go(-1)">'%(MEDIA_URL,prgm,batch))
+    wb.save('%s/summary_sheets/%s - %s.xls'%(MEDIA_ROOT,prgm,batch))    
+    return HttpResponse('<a href = "%s/summary_sheets/%s - %s.xls">Download Spreadsheet!</a><BR><br><br><br> <input type = "button" value = "back" onclick = "history.go(-1)">'%(MEDIA_URL,prgm,batch))
 
-
+@cache_page(1)
 def summary(request,formID):    
    
     """for rendering the index page for any user who has just logged in"""
@@ -276,7 +277,7 @@ def summary(request,formID):
 
     summary_outer_dict=dict()
     #for each feedbackQuestion in the form
-    from pygooglechart import PieChart3D;
+    from pygooglechart import PieChart2D;
 
     for q in f.questions.all():
         summary_inner_dict=dict();
@@ -301,7 +302,7 @@ def summary(request,formID):
                  else:    
                      summary_inner_dict[opt.answer_option] = summary_inner_dict[opt.answer_option] + 1
         try:    
-            chart = PieChart3D(250,100);
+            chart = PieChart2D(450,200);
         
             def text(x): return x.text;
         
@@ -311,7 +312,7 @@ def summary(request,formID):
             chart.add_data(summary_inner_dict.values())
             chart.set_pie_labels(list(map(text,summary_inner_dict.keys())))
             try:
-                chart.download('%s/%s.png'%(MEDIA_ROOT,q.id))
+                chart.download('%s/piecharts/%s.png'%(MEDIA_ROOT,q.id))
             except:
                 pass;
         except: pass;       
