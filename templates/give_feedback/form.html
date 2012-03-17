@@ -1,0 +1,139 @@
+<html>
+<head>
+<style type="text/css">
+
+#disclaimer{
+    font-family:verdana;
+    size:10;
+    text-align:justify;
+    color:maroon;
+}
+
+</style>
+</head>
+</html>{% extends "base.html" %}
+{% block title %}
+ Fill the form
+{% endblock %}
+{% block content %}
+<title> Give Your Feedback..!!</title>
+<script language='javascript'>
+
+function mandatory()
+{
+   flag=1;
+   {% for id,type in mandatoryQuestions.items %}
+    {% if type == 'multiple-choice-single-answer' %}
+        var radio= document.forms.feedbackForm.q{{id}}_rdb_opt;
+        for(i=0;i<radio.length;i++)
+          {          
+              if (radio[i].checked) 
+           {
+               flag=4;
+           }
+          } 
+        if(flag!=4) 
+        {   
+            alert('Please answer the mandatory radio button questions');
+            radio[0].focus();
+            return false;
+        }
+    {% endif %}  
+    {% if type == 'multiple-choice-multiple-answer' %}
+       var check=document.forms.feedbackForm.q2
+       for(i=0;i<check.length;i++)
+           {
+             //alert(check[i].value);
+             if(check[i].checked) 
+               {
+                  flag=7;
+               }
+               
+           }
+       if(flag!=7) 
+       {
+           alert('Please answer the mandatory checkbox questions!');
+           check[0].focus();
+           return false;
+       }
+
+    {% endif %}     
+    {%if type == 'text'%}
+         var a='q{{id}}'
+         var text=document.getElementById(a);
+         if(text.value=="")
+         {
+             alert('Please answer the mandatory text question!');
+             text.focus();
+             return false;
+         }
+         else flag=5;
+    {% endif %}      
+   {% endfor %} 
+ if(flag!=1) return true;
+ else return false;
+}
+
+function debug(str)
+{
+    alert(str);
+}
+
+
+</script>
+{% comment %}
+<!-- commented by Samar to let people know we aren't spying on them -->
+<h3 align='left'> Hi {{ username }} </h3>
+{% endcomment %}
+<div id="form">
+<h3 align='center'> {{ form.title }} </h3>
+{% if flag == 'show' %}
+  <form name='feedbackForm' action='{{ROOT}}/give_feedback/{{ form.id }}/submit/' method='POST' onsubmit='return mandatory();'>
+{% else %}  
+  <form name='feedbackForm' action='{{ROOT}}/give_feedback/{{ form.id }}/edit/' method='POST' onsubmit='return mandatory();'>
+  <input type='hidden' name='submissionID' value='{{ submissionID }}'>
+{% endif %}
+
+<ol>
+    {% csrf_token %}
+    {% for q in form.questions.all %}
+    
+    <li><span><q>{{ q.text }}</q></span>
+        {% if q.mandatory %}
+            <sup><img src="/../change_agent_media/star.png" height=10 width=10></sup>
+         {% endif %}
+    </li>
+    <br>
+		{% if q.type == 'multiple-choice-single-answer' %}
+			{% for opt in q.feedbackquestionoption_set.values %}
+            <input type='radio' id = 'q{{q.id}}' name='q{{ q.id }}_rdb_opt' value='{{ opt.id }}'/>
+	             <label for='q{{ q.id }}_rdb_opt'>
+        	           <span><ans>{{ opt.text }}</ans></span>
+		         </label> <br/>
+		    {% endfor %}
+		{% endif %}
+		{% if q.type == 'multiple-choice-multiple-answer' %}
+            {% for opt in q.feedbackquestionoption_set.values %}
+            <input type='checkbox' id = 'q{{q.id}}' name='q{{ q.id }}_chk_opt{{ opt.id }}'/> 
+	             <label for='q{{ q.id }}_chk_opt{{ opt.id }}'>
+        	            <span><ans>{{ opt.text }}</ans></span>
+                 </label><br/>
+        	{% endfor %}
+		{% endif %}
+		{% if q.type == 'text' %}
+			<textarea id='q{{q.id}}'name='q{{ q.id }}_txt' rows='12' cols='40' width='30%'></textarea> <br/>
+		{% endif %}
+	    <br/>
+   {% endfor %}
+          <input type='hidden' name='formid' value='{{ form.id }}'> 
+     	<input type='submit' value='Submit feedback!'>
+	<input type='button' onclick="javascript:location.href='{{ROOT}}/give_feedback/'" value='Cancel'>
+</form>
+{% if form.isofficial %}
+    <p id='disclaimer' align='right'>Please note that this form is official feedback form of SICSR.<br/> The questions and their options are all official and the software holds no responsiblity of it.</p>
+{% else %}
+    <p id='disclaimer' align='right'>Please note that this is an unofficial feedback form and the responses recorded will be available only to the assigned people.</p>
+{% endif %}
+
+</div>
+{% endblock %}
