@@ -1,89 +1,25 @@
 "Subject","Faculty","Programme","Batch","Division"
-"HRM","Yoshima Somavanshi","MBA-IT","2010-12",
-"Business Applications for the Extended Enterprise","Varoon Sir, Lalit Kathpalia","MBA-IT","2010-12",
-"Info Security Management","Ashok Kotwal","MBA-IT","2010-12",
-"Info Strategy Management","Shri Deshpande","MBA-IT","2010-12",
-"S/W Verification & Validation","Kirti Marthe","MBA-IT","2010-12",
-"Data Warehousing","Ajay Dani","MBA-IT","2010-12",
-"Business Intelligence","Mr. Shrotriya","MBA-IT","2010-12",
-"Software Quality Standards","Shubhashri Waghmare","MBA-IT","2010-12",
-"Software Quality Management ","Surabhi Pai","MBA-IT","2010-12",
-"Banking & Financial Markets I","Mr. Nene ","MBA-IT","2010-12",
-"Banking & Financial Markets  II","Hiren Malani","MBA-IT","2010-12",
-"ISM","Terence Sequeira, Mr. Hamine","MBA-IT","2010-12",
-"OOD","Sachin Naik","MBA-IT","2011-13",
-"JAVA","Rambabu Sir","MBA-IT","2011-13",
-"RDBMS I","Samaya Pillai","MBA-IT","2011-13",
-"SOFTWARE ENGINEERING","Shubhashri Waghmare, Kanchan Shrotriya","MBA-IT","2011-13",
-"WEB DEV.","Gaurav Pant","MBA-IT","2011-13",
-"NE","Sonal Khosla","MBA-IT","2011-13",
-"PPM","Viraj T, S Ghatak ","MBA-IT","2011-13",
-"FM I","Ashok Morwal","MBA-IT","2011-13",
-"Business Statistics","S Mujumdar,  Ajay Dani","MBA-IT","2011-13",
-"Mobile Computing ","Gurmeet  Singh,  V Rajani, Malani Sir","MBA-IT","2011-13",
-"Managerial Skills I","Khabdekar A, Ms. Bhadury","MBA-IT","2011-13",
-"Visual Basic .Net II","Shrikant Mapari","BCA","2009-12",
-"Core Java","Sachin Naik","BCA","2009-12",
-"Business Applications","Kanchan Shrotriya","BCA","2009-12",
-"Oracle","Rambabu Sir","BCA","2009-12",
-"Computer Oranization & Microprocessors","Rajashree Jain","BCA","2009-12",
-"Software Quality Management, Testing and Standards","Shubhashree Waghmare ","BCA","2009-12",
-"Elements of Information Technology","Vidya Kumbhar","BCA","2011-14","B"
-"Elements of Information Technology","Rajashree Jain","BCA","2011-14","C"
-"Logic Development and programming concepts","Samaya Pillai","BCA","2011-14","C"
-"Logic Development and programming concepts","Minal Tamhane ","BCA","2011-14","B"
-"Logic Development and programming concepts","Shubhashree Waghmare ","BCA","2011-14","B"
-"Digital Electronics","Rajashree Jain","BCA","2011-14",
-"Introduction to Operating System","Sonal Khosla","BCA","2011-14","B"
-"Introduction to Operating System","Harshad","BCA","2011-14","C"
-"Internet Technology","Priti Kulkarni","BCA","2011-14","B"
-"Internet Technology","Rambabu Sir","BCA","2011-14","C (only BCA)"
-"Business Communications","Vatsala Gupta (ELTIS)","BCA","2011-14",
-"Elements of Statistics","Shilpa Mujumdar","BCA","2011-14",
-"Environmental Science","Swaroop Gokhale","BCA","2011-14",
-"Integrated Disaster Management System","SCHC","BCA","2011-14",
-"Introduction to Operating System","Shrikant Mapari","BCA","2010-13",
-"Networking Essential","Priti Kulkarni","BCA","2010-13",
-"Principles of Accounting & Economics","Rohan Bhase","BCA","2010-13",
-"RDBMS","Samaya Pillai","BCA","2010-13",
-"Computer Oranization","Sonal Khosla","BCA","2010-13",
-"Server Side Web Technology","Anjali Abhyankar","BCA","2010-13",
-"Software Engineering & OOAD","Kanchan Shrotriya","BCA","2010-13",
-"Java SE","Apurva Jadhav","MSc. (CA)","2011-13","A"
-"Java SE","Vidya Kumbhar","MSc. (CA)","2011-13","B"
-"Data Strutures and Algorith","M K Tandon","MSc. (CA)","2011-13",
-"Essentials of Internet and Web Technologies","Atul Kahate","MSc. (CA)","2011-13",
-"Object Oriented Analysis and Design","Sachin Naik","MSc. (CA)","2011-13",
-"RDBMS","Kaushik Raghupathi","MSc. (CA)","2011-13",
-"Operating Systems (Kernel Internals)","Sourish Banerjee","MSc. (CA)","2011-13",
-"Linux & Shell Scripting ","Gaurav Pant","MSc. (CA)","2011-13",
-"Best Programming Practices","Harshad Gune","MSc. (CA)","2011-13",
-"Scientific Report Writing","Manjusha Joshi, Rajashree Jain","MSc. (CA)","2011-13",
-"Mobile Computing Technologies","Yatin Jog, Harshad Gune","MSc. (CA)","2010-12","SD"
-"Software Architecture","Brig. Sharangpani","MSc. (CA)","2010-12","SD"
-"Vulnerability Assessment and Penetration Testing","Payatu Labs (Asim, Murtuza)","MSc. (CA)","2010-12","SA"
-".NET Technologies","Shrikant Mapari","MSc. (CA)","2010-12","SD"
-"Software Testing & Deployment","Sachin Godbole","MSc. (CA)","2010-12",
-"Web 2.0","Atul Kahate","MSc. (CA)","2010-12","SD"
-"Server Security","Rohit Srivastwa, Gokhale Sir","MSc. (CA)","2010-12","SA"
-"Wireless Networking","Ashok Pattar","MSc. (CA)","2010-12","SA"
-"Data Warehousing and Data Mining","Ajay Dani","MSc. (CA)","2010-12",
-"High Performance Computing ","Kaushik Raghupathi","MSc. (CA)","2010-12",
-"Information Security,  Risk Analysis and Security Audit","S S Joglekar","MSc. (CA)","2010-12",
-"Network Programming","Harshad Gune","MSc. (CA)","2010-12",
-"Visual Basic","Vidya kumbhar","BBA-IT","2010-13","A"
-"Business Data Processing ","Vinayak Jadhav","BBA-IT","2010-13","A"
-"Network Essentials  ","Priti Kulkarni","BBA-IT","2010-13","A"
-"Business Economics","Rohan Bhase","BBA-IT","2010-13","A"
-"Costing","Kiwalkar","BBA-IT","2010-13","A"
-"Server Side  Web Technology","Minal Abhyankar","BBA-IT","2010-13","A"
-"Computer Animation","Ms Anagha Paithane","BBA-IT","2010-13","A"
-"Entrepreneurship Management  ","Rajashree Jain","BBA-IT","2010-13","A"
-"Visual Basic","Shrikant Mapari","BBA-IT","2010-13","B"
-"Business Data Processing ","Vinayak Jadhav","BBA-IT","2010-13","B"
-"Network Essentials  ","Sonal Khosla","BBA-IT","2010-13","B"
-"Business Economics","Rohan Bhase","BBA-IT","2010-13","B"
-"Costing","Kiwalkar","BBA-IT","2010-13","B"
-"Server Side  Web Technology","Apurva Jadhav","BBA-IT","2010-13","B"
-"Computer Animation","Ms Anagha Paithane","BBA-IT","2010-13","B"
-"Entrepreneurship Management  ","Rajashree Jain","BBA-IT","2010-13","B"
+"OOAD & JAVA","Sachin Naik, Rambabu M","MBA-IT","2011-13",
+"RDBMS","Shirish Joshi","MBA-IT","2011-13",
+"Software Project Management","Hiren Malani","MBA-IT","2011-13",
+"Software Verification and Validation
+","Kirtee Marathe","MBA-IT","2011-13",
+"Business Process Analysis","Ashok Kotwal","MBA-IT","2011-13",
+"Quantitative Techniquest","Ajay Dani","MBA-IT","2011-13",
+"Financial Management – II","Avinash Nene","MBA-IT","2011-13",
+"ERP","Varoon Rajani","MBA-IT","2011-13",
+"Management Skills – II","Aparna Khandekar, Bidisha Bhadury","MBA-IT","2011-13",
+"Software Quality & Security Standards","Shubhashree Waghmare","MBA-IT","2011-13",
+"Banking & Financial Markets – I","Avinesh Nene, Hiren Malani","MBA-IT","2011-13",
+"Network Operating Systems (SA)","Sudhanwa Jogalekar, Rohit Srivastav","MSc. (CA)","2011-13",
+"XML Technologies","Apurva Jadhav","MSc. (CA)","2011-13",
+"RTOS","Trupti Hake","MSc. (CA)","2011-13",
+"Network Information Systems","Mahesh Gokhale","MSc. (CA)","2011-13",
+"Internetworking","Ashok Pattar","MSc. (CA)","2011-13",
+"Infrastructure Management","Ashok Sharangpani","MSc. (CA)","2011-13",
+"Cryptography & Information Security","Atul Kahate","MSc. (CA)","2011-13",
+"Artificial Neural Networks","Pravin Metkewar","MSc. (CA)","2011-13",
+"R Programming Language","Manjusha Joshi","MSc. (CA)","2011-13",
+"German Language","Asavari, Wagdevi","MSc. (CA)","2011-13",
+"Data Structures","Harshad Gune","MSc. (CA)","2011-13",
+"Integrated Disaster Mangement Programme","SIHS","MSc. (CA)","2011-13",

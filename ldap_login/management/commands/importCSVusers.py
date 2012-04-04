@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         CSVFile = args[0];
         Newgroup = args[1];
-        if CSVFiles is None:
+        if CSVFile is None:
             print 'You need to specify path to a CSV file!!!'
             return;
         try:
