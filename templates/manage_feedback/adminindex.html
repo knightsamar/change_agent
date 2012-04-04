@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title%} Home{% endblock%}
+{% block content%}
+
+<script language = 'javascript'>
+function fillOptions(o)
+{
+    alert(o)
+    if (o.children.length >= 1) 
+       { 
+         while(o.firstChild)
+             o.removeChild(o.firstChild)
+       }
+    
+    c = o.previousElementSibling.value
+    d = new Date();
+    y = d.getFullYear(); //current year
+   
+    if (c == 'MSc. (CA)' || c == 'MBA-IT')
+       {
+           //for sem 1 and 2
+           options = document.createElement('option')
+           options.text = y-1 + '-' + ((y+1)%100);
+           o.add(options,null)
+           //for sem 3 and 4
+           options = document.createElement('option')
+           options.text = y + '-' + ((y+2)%100);
+           o.add(options,null)
+       }
+    else
+    {
+        //for sem 5 and 6
+        options = document.createElement('option')
+        options.text = (y-2) + '-' + ((y+1)%100);
+        o.add(options,null)
+        //for sem 3 and 4
+        options = document.createElement('option')
+        options.text = (y-1) + '-' + ((y+2)%100);
+        o.add(options,null)
+        //for sem 1 and 2
+        options = document.createElement('option')
+        options.text = y + '-' + ((y+3)%100);
+        o.add(options,null)
+    }
+
+}
+function enable(c)
+{
+    
+    var ans = confirm('Are you sure??')
+    if (ans)
+    {
+        o = document.getElementById('submit')
+        o.removeAttribute('disabled')
+        c.value = 'Disable again'
+    }
+}
+
+</script>
+
+<h3> hi..{{u.fullname}}..!!</h3>
+{% if formfilled %}
+<input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "{{ROOT}}/give_feedback/{{f.id}}/show"'>
+{% endif %}
+<form method = 'post' action = 'createmassforms'>
+{% csrf_token %}
+Programme
+<select name = 'programme'>
+    <option>MSc. (CA)
+    <option>MBA-IT
+    <option>BBA-IT
+    <option>BCA
+</select>
+
+<select name = 'batch' onfocus = 'fillOptions(this)'></select>
+
+
+<BR>
+
+Create
+<input type = 'radio' name = 'createforms' value = 'all' checked> All 
+<input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers
+<input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
+<br>
+Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2011-11-15'><bR>
+{% if u = 'moodleldap' %}
+<input id ='submit' type = 'submit' value = 'create forms' disabled>
+<input type = 'button' value = 'enable and create forms' onclick = 'enable(this)'>
+{% else%}
+<input type = 'button' value = 'create forms' onclick = 'alert("not now ;) .. forms already created")'>
+{%endif %}
+</form>
+<hr>
+<BR><BR>
+<form method = 'post' action = '{{ROOT}}/manage_feedback/studentsummary'>
+{% csrf_token %}
+Programme
+<select name = 'programme'>
+    <option>MSc. (CA)
+    <option>MBA-IT
+    <option>BBA-IT
+    <option>BCA
+</select>
+
+<select name = 'batch' onfocus = 'fillOptions(this)'></select>
+<input type = 'submit' value = 'view Summary'>
+</form>
+
+<input type = 'button' value = 'logout' onclick = 'javascript:location.href = "{{ROOT}}/ldap_login/logout"'>
+{% endblock %}

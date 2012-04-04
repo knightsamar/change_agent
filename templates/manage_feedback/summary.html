@@ -1,0 +1,80 @@
+ <title>change_agent::Form {{ formName }} Summary</title>
+ <style type = 'text/css'>
+    .graph{
+        float:right;
+        /* border: 1px dotted; */
+        width:40%;
+        margin-right:62%;
+    }
+    /*
+    .left {
+        border: 1px dashed;
+        width:60%;
+    } */  
+    .answers{
+        border:2px solid black;
+        padding:15;
+        width:50%;
+    }
+    .id{
+        float:left;
+    } */
+</style>
+<div id="form">
+<h2 align = 'center'> Feedback Summary for feedback about {{ formName }} </h3>
+{% for k,v in summaryDict.items %}
+ <b><q>Q. {{ k.text|capfirst }}</q></b>
+ <br/>
+ <ul>
+ <div class = 'answers'> 
+     <table>
+     <tr>
+     <td>
+      <table>
+      {% for option,count in v.items %}
+        <tr>
+           {% if count == None %}
+           <td>
+              {% if option != "" %}
+                    <li><div class='ans'>{{option}}</div></li>
+               {% endif %}
+           </td>
+           <td> &nbsp; </td>
+           {% else %}  
+           <td>
+             <div class='ans'>{{ option }}</div>
+           </td>
+           <td>
+              <font face = 'verdana' size = '5'><b>{{ count }}</b></font>
+           </td>
+           {% endif %}
+           <!--
+           {% comment %}
+           <td>
+               COUNT: {{count}}
+               OPTION : {{option}}
+           </td> 
+           {% endcomment %}
+           -->
+        </tr>
+
+      {% endfor %}
+      </table>
+     </td>
+     <td align='right'>
+     <div class='graph'>
+      {% if k.type != 'text' and count == None %}
+         <img src = '{{MEDIA_URL}}/piecharts/{{k.id}}.png'  />
+      {% else %}
+         <span>&nbsp;</span>
+      {% endif %}
+     </div>
+     </td>
+     </tr>
+    </table>
+ </div>
+ </ul>
+ <br/>
+{% endfor %}
+<input type='button' value='back' onClick="history.go(-1); return true;">
+</div>
