@@ -41,33 +41,39 @@ class Command(BaseCommand):
             csvFile = csv.DictReader(open('manage_feedback/change_agent-data.csv','rb'));
             #for each line in d csv file
             for record in csvFile:
+                print "Processing Record : ", record
                 subject = record['Subject'].strip();
                 teacher = record['Faculty'].strip();
                 div = ''
                 div = record['Division'].strip();
-                print "Division NOw is" , div;
+                print "Division Now is" , div;
                 #batch = getBatchPrefix(record['Programme'],record['Batch']);
                 batch = record['Batch'].strip()
                 d = date.today()
                 y = d.year
                 m = d.month
-                if int(batch.split('-')[0]) == (y -1): # 2010
-                    if m >=3 and m <=12:
+                #determine the semester of the batch
+                if int(batch.split('-')[0]) == (y-1): # 2010
+                    if m >= 6 and m <=12:
                         Sem = 3
-                    else: Sem = 2
-                elif int(batch.split('-')[0]) == (y -2): # 2009
-                    if m >=3 and m <=12:
+                    else: 
+                        Sem = 2
+                elif int(batch.split('-')[0]) == (y-2): # 2009
+                    if m >= 6 and m <=12:
                         Sem = 5
-                    else: Sem = 4
+                    else: 
+                        Sem = 4
                 elif int(batch.split('-')[0]) == y: # 2011
-                    if m >=3 and m <=12:
+                    if m >= 6 and m <=12:
                         Sem = 1
                     #else: "oops ..;P"
-                elif int(batch.split('-')[0]) == (y -3): # 2008
-                    if m >=3 and m <=12: print 'oops';
-                    else: Sem = 6
+                elif int(batch.split('-')[0]) == (y-3): # 2008
+                    if m >= 6 and m <=12: 
+                        print 'oops';
+                    else: 
+                        Sem = 6
                     pass;
-                print subject, teacher, batch, Sem, div
+                print subject, teacher, batch, "Sem ", Sem, div
                 print "================="
                 programme = record['Programme']
                 u = user.objects.get(pk = coordinators[programme])
@@ -83,10 +89,10 @@ class Command(BaseCommand):
                         div = 'all'
 
                     b = Batch.objects.get(division=div, programme = record['Programme'], batchname = batch, sem = Sem);
-                    print "already have ",b 
+                    print "Using existing Batch ",b 
                 except exceptions.ObjectDoesNotExist:
                     sleep(3)
-                    print "creating new"
+                    print "Creating new Batch"
                     b = Batch(
                         programme = record['Programme'],
                         division = div,
@@ -97,12 +103,15 @@ class Command(BaseCommand):
                     b.save();
                     try:
                         coursecode = record['coursecode']
-                        print "We got coursecode as ", type(coursecode);
+                        print "We have coursecode as ", type(coursecode);
                     except Exception as e:
                         print "Exception is ",e
                         coursecode = ""
                 except exceptions.MultipleObjectsReturned:
                     print b
+                
+                #Create subject record
+                print "Creating new Subject"
                 s = Subject(
                     name = subject,
                     for_batch = b,
@@ -111,7 +120,7 @@ class Command(BaseCommand):
                     )
                 s.save();
                 
-                print "Uploading" 
+                print "Saved."
+                print "*" * 42
         except Exception as e:
             print traceback.print_exc();
-
