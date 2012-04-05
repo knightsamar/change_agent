@@ -1,0 +1,84 @@
+TODO's 
+    -- for internal use only :P
+
+--------Realease II ---------
+
+Brought Forward from last releaze..
+-------------
+* the prefilling of forms while editn
+* the bug nu 1... whatever tt meant
+* the email feature.. whenever GodSam gets some time out for this project:P
+
+Requirements by Hg -- 16th may
+-----------
+
+* Make seperate form templates that generates forms by itself on the given parameters like Program name Batch, Sem etc.
+* this params can be customized(added new, removed modified) in the future and ence should be flexible.
+* This would generate forms and give form names like Java-Msc-10-12 SE-Mba-09-11 etc automatically
+* Need to first create a database that says which Program has what all subjects for what all semesters. This would help in creating the options in the template and hence the forms.
+* This template would also fetch the subjects, the semesters etc from the database and create al the related forms on just ne click and assign them to the Batchwala group and notify them for filling of new forms
+* the creator of the form and the course head/ program head (eg kv, hg) are by default the values of who-can-view wala paramater of the forms. 
+* The users for the group can also be synced from ldap, or imported from csv dump or something.
+*??? the admin view should then have option to generate new templates also...???????
+* We need to categorize the forms like Subjects, Techers, fun.. etc (we can use the about wala thing)
+
+-- as per 'us'---
+
+* add a form description.. or atleast print it by taking it from feedback about...
+* make the others wala text box.. onclick
+* Make a room for feedback about this s/w
+* Make it more general adding google/ facebook logins. Ldap->for sicsr/ others for outsiders...!!
+*Each user should have the option of creating (editing and del) a new form
+    - Either by manually creating an interface for them and customizing the optios for them
+    - Or integrating it with the admin view, which means creating a user for each in the admin wala thing also.
+* The question bank of user should be seperate from that of the Admin question bank
+* The who-can-view wala thing should be a form property.
+* Form should have a created by field also. 
+* Allow the Deadline date should be null or forever... 
+* Do that feedback-about-this-projet wala thing work somehow.
+* Make a view for error that accepts the error code and displays the corrosponding error message aong with our header and footer:)
+
+
+
+PROBLEMS TO BE FACED............  8TH MAY 2011
+* SA/SD to be grouped on thier own.. using AD logic or JS confirmation BOx (as suggested by Apoorva)
+* Students to be enrolled automaicaly from AD/Ldap
+* Editing of forms to be closed after first submission.- by using filter in admin view. 
+* for creating bulk forms... and the form names that should last for cuming years... they should be unique in the sense that Data Structures for Msc 10-12 by Tondon sir ka feedback should be seperate form than that of Data Stuctures BCA 13-15 sem 3 by HG. 
+(16th may)
+
+
+
+
+
+
+----RELEAZE I STUFF -------
+        - almost all done with satisfactory results:P
+BUGS
+----
+* Currently, when I create a question, I have to go seperately and create associated options...Actually it should ask me directly what options to create.
+ -- a sample is created in ldap_login/groups' admin view.
+ -- checkout http://docs.djangoproject.com/en/1.2/intro/tutorial02/ for more guidance.
+
+* Currently, when any non-mandatory is in a form edit and the user doesn't submit any value for that non-mandatory question, the original value which was filled priorly, is automatically associated and NOT flushed out. Thus non-mandatory questions in an edit have a value by default, whihc is their original value. 
+     --- We need prefilled forms while editing.
+     --- We need to flush out all submissionAnswerOptions corresponding to that submission when saving the edited submission. -- DONE by samar (using method 2..)
+
+* Check the mandatoriness of submissions on SERVER SIDE though it's already working on CLIENT SIDE -- done FOR SUBMITTING and editsubmit. -- done by apoorva
+* during preview.. checkbooxes are shown in different questions -- DONE by samar
+* All checkboxes stacked up in one go.- done by Samar. on 4th May
+
+FEATURES
+--------
+* We should be able to only SEE the feedback form when the DEADLINE is EXCEEDED. -- DONE
+* next next functioanlity in preview and show -- DONE
+* ppl who havent filled the forms... - DONE by Apoorva on 5th May
+* subhashri wala...!! -- done by Apoorva on 10th May
+
+
+REQUIREMENTS -- 20th April 
+-- by vidya maam
+--------------------
+* SA and SD seperate groups-- Done by apoorva
+* list of students who havent and have filled a particular form-done by Apoorva
+* list of unfilled forms during loggoff..!! and email and all the dhanki business-- to be finished by Samar..(the email part)
