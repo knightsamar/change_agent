@@ -482,7 +482,10 @@ def error(request, errorcode):
 
 def notFilled(request):
         p = request.POST['programme']
-        b = request.POST['batch']
+        try:
+           b = request.POST['batch']
+        except KeyError:
+            return HttpResponse('Please fill the batch also')
         queryset = feedbackForm.objects.filter(title__contains = '(%s - %s'%(p,b)).filter(isofficial = True);
         
         user_dict=dict()
@@ -496,7 +499,10 @@ def notFilled(request):
             #now from this list.. remove ppl who have filled the form...!!
             forms=feedbackSubmission.objects.filter(feedbackForm=existing_form)
             for f in forms:
-                user_all.remove(f.submitter)
+                try:
+                 user_all.remove(f.submitter)
+                except:
+                    pass
             user_dict[str(existing_form.title)]=user_all
         t = loader.get_template('manage_feedback/notFilled.html');
         c = Context(

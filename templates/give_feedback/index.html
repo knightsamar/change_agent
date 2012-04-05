@@ -23,48 +23,6 @@ function changesubmit(o,path)
     f.setAttribute('action',path);
     o.click();
 }
-function fillOptions(o)
-{
-    //alert(o)
-    if (o.children.length >= 1) 
-       { 
-         while(o.firstChild)
-             o.removeChild(o.firstChild)
-       }
-    
-    c = o.previousElementSibling.value
-    d = new Date();
-    y = d.getFullYear(); //current year
-   
-    if (c == 'MSc. (CA)' || c == 'MBA-IT')
-       {
-           //for sem 1 and 2
-           options = document.createElement('option')
-           options.text = y-1 + '-' + ((y+1)%100);
-           o.add(options,null)
-           //for sem 3 and 4
-           options = document.createElement('option')
-           options.text = y + '-' + ((y+2)%100);
-           o.add(options,null)
-       }
-    else
-    {
-        //for sem 5 and 6
-        options = document.createElement('option')
-        options.text = (y-2) + '-' + ((y+1)%100);
-        o.add(options,null)
-        //for sem 3 and 4
-        options = document.createElement('option')
-        options.text = (y-1) + '-' + ((y+2)%100);
-        o.add(options,null)
-        //for sem 1 and 2
-        options = document.createElement('option')
-        options.text = y + '-' + ((y+3)%100);
-        o.add(options,null)
-    }
-
-}
-f
 </script>
 <div id="menubar">
 {% if not About_us_filled %}
@@ -91,7 +49,7 @@ f
 <b>Select Batch:</b>
 <select name = 'batch' onfocus = 'fillOptions(this)'></select><br/>
 <input type='submit' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'> <br/>
-<input type='button' id='notfilled' value = "Get Students' who hav not filled" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> <br/>
+<input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> <br/>
 <input type = 'button' onclick ='javascript:location.href = "{{ROOT}}/manage_feedback/createforms"' value = 'create mass feedback forms'>
 <i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
 </form>

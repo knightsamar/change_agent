@@ -38,7 +38,7 @@ def index(request):
         batch = [COORDINATORS[username]];
         print batch
         if batch == ['All']:
-            batch = COORDINATORS.values()
+            batch = list(set(COORDINATORS.values()))
             batch.pop(batch.index('All'))
         print batch
         is_coordinator = True; 
