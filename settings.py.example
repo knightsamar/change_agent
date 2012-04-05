@@ -13,11 +13,13 @@ COORDINATORS = {
     'vidya.kulkarni':'MSc. (CA)',
     'moodleldap':'All',
     'sayali.joshi':'MBA-IT',
-    'kanchan.abcd':'BCA',
-    
+    'kanchan.bhide':'BCA',
+    'mamta.guram':'BBA-IT',
     }
 
 MANAGERS = ADMINS
+
+createforms = True
 
 DATABASES = {
     'default': {

@@ -52,7 +52,9 @@ function changesubmit(o,path)
 <input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
 <i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
 <br/>
+{% if createforms %}
 <input type = 'button' onclick ='javascript:location.href = "{{ROOT}}/manage_feedback/createforms"' value = 'Create Mass Feedback Forms'>
+{% endif %}
 </form>
 </fieldset> 
 {% endif %}

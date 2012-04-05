@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
-from change_agent.settings   import COORDINATORS, ROOT
+from change_agent.settings   import COORDINATORS, ROOT, createforms
 #for date
 from datetime import datetime
 
@@ -112,7 +112,8 @@ def index(request):
                 'feedback_about_list':feedback_about_list,
                 'is_coordinator' : is_coordinator,
                 'batch':batch,
-                'ROOT':ROOT
+                'ROOT':ROOT,
+                'createforms':createforms,
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
