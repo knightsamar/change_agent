@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
-from change_agent.settings   import COORDINATORS, ROOT
+from change_agent.settings   import COORDINATORS, ROOT, CREATEFORMS
 #for date
 from datetime import datetime
 
@@ -38,10 +38,10 @@ def index(request):
         batch = [COORDINATORS[username]];
         print batch
         if batch == ['All']:
-            batch = COORDINATORS.values()
+            batch = list(set(COORDINATORS.values()))
             batch.pop(batch.index('All'))
         print batch
-        is_coordinator = True; 
+        is_coordinator = True;
     else:
         is_coordinator = False;
         batch = None
@@ -97,7 +97,6 @@ def index(request):
     #print request.session['unfilled']            
     # for displaying date and checking for deadline
     d = datetime.today();
-
     n = datetime.now()		
 
     t = loader.get_template('give_feedback/index.html');
@@ -113,7 +112,8 @@ def index(request):
                 'feedback_about_list':feedback_about_list,
                 'is_coordinator' : is_coordinator,
                 'batch':batch,
-                'ROOT':ROOT
+                'ROOT':ROOT,
+                'createforms':CREATEFORMS,
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));

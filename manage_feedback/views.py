@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from datetime import datetime;
 from django.template import RequestContext,Context, loader
 #from django.db.models import Q
-from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS, createforms
+from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS, CREATEFORMS
 from django.db.models import exceptions
 from pyExcelerator import *
 from django.views.decorators.cache import cache_page
@@ -15,7 +15,7 @@ from django.views.decorators.cache import cache_page
 #many of the things here are being managed by the admin panel...so we won't release it in version 0.1
 #one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
 def adminindex(request):
-    if createforms is False:
+    if CREATEFORMS is False:
         return HttpResponse("<b>Not allowed!</b>")
     
     if request.POST:
