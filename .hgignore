@@ -14,7 +14,7 @@ GARBAGE/*
 GARBAGE
 *.vimrc.orig
 *.xls
-*settings.py*
+settings.py
 db-converter/*
 *change_agent-data.csv
 *chnge_agent.dump

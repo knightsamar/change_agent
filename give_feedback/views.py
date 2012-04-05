@@ -96,8 +96,7 @@ def index(request):
         request.session['unfilled'].append(about_us)            
     #print request.session['unfilled']            
     # for displaying date and checking for deadline
-    d = datetime.today();:137
-
+    d = datetime.today();
     n = datetime.now()		
 
     t = loader.get_template('give_feedback/index.html');

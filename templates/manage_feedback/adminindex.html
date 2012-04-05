@@ -5,7 +5,7 @@
 <script language = 'javascript'>
 function fillOptions(o)
 {
-    alert(o)
+    //alert(o)
     if (o.children.length >= 1) 
        { 
          while(o.firstChild)
@@ -62,7 +62,7 @@ function enable(c)
 {% if formfilled %}
 <input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "{{ROOT}}/give_feedback/{{f.id}}/show"'>
 {% endif %}
-<form method = 'post' action = 'createmassforms'>
+<form method = 'post' action = '{{ROOT}}/manage_feedback/createforms'>
 {% csrf_token %}
 Programme
 <select name = 'programme'>
