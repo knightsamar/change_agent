@@ -1,11 +1,10 @@
 import ldap;
 
-
 class ldapManager:
     
     conn = None; #for the connection
     base_dn = 'dc=sicsr,dc=edu'; #for the Base of the Domain
-
+	
     def getUsers(self,ou='10030142',attrs=['displayName','sAMAccountName','userPrincipalName']):
         '''gets all the users in the specified Organizational Unit
            by default it will retrieve the Username (samaccountname in M$ terms) AND the name of the person
@@ -24,7 +23,7 @@ class ldapManager:
         
         return result;
 
-    def connect(self,server='10.10.21.2',username='moodleldap@sicsr.edu',password='m00dl3',):
+    def connect(self,server='10.10.21.2',username='a',password='b',):
         '''connects to the given ldap server using name and password.
             this user must preferably have permissions of traversal, browsing if not everything
         '''

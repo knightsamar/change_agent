@@ -17,9 +17,10 @@ def hamari404():
 
 def index(request):
     """for rendering the index page for any user who has just logged in"""
-    
+    print "first line" 
     if 'username' not in request.session or request.session['username'] == None:
-        return redirect('%s/ldap_login/'%ROOT);
+        print "not logged in"
+	return redirect('%s/ldap_login/'%ROOT);
     else:
         print 'username in session object';
         username = request.session['username'];

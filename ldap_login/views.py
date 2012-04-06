@@ -45,6 +45,7 @@ def login(request):
             request.session.set_expiry(1800)
             add_user(userName);		
             print 'redirecting now...';
+	    print ROOT;
             if 'redirect' in request.session:
                 return redirect(request.session['redirect'])
             else:    
