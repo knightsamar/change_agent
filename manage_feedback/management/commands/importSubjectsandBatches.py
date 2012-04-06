@@ -38,7 +38,7 @@ class Command(BaseCommand):
        
         try:
             #open the csv file
-            csvFile = csv.DictReader(open('manage_feedback/change_agent-data.csv','rb'));
+            csvFile = csv.DictReader(open(CSVFile,'rb'));
             #for each line in d csv file
             for record in csvFile:
                 print "Processing Record : ", record
