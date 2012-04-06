@@ -21,10 +21,10 @@ class Command(BaseCommand):
         if len(args) == 0:
             print self.help
             return
-        semesters = raw_input('Please enter the semester going on... (odd or even)');
-        while semester ! = 'odd' or semester!= 'even':
+        semester = raw_input('Please enter the semester going on... (odd or even)');
+        while semester != 'odd' and semester!= 'even':
             semester = '';
-            semesters = raw_input('(odd or even)');
+            semester = raw_input('(odd or even)');
         CSVFile = args[0];
         if CSVFile is None:
             print self.help
@@ -55,20 +55,20 @@ class Command(BaseCommand):
                 y = d.year
                 if int(batch.split('-')[0]) == (y -1): # 2010
                    if semester == 'odd':  
-                     Sem = 3
-                    else: Sem = 2
+                        Sem = 3
+                   else: 
+                        Sem = 2
                 elif int(batch.split('-')[0]) == (y -2): # 2009
                    if semester == 'odd':  
                         Sem = 5
-                    else: Sem = 4
+                   else: Sem = 4
                 elif int(batch.split('-')[0]) == y: # 2011
                    if semester == 'odd':  
                         Sem = 1
                     #else: "oops ..;P"
                 elif int(batch.split('-')[0]) == (y -3): # 2008
-                   if semester == 'odd':  
-                    else: Sem = 6
-                    pass;
+                   if semester == 'odd': pass;  
+                   else: Sem = 6
                 print subject, teacher, batch, Sem, div
                 print "================="
                 programme = record['Programme']
