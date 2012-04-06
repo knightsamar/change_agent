@@ -4,7 +4,7 @@ from give_feedback.models import feedbackSubmission,feedbackSubmissionAnswer
 from ldap_login.models import user,group
 from django.http import HttpResponse;
 from django.shortcuts import redirect
-from datetime import datetime;
+from datetime import datetime,date;
 from django.template import RequestContext,Context, loader
 #from django.db.models import Q
 from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS, CREATEFORMS
@@ -12,8 +12,43 @@ from django.db.models import exceptions
 from pyExcelerator import *
 from django.views.decorators.cache import cache_page
 
-#many of the things here are being managed by the admin panel...so we won't release it in version 0.1
-#one view for Kulkarni Mam and coordinators to see how many and which students in a group hv filled 
+
+def getCurrentSemester(batch):
+    '''code for determining current semester
+       TODO: put this in a place which is accessible by all functions which require this whether Python or JavaScript
+             test against batches which are yet to come and also which have already passed out.
+
+       Logic: If current month is between(inclusive) June to Dec, it's an even semester.
+              If it is between(inclusive) Jan to May, it's an odd semester.
+    '''
+    batch = batch.strip()
+    d = date.today()
+    y = d.year
+    m = d.month
+    #determine the semester of the batch
+    if int(batch.split('-')[0]) == (y-1): # 2010
+        if m >= 6 and m <=12:
+            Sem = 3
+        else: 
+            Sem = 2
+    elif int(batch.split('-')[0]) == (y-2): # 2009
+        if m >= 6 and m <=12:
+            Sem = 5
+        else: 
+            Sem = 4
+    elif int(batch.split('-')[0]) == y: # 2011
+        if m >= 6 and m <=12:
+            Sem = 1
+        #else: "oops ..;P"
+    elif int(batch.split('-')[0]) == (y-3): # 2008
+        if m >= 6 and m <=12: 
+            print 'oops';
+        else: 
+            Sem = 6
+        pass;
+    
+    return Sem
+
 def adminindex(request):
     if CREATEFORMS is False:
         return HttpResponse("<b>Not allowed!</b>")
@@ -45,8 +80,12 @@ def adminindex(request):
             print 'creating StudentAbout'
             subjectAbout = feedbackAbout(title = 'Subject', description = 'Feedback about students');
             subjectAbout.save();
-        #get all batches for this semester in this prog
-        batches = Batch.objects.filter(programme = prog).filter(batchname = batchname)
+        
+        current_semester = getCurrentSemester(batchname)
+        print 'Semester ==',current_semester
+
+        #get all batches for CURRENT semester in this prog
+        batches = Batch.objects.filter(programme = prog).filter(batchname = batchname).filter(sem=current_semester)
         print "found batches === ", batches;
         if len(batches)==0:
             return HttpResponse('no batches')
