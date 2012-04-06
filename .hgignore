@@ -1,0 +1,32 @@
+# use glob syntax.
+syntax: glob
+
+TODOS
+settings.py
+Other/*
+change_agent.*
+*.pyc
+*.orig
+*~
+.*.swp
+.DS_Store
+GARBAGE/*
+GARBAGE
+*.vimrc.orig
+*.xls
+db-converter/*
+*change_agent-data.csv
+*chnge_agent.dump
+*download
+*dump.sql
+*ldap_login/import_users.py
+*ldap_login/models.py.rej
+*ldap_login/viewsbackup.py
+*ldap_login/viewsbackup.py.py
+*manage_feedback/management/__init__.py
+*manage_feedback/management/commands/__init__.py
+*templates/base.html.rej
+*templates/give_feedback/index.html.backup
+media/piecharts/*
+media/summary_graphs/*
+media/summary_sheets/*
