@@ -35,7 +35,11 @@ class Command(BaseCommand):
         coordinators = {}
         for k,v in COORDINATORS.iteritems():
             coordinators[v]=k;
-       
+        
+        Semester = raw_input('Which Semester is going on .. (odd or even)');
+        while Semester!='odd' and Semester!='even':
+            Semester = '';
+            Semester = raw_input('(odd/even)');
         try:
             #open the csv file
             csvFile = csv.DictReader(open(CSVFile,'rb'));
@@ -51,24 +55,23 @@ class Command(BaseCommand):
                 batch = record['Batch'].strip()
                 d = date.today()
                 y = d.year
-                m = d.month
                 #determine the semester of the batch
                 if int(batch.split('-')[0]) == (y-1): # 2010
-                    if m >= 6 and m <=12:
+                    if Semester == 'odd':    
                         Sem = 3
                     else: 
                         Sem = 2
                 elif int(batch.split('-')[0]) == (y-2): # 2009
-                    if m >= 6 and m <=12:
+                    if Semester == 'odd':    
                         Sem = 5
                     else: 
                         Sem = 4
                 elif int(batch.split('-')[0]) == y: # 2011
-                    if m >= 6 and m <=12:
+                    if Semester == 'odd':    
                         Sem = 1
                     #else: "oops ..;P"
                 elif int(batch.split('-')[0]) == (y-3): # 2008
-                    if m >= 6 and m <=12: 
+                    if Semester == 'odd':    
                         print 'oops';
                     else: 
                         Sem = 6
@@ -76,7 +79,8 @@ class Command(BaseCommand):
                 print subject, teacher, batch, "Sem ", Sem, div
                 print "================="
                 programme = record['Programme']
-                u = user.objects.get(pk = coordinators[programme])
+                print coordinators[programme]
+                u = user.objects.get_or_create(pk = coordinators[programme])[1]
                 coursecode = '';
                 try:
                     print div
