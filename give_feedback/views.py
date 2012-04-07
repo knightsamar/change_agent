@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
-from change_agent.settings   import COORDINATORS, ROOT, CREATEFORMS
+from change_agent.settings   import COORDINATORS, ROOT, CREATEFORMS, STUDENT_COORDINATORS
 #for date
 from datetime import datetime
 
@@ -32,15 +32,14 @@ def index(request):
         about_us = ""
         Filled = True;
 
-    
+    print COORDINATORS.keys(); 
     if username in COORDINATORS.keys():
         print "welcome coordinator", username;
         batch = [COORDINATORS[username]];
         print batch
-        if batch == ['All']:
-            batch = list(set(COORDINATORS.values()))
-            batch.pop(batch.index('All'))
-        print batch
+        is_coordinator = True;
+    elif username in STUDENT_COORDINATORS:
+        batch = list(set(COORDINATORS.values()));#unique
         is_coordinator = True;
     else:
         is_coordinator = False;

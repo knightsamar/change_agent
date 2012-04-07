@@ -136,6 +136,7 @@ def adminindex(request):
                     newForm.about = subjectAbout;
                     newForm.deadline_for_filling = deadline
                     newForm.save()
+                    s.username.allowed_viewing_feedback_about.add(newForm);
                     count = count+1
                     createdForSubject = True;
                     newForm.allowed_groups.add(g)
@@ -162,12 +163,14 @@ def adminindex(request):
                             groupname = yr+'030'+course
                             print "got the group",groupname
                             g = group.objects.get(name = groupname)
-
+                            
                         newForm.deadline = deadline
                         newForm.isofficial = True;
                         newForm.about = teacherAbout;
                         newForm.deadline_for_filling = deadline
                         newForm.save()
+                        s.username.allowed_viewing_feedback_about.add(newForm);
+                        s.username.save()
                         count = count +1
                         for t in teacherquestions:
                             newForm.questions.add(t)
