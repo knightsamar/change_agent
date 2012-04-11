@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     (r'^change_agent/','ldap_login.views.login'),
     (r'^$','ldap_login.views.login'),
     (r'^give_feedback/$','give_feedback.views.index'),
-    (r'^manage_feedback/createforms$','manage_feedback.views.adminindex'),
+    (r'^manage_feedback/admin$','manage_feedback.views.adminindex'),
+    (r'^manage_feedback/createforms$','manage_feedback.views.createmassforms'),
     (r'^ldap_login/$','ldap_login.views.login'), #for authentication
     (r'^ldap_login/logout$','ldap_login.views.logout'), #for loggin out
     (r'^ldap_login/passwordHelp$','ldap_login.views.passwordHelp'),

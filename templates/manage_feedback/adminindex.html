@@ -58,52 +58,51 @@ function enable(c)
 
 </script>
 
-<h3> hi..{{u.fullname}}..!!</h3>
+<h3> hi..{{u.username}}..!!</h3>
+
 {% if formfilled %}
 <input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "{{ROOT}}/give_feedback/{{f.id}}/show"'>
 {% endif %}
-<form method = 'post' action = '{{ROOT}}/manage_feedback/createforms'>
+
+<form id = 'MainForm' m ethod = 'post'>
 {% csrf_token %}
-Programme
-<select name = 'programme'>
-    <option>MSc. (CA)
-    <option>MBA-IT
-    <option>BBA-IT
-    <option>BCA
+<b>Select Programme:</b>
+<select id = 'programme_name' name = 'programme'>
+    {% for b in u.batch_set.all %}
+        <option>{{b.programme}}</option>
+    {%endfor%}
 </select>
 
-<select name = 'batch' onfocus = 'fillOptions(this)'></select>
-
-
+<b>Select Batch:</b>
+    <select name = 'batch' required onfocus = 'fillOptions(this)'></select><br/><br/><br/>
+<br/>
+{% if view_summary %}
+<input type='button' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'> <br/>
+{% endif %}
+{% if view_notfilled %}
+<input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
+{% endif %}<BR>
+{% if view_reports %}
+<input type='button' id='reports' value = "Report" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/summary/")'> 
+{% endif %}
+<br/>
+<hR>
 <BR>
-
-Create
+{% if create_forms %}
+{% if createforms %}
+To Create Forms<BR><BR>
 <input type = 'radio' name = 'createforms' value = 'all' checked> All 
 <input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers
 <input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
 <br>
-Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2011-11-15'><bR>
-{% if u = 'moodleldap' %}
-<input id ='submit' type = 'submit' value = 'create forms' disabled>
-<input type = 'button' value = 'enable and create forms' onclick = 'enable(this)'>
-{% else%}
-<input type = 'button' value = 'create forms' onclick = 'alert("not now ;) .. forms already created")'>
-{%endif %}
+Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size = 10 maxlength =10 value = '2012-10-15'><bR>
+<input type = 'button'  id = 'create' value = 'Create Mass Feedback Forms' onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/createmassforms/")'>
+{% endif %}
+{% endif %}
 </form>
+</fieldset> 
 <hr>
-<BR><BR>
-<form method = 'post' action = '{{ROOT}}/manage_feedback/studentsummary'>
-{% csrf_token %}
-Programme
-<select name = 'programme'>
-    <option>MSc. (CA)
-    <option>MBA-IT
-    <option>BBA-IT
-    <option>BCA
-</select>
-
-<select name = 'batch' onfocus = 'fillOptions(this)'></select>
-<input type = 'submit' value = 'view Summary'>
+<i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
 </form>
 <input type = 'button' value = 'logout' onclick = 'javascript:location.href = "{{ROOT}}/ldap_login/logout"'>
 {% endblock %}

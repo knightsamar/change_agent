@@ -19,8 +19,7 @@ def getCurrentSemester(batch):
              test against batches which are yet to come and also which have already passed out.
 
        Logic: If current month is between(inclusive) June to Dec, it's an even semester.
-              If it is between(inclusive) Jan to May, it's an odd semester.
-    '''
+              If it is between(inclusive) Jan to May, it's an odd semester.'''
     batch = batch.strip()
     d = date.today()
     y = d.year
@@ -48,8 +47,27 @@ def getCurrentSemester(batch):
         pass;
     
     return Sem
-
 def adminindex(request):
+        if 'username' not in request.session or request.session['username'] == None:
+            print "not logged in"
+            request.session['redirect'] = '%s/manage_feedback/admin'%ROOT
+    	    return  redirect('%s/ldap_login/login'%ROOT);
+        u = user.objects.get(username = request.session['username'])
+        print 'uuuuuuuu',u
+        t=loader.get_template('manage_feedback/adminindex.html')
+        c = RequestContext(request,{
+                'ROOT':ROOT,
+                'createforms':CREATEFORMS,
+                'create_forms':u.has_permission('create official forms'),
+                'view_summary':u.has_permission('view summary'),
+                'view_notfilled':u.has_permission('view notfilled'),
+                'view_reports':u.has_permission('view reports'),
+                'u':u
+                 });
+        return HttpResponse(t.render(c));
+
+
+def createmassforms(request):
     if CREATEFORMS is False:
         return HttpResponse("<b>Not allowed!</b>")
     
@@ -177,13 +195,8 @@ def adminindex(request):
                         newForm.allowed_groups.add(g)
                         newForm.allowed_groups.add(whole_batch_group) #only for now, see above for reason
         return HttpResponse('%s forms created' %count)   
-    else:
-        t=loader.get_template('manage_feedback/adminindex.html')
-        c = RequestContext(request,{
-                'ROOT':ROOT,
-                'u':request.session['username']
-                 });
-        return HttpResponse(t.render(c));
+    else: return HttpResponse('gotcha')
+        
 def stusummary(request):
     if 'username' not in request.session:
        
