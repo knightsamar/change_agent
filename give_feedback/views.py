@@ -43,9 +43,6 @@ def index(request):
     else:
         Filled  = False;
     #TO ADD:- check for group as staff... not that important...:) 
-    print u.get_unfilled_forms();
-    print u.get_filled_forms();
-    print u.allowed_viewing_feedback_about.all();
     #print request.session['unfilled']            
     # for displaying date and checking for deadline
     d = datetime.today();
@@ -59,7 +56,8 @@ def index(request):
                 'filled_forms':u.get_filled_forms(),
                 'admin':u.has_permission('admin'),
                 'feedback_about':u.allowed_viewing_feedback_about.all(),
-	        	'About_us_filled' : Filled,
+	        	'About_us_filled' : Filled,'view_forms':u.has_permission('view forms'),
+                 'fill_forms':u.has_permission('fill forms'),
                 'today' : d,
                 'rightnow' : n, #because template api already has tag called now
                 'ROOT':ROOT,
@@ -92,6 +90,7 @@ def show(request,form):
 
     # is the deadline exceded??
     now = datetime.today()
+    print u.has_permission('fill forms')
     
     if (f.deadline_for_filling < now ):
         return redirect("%s/manage_feedback/2/error"%ROOT);

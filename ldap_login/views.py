@@ -79,17 +79,18 @@ def add_user(prn):
         try:
             print "user already existed..!!!"
             userexists=user.objects.get(pk=prn)
-            userexists[0].last_login=datetime.today();
-            userexists[0].save();
-            return userexists[0]; 
+            userexists.last_login=datetime.today();
+            userexists.save();
+            return userexists; 
         except:
             print " got a new user"
 		    # the user not in database... create one..!!
-            newuser = user();
-            newuser.username=prn
-            newuser.password=''
-            newuser.created_on=datetime.today();
-            newuser.role = r[0];
+            newuser = user(
+                        username=prn
+                        password=''
+                        created_on=datetime.today();
+                        role = r[0];
+                    );
             newuser.save();
 		    # this auto gruop assignment takes place by the logic that all students log in from thier PRN's and thier 1st 8 digit of thier PRN represents thier gruop.. to assignm a student to another group we need to do it manually..:) and we need to find out a better way of creating groups..!!! :D
 		

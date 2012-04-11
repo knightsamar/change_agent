@@ -42,7 +42,6 @@ function changesubmit(o,path)
 </fieldset>
 {% endif %}
 <!-- New feedback forms -->
-
 <fieldset>
 <legend> Feedback forms to be filled </legend>
 
@@ -50,9 +49,12 @@ function changesubmit(o,path)
 
     {% for form in unfilled_forms %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='#b3dlea'><td> <a href='{{ROOT}}/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
+        {% if fill_forms %}
+            <tr bgcolor='#b3dlea'><td> <a href='{{ROOT}}/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
             <img align='right' src='/../../change_agent_media/clock' height=40 width=40>
-        
+        {% else %}
+            <tr bgcolor='#b3dlea'><td>{{ form.title }}
+       {% endif %} 
         </td>
         <td>{{ form.deadline_for_filling|timeuntil }} left </td></tr>
       {% else %}
@@ -70,14 +72,18 @@ function changesubmit(o,path)
 
                 <!-- For Preview....-->
 
-
+{% if view_forms %}
 <fieldset>
 <legend> Feedback you gave </legend>
 
 <table cellpadding='16' align='center'>
     {% for form in filled_forms %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
-         <tr> <td><a href='{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
+            {% if fill_forms %}
+                 <tr> <td><a href='{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
+            {% else %} 
+                 <tr> <td>{{form.feedbackForm.title}}</td>
+            {% endif %}
       {% else %}
         <tr><td><a href = '{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
       {% endif %} 
@@ -87,7 +93,7 @@ function changesubmit(o,path)
      {% endfor %}
 </table>
 </fieldset>
-
+{% endif %}
             <!-- Feedback About -->
 
 {% if feedback_about_list %}
