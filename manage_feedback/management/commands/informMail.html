@@ -1,0 +1,18 @@
+{% if user.fullname.strip != '' %}
+    Dear <b>{{user.fullname}},</b>
+{% else %}
+    Dear <b>{{user.username}},</b>
+{% endif %}
+ 
+<p> You have following official SICSR Feedback Forms to be filled online : </p>
+<ul>
+    {% for f in unfilled_forms %}
+    <li><a href='http://projects.sdrclabs.in/give_feedback/{{f.id}}/show'>{{f.title}}</a></li>
+    {% endfor %}
+</ul>
+
+Please fill them before their deadline :)
+For any queries, please contact us at : sdrclabs@sicsr.ac.in
+
+Regards,
+Team ChangeAgent

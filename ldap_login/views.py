@@ -86,10 +86,10 @@ def add_user(prn):
             print " got a new user"
 		    # the user not in database... create one..!!
             newuser = user(
-                        username=prn
-                        password=''
-                        created_on=datetime.today();
-                        role = r[0];
+                        username=prn,
+                        password = '',
+                        created_on=datetime.today(),
+                        role = r[0],
                     );
             newuser.save();
 		    # this auto gruop assignment takes place by the logic that all students log in from thier PRN's and thier 1st 8 digit of thier PRN represents thier gruop.. to assignm a student to another group we need to do it manually..:) and we need to find out a better way of creating groups..!!! :D
