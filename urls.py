@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 #from ldapAuthBackend import authenticate;
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -36,3 +37,11 @@ urlpatterns = patterns('',
     
     #(r'^/', include(ldap_login.views.login)), #default is login page
 )
+
+if settings.DEBUG:
+	# Serve static files in debug.
+	urlpatterns += patterns('',
+		(r'^change_agent_media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT,'show_indexes' : True}),
+)
+
+

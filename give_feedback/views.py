@@ -75,7 +75,10 @@ def show(request,form):
         request.session['redirect'] = request.get_full_path()
         return redirect('/change_agent/ldap_login/'); 
     else: #is logged in!
-        username = str(request.session['username']);
+	# username = str(request.session['username']);
+	#Kannan just added the next 2 lines replacing the above line
+	username = request.session['username'];
+        u=user.objects.get(pk=username)
        
     #for feedback Forms Filling   
     f = feedbackForm.objects.get(pk=form);
