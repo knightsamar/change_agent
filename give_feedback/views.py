@@ -340,14 +340,16 @@ def submit(request,form):
         request.session['redirect'] = request.get_full_path()
         return redirect('%s/ldap_login/'%ROOT);
     else:
-        username = str(request.session['username']);
-    
+        #username = str(request.session['username']);
+	#Kannan added the next 2 lines instead of the above line
+    	username = request.session['username'];
+        u=user.objects.get(pk=username)
+
     #get the form's submission data
     s = request.POST;     
-
-    print "in submisson view...unfilled forms are ", request.session['unfilled']
+    unfilled = u.get_unfilled_forms()
+    print "in submisson view...unfilled forms are ",unfilled 
     
-    unfilled = request.session['unfilled']
     f = feedbackForm.objects.get(pk=form)
     print "PROCESSING NEXT FORMS..!!"
     nextform = None

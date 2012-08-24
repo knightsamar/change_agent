@@ -7,10 +7,12 @@
             			font-style: bold;
         		    	src: url('{{ MEDIA_URL }}/fonts/Asbel.ttf');
 				 } coolvetica
+
 			@font-face {
 	          	 	font-family:coolvetica;
             			src: url('{{ MEDIA_URL }}/fonts/coolvetica.ttf');
 				 }
+
 			@font-face {
 				font-family: logo;
 				font-style: normal;
@@ -30,15 +32,17 @@
 
 			hr{
 				
-			/*border-top:1px solid ;*/
+				/*border-top:1px solid ;*/
 				border-bottom:1px solid #fff;
 				width:960px;
 				}
+
 			/*hr{
 				background:url('{{MEDIA_URL}}/divider_line.png');
 				height:23px;
 				border:0px;
 				}*/
+
 			a{
 				text-decoration:none;
 				color:#868686;
@@ -52,15 +56,16 @@
 				padding:0px;
 				width:960px;
 				height:120px;
-				/*background:rgba(255,255,255,0.3);*/
 				/*
-				to fix the header
-				position:fixed;
-				z-index:999;
+					background:rgba(255,255,255,0.3);
+
+					to fix the header
+					position:fixed;
+					z-index:999;
+				
+					-moz-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);
+					-webkit-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);
 				*/
-				/*-moz-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);
-				-webkit-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);*/
-			
 				}
 			#header-topline{
 				background: url({{MEDIA_URL}}/headertopline.png) repeat-x;
@@ -73,6 +78,7 @@
 				left:0px;
 				z-index:-999;
 				}
+
 			#header-underline{
 				width:100%;
 				position:fixed;
@@ -87,17 +93,19 @@
 				font-family:Helvetica, sans-serif;
 				padding-top:0px;
 				margin-bottom:0px;
-				margin-top:100px;
+				margin-top:40px;
 				text-decoration:none; 
 				color:#868686; 
 				/*background:rgb(204,204,204);*/
 				width:100%;
 				}
+
 			.footer a{
 				font-size:14px;
 				font-weight:400;
 			}
 			/*
+
 			#footer-overline{
 				width:100%;
 				height:10px;
@@ -106,6 +114,7 @@
 				border-top:1px solid rgba(204,204,204,0.7);
 				}
 			*/
+
 			#footerleft{ 
 				font-size:14px;
 				color:#666666;
@@ -119,6 +128,7 @@
 				float:right;
 				padding:10px;
 				}
+
 			#footerright td{
 					padding-top:4px;
 					padding-left:10px;
@@ -129,6 +139,7 @@
 				width:100%;
 				margin:auto;
 				}
+
 			#content{
 				width:960px;
 				padding-top:20px;
@@ -137,13 +148,14 @@
 			#form {
 				width:840px;
 				background-color:rgba(255,255,255,0.3);	
-				border-style:solid;
+				/*border-style:solid;
 			        border-width:thin;
-				border-color:rgb(243,108,32); 
+				border-color:rgb(243,108,32); */
 				border-bottom-left-radius:5px;
 				border-bottom-right-radius:5px;
 				border-top-left-radius:5px;
 				border-top-right-radius:5px;
+				padding-bottom:20px;
 
 				-moz-box-shadow:0px 0px 5px 2px #ccc;
 				-webkit-box-shadow:0px 0px 5px 2px #ccc;
@@ -159,7 +171,9 @@
 				    /*-moz-box-shadow:0 0 300px 5px;*/
 				{% endif %}
 				}
-			formtitle{
+
+			#formtitle{
+				padding:20px;
 			        text-align:center;
 				font-size:25px;
 				font-weight:bold;
@@ -169,6 +183,7 @@
 				font-family: Verdana;
 				font-size: 14px;
 				}
+
 			#ans {
 				font-family: "comic sans MS";
 			        word-wrap: normal;
@@ -204,7 +219,7 @@
 		<div id="content_main" align="center">
 			<div class="header">
 				<!--div width="960px"><img src="{{MEDIA_URL}}/slider_shadow_top_new.png" style="opacity:0.3"/></div-->
-				<div id="header-topline"></div>
+				<!--div id="header-topline"></div-->
 				<div>
 					<span style="font-family:logo;font-size:48px;color:orange;letter-spacing:-2px;text-shadow:0px 1px rgba(153,153,153,0.6);">Change</span>
 					<span style="font-family:logo;font-size:48px;color:#336600;letter-spacing:-2px;text-shadow:0px 1px rgba(153,153,153,0.6);">Agent</span>
