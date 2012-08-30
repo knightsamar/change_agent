@@ -2,6 +2,8 @@ from django.conf.urls.defaults import *
 #from ldapAuthBackend import authenticate;
 from django.conf import settings
 
+from hamarasocialauth.views import home, done, logout, error, form
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -31,11 +33,15 @@ urlpatterns = patterns('',
 	(r'^give_feedback/(?P<form>\d+)/submit/$','give_feedback.views.submit'),    
     # Uncomment the admin/doc line below to enable admin documentation:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-       
+     
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
     
+    #example app for trying out social auth
+    (r'^social_auth/logged-in/', 'socialauth.views.afterglow'),
+    (r'^social_auth/logout/','socialauth.views.logout'),
     #(r'^/', include(ldap_login.views.login)), #default is login page
+    (r'', include('social_auth.urls')),
 )
 
 if settings.DEBUG:
@@ -43,5 +49,3 @@ if settings.DEBUG:
 	urlpatterns += patterns('',
 		(r'^change_agent_media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT,'show_indexes' : True}),
 )
-
-
