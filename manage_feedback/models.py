@@ -14,7 +14,7 @@ class feedbackQuestion(models.Model):
         mandatory = models.BooleanField(help_text="Whether you want to keep this field mandatory ?",default=False);
 
         def __str__(self):
-            return ('%s - %s' % (self.name, self.type));
+            return ('ID %s %s - %s' % (self.id, self.name, self.type));
 
 #one feedbackQuestionOption belongs to only one feedbackQuestion and that too for types which allow multiple-
 class feedbackQuestionOption(models.Model):
@@ -35,6 +35,7 @@ class feedbackForm(models.Model):
         allowed_groups = models.ManyToManyField('ldap_login.group', help_text='Groups which are allowed to view and fill this form') #groups which are allowed to fill this form!
         about = models.ForeignKey('feedbackAbout');
         isofficial = models.BooleanField(default=True,blank=False,null=False, help_text="Is this an official form of SICSR or you are creating it just for your own non-official purpose?");
+	sequence = models.CommaSeparatedIntegerField(max_length=100,blank=True,null=False,verbose_name='Sequence of questions',help_text='Sequence in which questions will appear.[ PLEASE ENTER COMMA SEPARATED VALUES ]',default='0')
 
         def __str__(self):
             return self.title; 
@@ -45,7 +46,63 @@ class feedbackForm(models.Model):
                 #
             pass;
         
-        def mandatoryQuestions(self):
+	def sortedQuestions(self):
+		#if sequence is left empty it shows questions in default format
+		if(self.sequence == ''):
+                        return self.questions.all()
+		else:	
+			#get ids of all selected questions
+                	selected_question_ids =[]
+        	        for q in self.questions.all():
+	                        selected_question_ids.append(q.id)
+
+			#split the sequence
+			sequence_split = self.sequence.split(',')
+			sequence_ids = []
+		
+			#convert the split sequence into long and store it
+			for s in sequence_split:
+				sequence_ids.append(long(s))
+		
+			#endlist stores the ids of questions that are selected but not mentioned in sequence.We will put these ids at the end of sortedlist
+			endlist =[]
+		
+			#ignorelist stores the ids of questions which are in sequence but not selected.We will ignore these questions for now
+			ignorelist=[]
+		
+			#sortedlist stores the ids of questions in sorted order.
+			sortedlist=[]
+
+			#Stores ids which are selected but not in sequence
+			for x in selected_question_ids:
+				if(x in sequence_ids):
+					pass
+				else:
+					endlist.append(x)
+			#stores ids which are mentioned in sequence in order
+			for y in sequence_ids:
+				if(y in selected_question_ids):
+					sortedlist.append(y)
+				else:
+					ignorelist.append(y)
+
+			#stores ids not mentioned in sequence at the end of the sortedlist
+			for z in endlist:
+				sortedlist.append(i)
+		
+			sorted_questions = []
+			for s in sortedlist:
+				sorted_questions.append(feedbackQuestion.objects.get(pk=s))
+
+			return sorted_questions;
+
+	def save(self, *args, **kwargs):
+           print "Saving a feedbackForm and putting the right sequence of questions"
+          # for q in self.questions.values(): 
+          #     self.sequence += q['id']
+	   super(feedbackForm, self).save(*args, **kwargs)
+	
+	def mandatoryQuestions(self):
             """returns a list of mandatory feedbackQuestion in the form"""
             questions = self.questions.filter(mandatory=True);
             questions_dict = {};
