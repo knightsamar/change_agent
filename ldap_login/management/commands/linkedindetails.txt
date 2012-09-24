@@ -1,0 +1,26 @@
+Application Details
+Company:
+
+SDRCLabs
+
+Application Name:
+
+Change_Agent
+
+API Key:
+
+j5x4jh3sh389
+
+Secret Key:
+
+U2TY1Jw3ubqX1RRt
+
+OAuth User Token:
+
+0710d966-c41b-42f7-a4f8-57ecfe36304d
+
+OAuth User Secret:
+
+acfce8a5-17e6-473b-9646-60fa5889cf16
+
+

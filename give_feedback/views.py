@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from manage_feedback.models import feedbackForm,feedbackQuestion,feedbackQuestionOption, feedbackAbout, Batch, Subject
 from give_feedback.models import feedbackSubmission, feedbackSubmissionAnswer
 from django.core.context_processors import csrf
+from suvidha.models import User,Group
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
@@ -18,13 +19,15 @@ def hamari404():
 def index(request):
     """for rendering the index page for any user who has just logged in"""
     print "first line" 
-    if 'username' not in request.session or request.session['username'] == None:
+    if ('username' not in request.session or request.session['username'] == 
+None) or (not request.user.social_auth):
         print "not logged in"
-        return redirect('%s/ldap_login/'%ROOT);
+        return redirect('%s/ldap_login/'%ROOT);	
     else:
         print 'username in session object';
-        username = request.session['username'];
+        username = request.session['username'];      
         u=user.objects.get(pk=username)
+        
     
     try:
         about_us=feedbackForm.objects.get(title="About This Project") 

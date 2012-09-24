@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class feedbackSubmission(models.Model):
     feedbackForm = models.ForeignKey('manage_feedback.feedbackForm',help_text='Which Form\'s submission?');
-    submitter = models.ForeignKey('ldap_login.user',help_text='Submitted by which user?');
+    submitter = models.ForeignKey('suvidha.User', help_text='Submitted by which user?'); 
     when = models.DateTimeField(auto_now_add=True, help_text='When was this submitted?');
     def __str__(self):
         return ("%s's submission of form '%s'" % (self.submitter, self.feedbackForm))
@@ -15,7 +15,6 @@ class feedbackSubmissionAnswer(models.Model):
     answer_text = models.TextField('Answer text (only for text questions)',help_text='Text answer given by the user(only for text questions',blank=True,null=True);
 
     def __str__(self):
-        return ("%s's answer to '%s' in submission '%s'" % (self.submission.submitter, self.question.text, self.submission.id));
-
+        return ("%s's answer to '%s' in submission '%s'" % (self.submission.submitter, self.question.text, self.submission.id));	
 #limit_choices_to = {'answer.question_id__exact' : question});
     #use add method to insert rows/create instances...right?

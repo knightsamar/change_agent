@@ -2,8 +2,6 @@ from django.conf.urls.defaults import *
 #from ldapAuthBackend import authenticate;
 from django.conf import settings
 
-from hamarasocialauth.views import home, done, logout, error, form
-
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
