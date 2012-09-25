@@ -1,120 +1,276 @@
-
 <html>
 	<head>
-	<meta names = 'keywords' language = 'en-US' content = 'feedback, SICSR, project, sdrclabs, improvement,apoorva,samar'>
-    <style>
-	#change {
-		text-align: center;
-		text-decoration: line-through;
-		letter-spacing: -10px;
-		text-shadow: 3px 6px black;
-		font-family: logo;// Blackmoor LET; 
-        /*font-src: url(http://projects.sdrclabs.in/change_agent_media/Woodcut-Cracked.ttf);*/		
-        font-size: 80px;
-        /* position:absolute;  */
-	}
-    
-    #footer{
-    text-align:right;
-    }
-	hr {
-		text-shadow: 1px 2px black;
-		color: #ff7f00;
-        line-height: 15px;
-    }
-    
-    @font-face {
-            font-family: logo;
-            font-style: normal;
-            src: url('http:/change_agent_media/fonts/Whatka!.ttf');
-        }
-	
-	#form {
-    width:50%;
-    margin-left:25%;
-    {% comment %}
-    To ensure that summary page doesnot get the background
-    {% endcomment %}
-    {% if not summaryDict %}
-	background-image: url('/change_agent_media/CRINKLEP.JPG');
-    {% endif %}
-    /* background-color:#fdfed4; */
-    border:15px groove;
-    line-break:strict;
-    {% if not summaryDict %}
-    -moz-box-shadow:0 0 300px 5px;
-    {% endif %}
-}
-formtitle{
-    text-align:center;
-    font-size:25px;
-    font-weight:bold;
-}
+		<meta names = 'keywords' language = 'en-US' content = 'feedback, SICSR, project, sdrclabs, improvement,apoorva,samar'>
+		<style>
+			@font-face {
+	          	 	font-family:Asbel;
+            			font-style: bold;
+        		    	src: url('{{ MEDIA_URL }}/fonts/Asbel.ttf');
+				 } coolvetica
+			@font-face {
+	          	 	font-family:coolvetica;
+            			src: url('{{ MEDIA_URL }}/fonts/coolvetica.ttf');
+				 }
+			@font-face {
+				font-family: logo;
+				font-style: normal;
+				src: url('{{MEDIA_URL}}/fonts/Whatka!.ttf');
+        			}			
 
-	q {
-	font-family: Verdana;
-	font-size: 14px;
-}
-	#ans {
-	font-family: "comic sans MS";
-    word-wrap: normal;
-}
+			html{
+				background:#fff url({{ MEDIA_URL }}/bg.png) repeat scroll;
+				}
 
-	</style>
-   <script type="text/javascript">
+			body{
+				color:#222;
+				font-family:Helvetica, sans-serif;
+				font-size:10px;
+				margin:0px;
+				}
 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-26739811-1']);
-     _gaq.push(['_trackPageview']);
+			hr{
+				
+			/*border-top:1px solid ;*/
+				border-bottom:1px solid #fff;
+				width:960px;
+				}
+			/*hr{
+				background:url('{{MEDIA_URL}}/divider_line.png');
+				height:23px;
+				border:0px;
+				}*/
+			a{
+				text-decoration:none;
+				color:#868686;
+				}
 
-     (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-     })();
-
-    </script>
-<!--<link REL=Stylesheet HREF="base.css" TYPE="text/css">-->
-
-		<title>Change Agent :: {% block title %} {% endblock %}</title>
-    <script language='javascript'>
-        usernameEl = document.getElementById('username');
-        if (usernameEl)
-            usernameEl.focus(); //only run on the login page
-    </script>
-    
-    <script language='javascript' src='/change_agent_media/admin.js'></script>
-	</head>
-	
-	<body>
-		<div id='change'>
-        <font color="orange">c h</font>
-        <font color="green">a</font>
-        <font color="orange">n</font>
-        <font color="green">g e&nbsp;n t</font>
-        </font>
-         </div>
-      <h5 align='center'>be the change u wanna c</h5>
-      <hr><BR>
-
-		<div id='content'>
-		{% block content %}
+			a:focus,
+			a:hover{ color:#666; }
 		
-		{% endblock %}
-		</div>
+			
+			.header{
+				padding:0px;
+				width:960px;
+				height:120px;
+				/*background:rgba(255,255,255,0.3);*/
+				/*
+				to fix the header
+				position:fixed;
+				z-index:999;
+				*/
+				/*-moz-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);
+				-webkit-box-shadow:0px 1px 5px 5px rgba(255,255,255,0.7);*/
+			
+				}
+			#header-topline{
+				background: url({{MEDIA_URL}}/headertopline.png) repeat-x;
+				width:100%;
+				height:3px;
+				padding-bottom:10px;
+				marginn:0px;	
+				position:relative;
+				top:0px;
+				left:0px;
+				z-index:-999;
+				}
+			#header-underline{
+				width:100%;
+				position:fixed;
+				height:10px;
+				margin-top:20px;
+				padding:0px;
+				/*background:rgba(221,221,221,1);
+				border-bottom:1px solid rgba(204,204,204,0.7);*/
+				}
+				
+			.footer{
+				font-family:Helvetica, sans-serif;
+				padding-top:0px;
+				margin-bottom:0px;
+				margin-top:100px;
+				text-decoration:none; 
+				color:#868686; 
+				/*background:rgb(204,204,204);*/
+				width:100%;
+				}
+			.footer a{
+				font-size:14px;
+				font-weight:400;
+			}
+			/*
+			#footer-overline{
+				width:100%;
+				height:10px;
+				padding:0px;
+				background:rgba(221,221,221,0.7);
+				border-top:1px solid rgba(204,204,204,0.7);
+				}
+			*/
+			#footerleft{ 
+				font-size:14px;
+				color:#666666;
+				float:left;
+				padding:10px;
+				}
+		
+			#footerright{ 
+				font-size:14px;
+				color:#666666;
+				float:right;
+				padding:10px;
+				}
+			#footerright td{
+					padding-top:4px;
+					padding-left:10px;
+					padding-right:10px;
+				}	
+			
+			#content_main{
+				width:100%;
+				margin:auto;
+				}
+			#content{
+				width:960px;
+				padding-top:20px;
+				}
+			
+			#form {
+				width:840px;
+				background-color:rgba(255,255,255,0.3);	
+				border-style:solid;
+			        border-width:thin;
+				border-color:rgb(243,108,32); 
+				border-bottom-left-radius:5px;
+				border-bottom-right-radius:5px;
+				border-top-left-radius:5px;
+				border-top-right-radius:5px;
 
-		<br/>
+				-moz-box-shadow:0px 0px 5px 2px #ccc;
+				-webkit-box-shadow:0px 0px 5px 2px #ccc;
+				{% comment %}
+				To ensure that summary page doesnot get the background
+				{% endcomment %}
+				{% if not summaryDict %}
+					/*background-image: url('{{MEDIA_URL}}/background.jpg');*/
+				{% endif %}
+				
+				line-break:strict;
+				{% if not summaryDict %}
+				    /*-moz-box-shadow:0 0 300px 5px;*/
+				{% endif %}
+				}
+			formtitle{
+			        text-align:center;
+				font-size:25px;
+				font-weight:bold;
+				}
 
-		<div id='footer'> 
-		<hr>
-			Developed using <a href='http://www.djangoproject.com'><img src='/change_agent_media/django-logo-positive.png' height='40' width='70' alt='Django' border=0></a>which is <a href='http://python.org'><img src='/change_agent_media/python-powered-h-50x65.png' border=0 lt='Python'></a><br/>
-            This is a <a href='http://sdrclabs.in'><img src="/change_agent_media/SDRC_logo.gif" height="40" width="80" border=0 alt="SDRCLabs"></a>Labs creation!<br/>
-            Developed and maintained by <a href='http://www.facebook.com/apoorva.srinivasan1'>Apoorva</a>, <a href = 'http://www.facebook.com/knightsamar'>Samar</a> and <a href='http://www.facebook.com/dipin.thomas.7'>Dipin</a><br/>
-            MSc.(CA)<br/>
-            <a href='http://redwine.sdrclabs.in/projects/sdrc-changeagent'>Version 0.73</a><br>
+			q {
+				font-family: Verdana;
+				font-size: 14px;
+				}
+			#ans {
+				font-family: "comic sans MS";
+			        word-wrap: normal;
+				}
+
+				
+		</style>
+		<!--[if lte IE 8]><link href='fakebase.css' type="text/css" rel='stylesheet'><![endif]-->
+		<script type="text/javascript">
+
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-26739811-1']);
+			 _gaq.push(['_trackPageview']);
+
+			 (function() {
+			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			 })();
+
+		</script>
+        <script type="text/javascript">
+			function show_login_help()
+			{
+				var temp = document.getElementsByClassName("loginhelp");
+				temp.style.visibility="visible";	
+			}
+		</script>
+		<title>Change Agent :: {% block title %} {% endblock %}</title>
+		<script language='javascript' src='/change_agent_media/admin.js'></script>
+	</head>
+	<body>
+		<div id="content_main" align="center">
+			<div class="header">
+				<!--div width="960px"><img src="{{MEDIA_URL}}/slider_shadow_top_new.png" style="opacity:0.3"/></div-->
+				<div id="header-topline"></div>
+				<div>
+					<span style="font-family:logo;font-size:48px;color:orange;letter-spacing:-2px;text-shadow:0px 1px rgba(153,153,153,0.6);">Change</span>
+					<span style="font-family:logo;font-size:48px;color:#336600;letter-spacing:-2px;text-shadow:0px 1px rgba(153,153,153,0.6);">Agent</span>
+				</div>
+			
+				<div align="">
+					<span style="color:#666;font-size:16px;"><b> 
+					Be the Change you want to see</b>
+					</span>
+				</div>
+				<!--div id="header-underline"></div-->
+		
+			</div>
+			<hr/>
+			<!--div width="960px"><img src="{{MEDIA_URL}}/slider_shadow_bot_new.png" style="opacity:0.3"/></div-->
+			
+
+
+			<div id='content'>
+				{% block content %}
+		
+				{% endblock %}
+			</div>
+
+			
+
+			<div class='footer' > 
+			<hr/>
+			<div id="footer-overline"></div>
+			<table>
+				<tr>
+				<td>
+			                <table id="footerleft">
+                      <tr align="center" valign="middle">
+                        <td>
+                
+                <a href='http://sdrclabs.in'><img src="{{MEDIA_URL}}/SDRC_logo.gif" height="40" align="absmiddle" width="80" border=0 alt="SDRCLabs"></a>
+                &nbsp;Labs creation!
+                        </td>
+                     </tr>
+                     <tr align="center">
+                        <td>
+                            <a href='http://redwine.sdrclabs.in/projects/sdrc-changeagent'>Version 0.73</a>
+                        </td>
+                    </tr>
+                </table>
+				</td>
+				<td>
+                <table align="center" id="footerright">
+                	<tr align="center">
+                    <td> Created by</td>
+                       <td>Developed using </td>
+	                   	<td> Powered by </td>
+                    </tr>
+                    <tr align="center">
+                    	<td><a href='http://www.facebook.com/kannanpkumar'>Kannan</a>, <a href='http://www.facebook.com/rahulkave'>Rahul, <a href='http://www.facebook.com/apoorva.srinivasan1'>Apoorva</a>.<br><a href='http://www.facebook.com/knightsamar'>Samarendra</a></td>
+	                  	<td><a href='http://www.djangoproject.com'><img src='{{MEDIA_URL}}/django_logo.png' height='30px' width='80px' alt='Django' border=0></a></td>
+                        <td><a href='http://python.org'><img src='{{MEDIA_URL}}/python_logo.png' width="150px" height="50px"border='0' alt='Python'></a></td>
+					</tr>
+                </table>         
+                 </td>
+				</tr>
+				</table>
+                
+			</div>
 		</div>
-        
+		
 	</body>
-
 </html>
-

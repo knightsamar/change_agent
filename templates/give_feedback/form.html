@@ -1,17 +1,5 @@
-<html>
-<head>
-<style type="text/css">
 
-#disclaimer{
-    font-family:verdana;
-    size:10;
-    text-align:justify;
-    color:maroon;
-}
-
-</style>
-</head>
-</html>{% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}
  Fill the form
 {% endblock %}
@@ -81,6 +69,17 @@ function debug(str)
 
 
 </script>
+<style type="text/css">
+
+#disclaimer{
+    font-family:verdana;
+    size:10;
+    text-align:justify;
+    color:maroon;
+}
+
+</style>
+
 {% comment %}
 <!-- commented by Samar to let people know we aren't spying on them -->
 <h3 align='left'> Hi {{ username }} </h3>

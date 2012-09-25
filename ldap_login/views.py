@@ -5,10 +5,11 @@ if ROOT !="":
 from django.http import HttpResponse;
 from django.shortcuts import redirect, render_to_response;
 from django.template import RequestContext, loader;
-from ldap_login.models import user,group;
+from ldap_login.models import user,group,Role;
 from datetime import datetime
 from django.core.mail import send_mail
 from django.views.decorators.cache import cache_page
+
 
 #from django_auth_ldap.config import LDAPSearch
 #ldap_login
@@ -17,10 +18,10 @@ def login(request):
     message = None;
     if 'username' in request.session:
         if 'redirect' in request.session:
-            return redirect(request.session['redirect'])
+            return redirect(request.session['redirect']);
         else:
             return redirect('%s/give_feedback/'%ROOT);
-
+            
     if 'username' in request.POST:# and 'password' in request.POST:
         #print 'processing login attempt';
         try:
@@ -45,6 +46,7 @@ def login(request):
             request.session.set_expiry(1800)
             add_user(userName);		
             print 'redirecting now...';
+	    print ROOT;
             if 'redirect' in request.session:
                 return redirect(request.session['redirect'])
             else:    
@@ -72,19 +74,28 @@ def login(request):
     #wrong username/password!!!
 
 def add_user(prn):
-        userexists=user.objects.get_or_create(pk=prn)
-        if userexists[1] is True:
+        r = Role.objects.get_or_create(name = 'student')
+        r[0].save();
+        try:
+            print "user already existed..!!!"
+            userexists=user.objects.get(pk=prn)
+            userexists.last_login=datetime.today();
+            userexists.save();
+            return userexists; 
+        except:
             print " got a new user"
 		    # the user not in database... create one..!!
-            newuser = userexists[0]
-            newuser.username=prn
-            newuser.password=''
-            newuser.created_on=datetime.today();
+            newuser = user(
+                        username=prn,
+                        password = '',
+                        created_on=datetime.today(),
+                        role = r[0],
+                    );
             newuser.save();
 		    # this auto gruop assignment takes place by the logic that all students log in from thier PRN's and thier 1st 8 digit of thier PRN represents thier gruop.. to assignm a student to another group we need to do it manually..:) and we need to find out a better way of creating groups..!!! :D
 		
 
-		# to check whether its a student or staff.. :)
+		    # to check whether its a student or staff.. :)
             if prn.isdigit() is True:
                 print "its a student"
                 groupid=prn[0:8];
@@ -93,27 +104,10 @@ def add_user(prn):
                 groupid='staff'
             groupexists=group.objects.get_or_create(name=groupid)
             print "groupexists... = ", groupexists
-            
-            # We will have to think of a better method of doing this..!! eventually
-            # for SA and SD ppl 
-            '''SA=['009','008','020','025','027','030','031','036','046','048','059','069','076','080','090','093','0100','0101'] # add all the SA ppl ka PRN
-            if userName[2:8]=="030142": # if they are in msscca
-                print "in mscca",userName[2:8]
-                if userName[8:11] in SA: # last three digits of PRN
-                    print "SA- ", prn[8:11]
-                    sa=group.objects.get_or_create(name='SA')
-                    newuser.groups.add(sa[0])
-                else:
-                    print "SD", userName[8:11]
-                    sd=group.objects.get_or_create(name='SD')
-                    newuser.groups.add(sd[0])'''
             newuser.groups.add(groupexists[0]);
             newuser.save();
-        else:
-            print "user already existed..!!!"
-            userexists[0].last_login=datetime.today();
-            userexists[0].save();
-        return userexists[0]; 
+            return newuser; 
+        
 
 def logout(request):
     #are we actually logged in ?

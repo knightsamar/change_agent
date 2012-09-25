@@ -4,16 +4,78 @@
 {% endblock %}
 {% block content %}
 <style type="text/css">
+#menubar{
+	margin-left:470px;
+	}
+.fieldset {
+	background:rgba(255,240.200,1);	
+	border:1px solid rgba(255,187,136);
+        border-radius:6px 6px 6px 6px;
+	
+	-moz-box-shadow:0px 2px 12px rgb(119,85,34);
+	-webkit-box-shadow:0px 2px 12px rgb(119,85,34);
+	box-shadow:0px 2px 12px rgb(119,85,34);
 
-fieldset {
-	background-color: #fdfed4;
-	color: black;
-	font-family: purisa;
+	color:black;
+	margin-bottom:20px;
 }
-legend{
+#unfilled{ border:1px solid rgba(104,184,189,0.5);}
+
+#submitted{	border-color:rgb(243,108,32); }
+
+#summary{ border-color:rgb(120,173,96); }
+h3{
+    font-size:20px;
     font-weight:bold;
 }
-
+.tablemajor{
+	cellpadding:0px;
+	cellspacing:0px;
+	border-collapse:collapse;
+}
+.bookmark-images{
+	position:relative;
+	left:-10px;
+	top:10px;
+	margin-bottom:20px;
+}
+#unfilled tr:first-child{
+	border-top:1px solid rgba(104,184,189,0.5);
+}
+#unfilled .tableelements td{
+	font-size:14px;
+	color:black;
+	padding:16px;
+	padding-left:50px;
+	border-bottom:1px solid rgba(104,184,189,0.5);
+	text-align:left;
+}
+#submitted tr:first-child{
+	border-top:1px solid rgba(243,108,32,0.5);
+}
+#submitted .tableelements td{
+	font-size:14px;
+	padding:16px;
+	padding-left:50px;
+	border-bottom:1px solid rgba(243,108,32,0.5);
+	text-align:left;
+}
+#summary tr:first-child{
+	border-top:1px solid rgba(120,173,96,0.5);
+}
+#summary .tableelements td{
+	font-size:14px;
+	padding:16px;
+	
+	border-bottom:1px solid rgba(120,173,96,0.5);
+	text-align:center;
+}
+.tableelements:hover{
+	background:rgba(221,221,221,0.4);
+	cursor:pointer;
+	-moz-box-shadow:0px 0px 5px 5px rgba(204,204,204,0.4) inset;
+        -webkit-box-shadow:0px 0px 5px 5px rgba(204,204,204,0.4) inset;
+}
 </style>
 <script>
 function changesubmit(o,path)
@@ -25,56 +87,52 @@ function changesubmit(o,path)
 }
 </script>
 <div id="menubar">
+<table>
+<tr>
+<td>
 {% if not About_us_filled %}
-<input type="button" value="Feedback About this Software" onClick="javascript:location.href='{{ROOT}}/give_feedback/16/show'"><br>
+<input type="button" class=""  value="Feedback About this Software" onClick="javascript:location.href='{{ROOT}}/give_feedback/16/show'" style="align:left;margin:auto;"><br>
 {% endif %}
-<input type='button' onClick="javascript:location.href='{{ROOT}}/ldap_login/logout'" value='Logout!' alt='Enough of form filling!'></span> 
+</td>
+<td>
+<input type='button' class="" onClick="javascript:location.href='{{ROOT}}/ldap_login/logout'" value='Logout!' alt='Enough of form filling!' style="align:right;margin-left"></span> 
+</td>
+</tr>
+</table>
 </div>
-<h2> Hi {{fullname}}! </h2>
+<p align="left" style="font-size:18px;margin-left:40px;"> Hi {{u.fullname}}! </p>
 
 
 <!-- Admin thingies -->
 
-{% if is_coordinator %}
-<fieldset> 
-<legend> Student's Feedback Form Printout </legend>
-<form id = 'MainForm' method = 'post' action = '{{ROOT}}/manage_feedback/studentsummary'>
-{% csrf_token %}
-<b>Select Programme:</b>
-<select id = 'SamarXandY' name = 'programme'>
-{% for b in batch %}
-<option>{{b}}</option>
-{%endfor%}
-</select>
-<b>Select Batch:</b>
-<select name = 'batch' onfocus = 'fillOptions(this)'></select><br/>
-<input type='submit' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'> <br/>
-<input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
-<i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
-<br/>
-{% if createforms %}
-<input type = 'button' onclick ='javascript:location.href = "{{ROOT}}/manage_feedback/createforms"' value = 'Create Mass Feedback Forms'>
+{% if admin %}
+<div class="fieldset" id='adminthings'>
+<h2> Admin things </h2>
+<input type = 'button' onclick ='javascript:location.href = "{{ROOT}}/manage_feedback/admin"' value = 'Admin'>
+</fieldset>
 {% endif %}
-</form>
-</fieldset> 
-{% endif %}
+<!-- New feedback forms -->
+<div class="fieldset" id='unfilled'>
+<img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-unfilled-bookmark.png"  width="228pt" height="48pt" align="left"/>
+<table class="tablemajor" width='100%' style="margin-top:10px;margin-bottom:20px;">
 
-
-                <!-- New feedback forms -->
-
-<fieldset>
-<legend> Feedback forms to be filled </legend>
-
-<table cellpadding='16' align='center'>
-    {% for form in unfilled_list %}
+    {% for form in unfilled_forms %}
       {% if today < form.deadline_for_filling %}
-        <tr bgcolor='#b3dlea'><td> <a href='{{ROOT}}/give_feedback/{{form.id}}/show'>{{ form.title }}</a>
-            <img align='right' src='/../../change_agent_media/clock' height=40 width=40>
+        {% if fill_forms %}
+            	<tr onclick="document.location = '{{ROOT}}/give_feedback/{{form.id}}/show';" class="tableelements">
+				<td>{{ form.title }}<img align='right' src='{{MEDIA_URL}}/clock' height=40 width=40>
         
+        {% else %}
+<tr onclick="document.location = '{{ROOT}}/give_feedback/{{form.id}}/show';" class="tableelements">
+				<td>{{ form.title }}<img align='right' src='{{MEDIA_URL}}/clock' height=40 width=40>
+       {% endif %} 
         </td>
         <td>{{ form.deadline_for_filling|timeuntil }} left </td></tr>
       {% else %}
-        <tr><td>{{ form.title }}</td> <td><i> Deadline already exceeded!</i></td></tr>
+        <tr class="tableelements">
+				<td style="border-right:0px;border-left:0px">{{ form.title }}</td> 
+				<td style="border-right:0px;border-left:0px;""> Deadline already exceeded!</td>
+			</tr>
       {% endif %}
     {% empty %}
         <i>You have no new feedback forms </i>
@@ -83,42 +141,50 @@ function changesubmit(o,path)
 {% comment %}
 <p id='disclaimer' align='right'>Please note that all these forms are official feedback forms of SICSR.<br/>The questions, and options are all offical and the sofware hold no responsibilty for the data.</p>
 {% endcomment %}
-</fieldset>
+</div>
 
 
                 <!-- For Preview....-->
 
-
-<fieldset>
-<legend> Feedback you gave </legend>
-
-<table cellpadding='16' align='center'>
-    {% for form in filled_list %}
+{% if view_forms %}
+<div class="fieldset" id='submitted'>
+<!--h2> Feedback you gave </h2-->
+<img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-submitted-bookmark.png"  width="238pt" height="48pt" align="left"/>
+<table class="tablemajor" width='100%' style="margin-top:10px;margin-bottom:20px;">
+    {% for form in filled_forms %}
       {% if today < form.feedbackForm.deadline_for_filling  %}
-         <tr> <td><a href='{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{form.feedbackForm.title}}</a></td>
+            {% if fill_forms %}
+                <tr onclick="document.location = '{{ROOT}}/give_feedback/{{form.id}}/preview.html';" class="tableelements"> 
+			<td>{{form.feedbackForm.title}}</td>
+            {% else %} 
+                 <<tr class="tableelements"> 
+			<td>{{form.feedbackForm.title}}</td>
+            {% endif %}
       {% else %}
-        <tr><td><a href = '{{ROOT}}/give_feedback/{{form.id}}/preview.html'>{{ form.feedbackForm.title }}</a></td>
+    <tr onclick="document.location = '{{ROOT}}/give_feedback/{{form.id}}/preview.html';" class="tableelements">
+		<td>{{ form.feedbackForm.title }}</td>
+
       {% endif %} 
 	  <td> {{form.feedbackForm.deadline_for_filling|timeuntil }} left</tr>
      {% empty%}
-         <i> You have not filled any forms</i>
+         <h2> You have not filled any forms</h2>
      {% endfor %}
 </table>
-</fieldset>
-
+</div>
+{% endif %}
             <!-- Feedback About -->
 
 {% if feedback_about_list %}
-<fieldset>
-<legend> Feedback Form Summary you can view</legend>
-<ul align = 'center'>
-{% for f in feedback_about_list %}
- <li><a href ="{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout"> {{ f }} </a> </li>
+<div class="fieldset" id='summary'>
+<!--h2> Feedback Form Summary you can view</h2-->
+<img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-summary-bookmark.png"  width="238pt" height="48pt" align="left"/>
+<table class="tablemajor" width='100%' style="margin-top:10px;margin-bottom:20px;">
+{% for f in feedback_about %}
+ <tr onclick="document.location = '{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout';" class="tableelements"><td>{{ f }} </td></tr>
 {% endfor %}
 {% endif %}
-</ul>
-</fieldset>
-
+</table>
+</div>
 
 {% endblock %}
 </body>

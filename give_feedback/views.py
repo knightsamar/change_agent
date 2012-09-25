@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 #from accepting submissions;
 from give_feedback.models import *;
 from ldap_login.models import user,group;
-from change_agent.settings   import COORDINATORS, ROOT, CREATEFORMS
+from change_agent.settings   import ROOT, CREATEFORMS
 #for date
 from datetime import datetime
 
@@ -17,8 +17,9 @@ def hamari404():
 
 def index(request):
     """for rendering the index page for any user who has just logged in"""
-    
+    print "first line" 
     if 'username' not in request.session or request.session['username'] == None:
+        print "not logged in"
         return redirect('%s/ldap_login/'%ROOT);
     else:
         print 'username in session object';
@@ -31,69 +32,17 @@ def index(request):
         print "create the about us form...;)"
         about_us = ""
         Filled = True;
-
-    
-    if username in COORDINATORS.keys():
-        print "welcome coordinator", username;
-        batch = [COORDINATORS[username]];
-        print batch
-        if batch == ['All']:
-            batch = list(set(COORDINATORS.values()))
-            batch.pop(batch.index('All'))
-        print batch
-        is_coordinator = True;
-    else:
-        is_coordinator = False;
-        batch = None
-    # to fetch the all the forms
-    # for feedback About
-    
-    #TO ADD:- check for group as staff... not that important...:) 
-    feedback_about_list=list()
-    feedback_about=u.allowed_viewing_feedback_about.values();
-    for a in feedback_about:
+    def form(f):
         try:
-            ab=feedbackForm.objects.get(pk=a['id'])
-            #feedback_forms_about=feedbackForm.objects.filter(about=ab)
-            feedback_about_list.extend([ab])
+            return f.feedbackForm;
         except:
-            continue;
-    Filled=False
-    # to fetch the filled forms for previewing and editing 
-    
-    filled_forms = list(feedbackSubmission.objects.filter(submitter=username));
+            pass;
 
-    # to remove the filled forms from the list of all forms to get the newly available forms
-    if filled_forms:
-        request.session['filled']=list(filled_forms)
-        #print "filled form in index...", request.session['filled']
-    print "dsadAS"
-    #unfilled_forms = list(feedbackForm.objects.filter(allowed_groups=u.group));
-    #forms ordered in descending order of deadlines and ascending orders of about what they are
-    all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").order_by('-deadline_for_filling','about'))
-
-    #print "all-forms.. ", all_forms
-    print "user.", u
-    #print "user groups", u.groups.values()
-    unfilled_forms=list();
-    for g in u.groups.values():
-        for f in all_forms:
-            if g in f.allowed_groups.values():
-                unfilled_forms.extend([f])
-    #print "unfilled forms..!!", unfilled_forms;
-    for form in filled_forms:
-    	k = form.feedbackForm
-        if k == about_us:
-            Filled = True
-            filled_forms.remove(form)
-	
-        if k is not None and k in unfilled_forms:
-		     unfilled_forms.remove(k)
-     
-    request.session['unfilled']= list(unfilled_forms);
-    if Filled is False:
-        print "=-----Filled is False----"
-        request.session['unfilled'].append(about_us)            
+    if about_us in map(form,u.feedbacksubmission_set.all()):
+        Filled = True;
+    else:
+        Filled  = False;
+    #TO ADD:- check for group as staff... not that important...:) 
     #print request.session['unfilled']            
     # for displaying date and checking for deadline
     d = datetime.today();
@@ -102,18 +51,16 @@ def index(request):
     t = loader.get_template('give_feedback/index.html');
     c = RequestContext (request,
             {
-                'username' : username,
-                'fullname' : u.fullname,
-	        	'About_us_filled' : Filled,
-                'filled_list' : list(filled_forms),
-        		'unfilled_list': list(unfilled_forms),
+                'user' : u,
+                'unfilled_forms':u.get_unfilled_forms(),
+                'filled_forms':u.get_filled_forms(),
+                'admin':u.has_permission('admin'),
+                'feedback_about':u.allowed_viewing_feedback_about.all(),
+	        	'About_us_filled' : Filled,'view_forms':u.has_permission('view forms'),
+                 'fill_forms':u.has_permission('fill forms'),
                 'today' : d,
                 'rightnow' : n, #because template api already has tag called now
-                'feedback_about_list':feedback_about_list,
-                'is_coordinator' : is_coordinator,
-                'batch':batch,
                 'ROOT':ROOT,
-                'createforms':CREATEFORMS,
             }  ) #pass the list to the template
  
     return HttpResponse(t.render(c));
@@ -128,7 +75,10 @@ def show(request,form):
         request.session['redirect'] = request.get_full_path()
         return redirect('/change_agent/ldap_login/'); 
     else: #is logged in!
-        username = str(request.session['username']);
+	# username = str(request.session['username']);
+	#Kannan just added the next 2 lines replacing the above line
+	username = request.session['username'];
+        u=user.objects.get(pk=username)
        
     #for feedback Forms Filling   
     f = feedbackForm.objects.get(pk=form);
@@ -143,6 +93,7 @@ def show(request,form):
 
     # is the deadline exceded??
     now = datetime.today()
+    print u.has_permission('fill forms')
     
     if (f.deadline_for_filling < now ):
         return redirect("%s/manage_feedback/2/error"%ROOT);

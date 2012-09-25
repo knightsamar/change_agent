@@ -1,11 +1,30 @@
 from django.db import models
+from manage_feedback.models import *;
+from give_feedback.models import *
+from datetime import datetime
 # Create your models here.
+
+class Role(models.Model):
+    name = models.CharField(max_length=40,unique=True);
+    permissions = models.ManyToManyField('Permission');
+    def __str__(self):
+        return self.name
+
+
+class Permission(models.Model):
+    name = models.CharField(max_length = 40,unique=True);
+    def __str__(self):
+        return self.name
+
 
 #one group has many users
 class group(models.Model):
     name = models.CharField(max_length=40,unique=True);
     created_on = models.DateTimeField(auto_now_add=True);
-
+    def set_permission(self,permission):
+        for u in self.user_set.all():
+            u.role.add(permission);
+            
     def getBatch(self):
          print "====",self.name
          Three_yr_courses={ 122:'BBA-IT', 121:'BCA'} 
@@ -70,8 +89,50 @@ class user(models.Model):
     created_on = models.DateTimeField(auto_now_add=True);
     groups = models.ManyToManyField(group);
     allowed_viewing_feedback_about = models.ManyToManyField('manage_feedback.feedbackForm',blank=True,null=True);
+    role = models.ForeignKey('Role');
 
+    def has_permission(self,permission_name):
+        p = Permission.objects.get_or_create(name = permission_name)[0];
+        if p in self.role.permissions.all():
+            return True
+        else:
+            return False;
+        
     def __str__(self):
 	    return self.username;
+    
+    def get_unfilled_forms(self):
+        all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").filter(deadline_for_filling__gt = datetime.now()).order_by('-deadline_for_filling','about'))
+        #print "all-forms.. ", all_forms
+        #print "user groups", u.groups.values()
+        filled_forms = self.get_filled_forms();
+        unfilled_forms=list();
+        for g in self.groups.values():
+            for f in all_forms:
+                if g in f.allowed_groups.values():
+                    unfilled_forms.extend([f])
+        #print "unfilled forms..!!", unfilled_forms;
+        for form in filled_forms:
+    	    k = form.feedbackForm
+            if k is not None and k in unfilled_forms:
+		         unfilled_forms.remove(k)
+        return unfilled_forms;
+
+    def get_filled_forms(self):
+        feedback_about_list=list()
+        feedback_about=self.allowed_viewing_feedback_about.values();
+        for a in feedback_about:
+            try:
+                ab=feedbackForm.objects.get(pk=a['id'])
+                #feedback_forms_about=feedbackForm.objects.filter(about=ab)
+                feedback_about_list.extend([ab])
+            except:
+                continue;
+        Filled=False
+        # to fetch the filled forms for previewing and editing 
+    
+        filled_forms = list(feedbackSubmission.objects.filter(submitter=self.username));
+        return filled_forms;
 
 
+        

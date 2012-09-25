@@ -26,13 +26,13 @@
     @font-face {
             font-family: logo;
             font-style: normal;
-            src: url('/change_agent_media/fonts/Whatka!.ttf');
+            src: url('{{MEDIA_URL}}/fonts/Whatka!.ttf');
         }
 	
 	#form {
     width:50%;
     margin-left:25%;
-	background-image: url('/change_agent_media/CRINKLEP.JPG');
+	background-image: url('{{MEDIA_URL}}/CRINKLEP.JPG');
     /*background-color:#fdfed4;*/
     border:15px groove;
     line-break:strict;
