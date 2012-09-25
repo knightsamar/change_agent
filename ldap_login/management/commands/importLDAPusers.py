@@ -1,6 +1,6 @@
 from django.core.management.base import NoArgsCommand, CommandError;
 from ldap_login.ldapUtils import ldapManager;
-from ldap_login.models import user,group;
+from ldap_login.models import user,group,Role;
 from datetime import datetime;
 import traceback;
 
@@ -53,6 +53,13 @@ class Command(NoArgsCommand):
                         finally: #so that we update these properties for all user
                             userObj.fullname = u['displayName'][0] #because it's a dictionary of lists!
                             userObj.groups.add(groupObj); #add this user to the group;
+			    
+			    #Don't forget to assign role!
+		            if username.startswith('0') or username.startswith('1'):
+				userObj.role = Role.objects.get_or_create(name='student')
+			    else:
+				userObj.role = Role.objects.get_or_create(name='faculty')
+
                             userObj.save();
 
         except Exception as e:

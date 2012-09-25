@@ -131,6 +131,9 @@ class Batch(models.Model):
     def __str__(self):
         return "%s %s for Sem %d - %s" %(self.programme ,self.batchname ,self.sem, self.division)
 
+    class Meta:
+	verbose_name_plural = 'Batches'
+
 class Subject(models.Model):
     name = models.CharField(max_length = 100);
     code = models.CharField(max_length = 15);
