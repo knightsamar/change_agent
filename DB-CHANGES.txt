@@ -1,0 +1,29 @@
+-- python manage.py syncdb
+
+CREATE TABLE `ldap_login_role_permissions` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `role_id` integer NOT NULL,
+    `permission_id` integer NOT NULL,
+    UNIQUE (`role_id`, `permission_id`)
+) if not exists 
+;
+CREATE TABLE `ldap_login_role` if not exists (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(40) NOT NULL UNIQUE
+)
+;
+ALTER TABLE `ldap_login_role_permissions` ADD CONSTRAINT `role_id_refs_id_6fad3428` FOREIGN KEY (`role_id`) REFERENCES `ldap_login_role` (`id`);
+CREATE TABLE `ldap_login_permission` if not exists (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(40) NOT NULL UNIQUE
+)
+;
+ALTER TABLE `ldap_login_role_permissions` ADD CONSTRAINT `permission_id_refs_id_6bdc63f7` FOREIGN KEY (`permission_id`) REFERENCES `ldap_login_permission` (`id`);
+CREATE TABLE `ldap_login_group` if not exists (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(40) NOT NULL UNIQUE,
+    `created_on` datetime NOT NULL
+)
+
+ALTER TABLE ldap_login_user ADD `role_id` integer NOT NULL
+
