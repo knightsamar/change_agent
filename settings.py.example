@@ -9,31 +9,34 @@ ADMINS = (
      ('Apoorva','ascoolas.apoorva@gmail.com')
 )
 
-CREATEFORMS = False
+CREATEFORMS = True
 STUDENTS_COORDINATORS = ['moodleldap','10030142031','10030142056'];
 
+COURSES = {'MSC(CA)':142, 'MBA(IT)':141, 'BCA':122,'BBA(IT)':121}
+
 COORDINATORS = {
-    'vidya.kulkarni':'MSc. (CA)',
+    'vidya.kulkarni':'MSC(CA)',
     'rohit.srivastwa':'All',
-    'sayali.joshi':'MBA-IT',
-    'mamta.guram':'BBA-IT',
+    'sayali.joshi':'MBA(IT)',
+    'mamta.guram':'BBA(IT)',
     'kanchan.bhide':'BCA',
-    'shrish.joshi':'MBA-IT',
+    'shrish.joshi':'MBA(IT)',
     'harshad.gune':'All',
     'lalit.kathpalia':'All',
     'moodleldap':'All',
     'shubhashri.waghmare':'BCA',
-    'priti.kulkarni':'BBA-IT',
+    'priti.kulkarni':'BBA(IT)',
     }
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+         #'NAME': 'change_agent.sqlite3',                      # Or path to database file if using sqlite3.
         'NAME': 'change_agent',                      # Or path to database file if using sqlite3.
-        'USER': 'change_agent',                      # Not used with sqlite3.
-        'PASSWORD': '8CA7rXL45NvFTG36',              # Not used with sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
+        'PASSWORD': 'sqladmin',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -64,7 +67,7 @@ USE_L10N = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/knightsamar/learn/change_agent/media'
+MEDIA_ROOT = '/home/knightsamar/change_agent/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -105,7 +108,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/knightsamar/learn/change_agent/templates'
+    '/home/knightsamar/change_agent/templates'
 )
 
 INSTALLED_APPS = (
@@ -130,5 +133,5 @@ AUTHENTICATION_BACKENDS = (
 #CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 #the directory where emails will be stored
-EMAIL_FILE_PATH = '/home/knightsamar/learn/change_agent/emails' # change this to a proper location
+EMAIL_FILE_PATH = '/home/knightsamar/change_agent/emails' # change this to a proper location
 DEFAULT_FROM_EMAIL = 'testing@testing.localhost'

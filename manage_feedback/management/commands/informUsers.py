@@ -54,7 +54,7 @@ class Command(BaseCommand):
                     'user' : u,
                     'unfilled_forms' : unfilled_forms,
                 })
-                body = render_to_string("informMail.html", c);
+                body = render_to_string("manage_feedback/informMail.html", c);
                 to = '%s@sicsr.ac.in' % u.username 
                 email = mail.EmailMessage(
                         subject = '[FeedbackForms] Please fill them!', 

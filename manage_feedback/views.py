@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from datetime import datetime,date;
 from django.template import RequestContext,Context, loader
 #from django.db.models import Q
-from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS, CREATEFORMS
+from change_agent.settings import ROOT,MEDIA_URL, MEDIA_ROOT, COORDINATORS, CREATEFORMS, COURSES
 from django.db.models import exceptions
 from pyExcelerator import *
 from django.views.decorators.cache import cache_page
@@ -108,7 +108,7 @@ def createmassforms(request):
         if len(batches)==0:
             return HttpResponse('no batches')
         s = list()
-        count =0
+        count=0
         subjectquestions = feedbackQuestion.objects.filter(name__startswith='subject')
         print "SUBJECT QUES == ", subjectquestions
         teacherquestions = feedbackQuestion.objects.filter(name__startswith='teacher')
@@ -118,12 +118,12 @@ def createmassforms(request):
             print "subject list for", b , subjects
             for s in subjects:
                 #whole batch because in cases like current when we DO NOT have division or stream wise list of students
-                c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+                c = COURSES
                 yr = b.batchname[2:4]
                 course = str(c[b.programme])
                 groupname = yr+'030'+course
-                whole_batch_group = group.objects.get(name=groupname);
-     
+                whole_batch_group = group.objects.get_or_create(name=groupname)[1]
+                
                 if createforms == 'all' or createforms == 'subject':
                     newForm = feedbackForm();
                     newForm.title = "%s (%s - %s %s)" % (s.name,b.programme,b.batchname,b.division)
@@ -133,7 +133,7 @@ def createmassforms(request):
                     if len(b.division) == 1: #for one-letter divisions
                         groupname = "%s %s Div-%s" %(b.programme, b.batchname,b.division) # MBA 2010-12 Div-A
                     elif b.division == 'all': #for divisions with value 'all'
-                        c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+                        c = COURSES
                         yr = b.batchname[2:4]
                         course = str(c[b.programme])
                         groupname = yr+'030'+course
@@ -154,7 +154,6 @@ def createmassforms(request):
                     newForm.about = subjectAbout;
                     newForm.deadline_for_filling = deadline
                     newForm.save()
-                    s.username.allowed_viewing_feedback_about.add(newForm);
                     count = count+1
                     createdForSubject = True;
                     newForm.allowed_groups.add(g)
@@ -175,7 +174,7 @@ def createmassforms(request):
                         try:
                             g = group.objects.get(name = groupname) #preference is given to the STREAM or division than the whole batch
                         except:
-                            c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+                            c = COURSES
                             yr = b.batchname[2:4]
                             course = str(c[b.programme])
                             groupname = yr+'030'+course
@@ -187,8 +186,6 @@ def createmassforms(request):
                         newForm.about = teacherAbout;
                         newForm.deadline_for_filling = deadline
                         newForm.save()
-                        s.username.allowed_viewing_feedback_about.add(newForm);
-                        s.username.save()
                         count = count +1
                         for t in teacherquestions:
                             newForm.questions.add(t)
@@ -238,7 +235,7 @@ def stusummary(request):
     w_sub = wb.add_sheet('Feedback for subjects by %s %s' %(prgm ,batch));
     w_tea = wb.add_sheet('Feedback for teachers by %s %s' %(prgm ,batch));
 
-    c = {'MSc. (CA)':142, 'MBA-IT':141, 'BCA':122,'BBA-IT':121}
+    c = COURSES
     yr = batch[2:4]
     course = str(c[prgm])
     groupname = yr+'030'+course

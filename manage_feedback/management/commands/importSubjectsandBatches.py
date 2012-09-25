@@ -3,7 +3,7 @@ import csv
 from manage_feedback.models import Batch , Subject
 from django.db.models import exceptions
 from datetime import date
-from ldap_login.models import user
+from ldap_login.models import user, Role
 from change_agent.settings import COORDINATORS
 from django.core.management.base import BaseCommand, CommandError
 import traceback
@@ -35,6 +35,11 @@ class Command(BaseCommand):
         coordinators = {}
         for k,v in COORDINATORS.iteritems():
             coordinators[v]=k;
+            try:
+                u = user.objects.get(username=k)
+            except user.DoesNotExist as e:
+                u = user.objects.create(username=k,role=Role.objects.get(name='admin'))
+                u.save()
         
         Semester = raw_input('Which Semester is going on .. (odd or even)');
         while Semester!='odd' and Semester!='even':
@@ -80,7 +85,7 @@ class Command(BaseCommand):
                 print "================="
                 programme = record['Programme']
                 print coordinators[programme]
-                u = user.objects.get_or_create(pk = coordinators[programme])[1]
+                u = user.objects.get(pk = coordinators[programme])
                 coursecode = '';
                 try:
                     print div

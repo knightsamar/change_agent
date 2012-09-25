@@ -17,20 +17,20 @@ function fillOptions(o)
     d = new Date();
     y = d.getFullYear(); //current year
    
-    if (c == 'MSc. (CA)' || c == 'MBA-IT')
+    if (c == 'MSC(CA)' || c == 'MBA(IT)')
        {
            //for sem 1 and 2
            options = document.createElement('option')
-           options.text = y-1 + '-' + ((y+1)%100);
+           options.text = y-1 + '-' + (y+1);
            o.add(options,null)
            if (d.getMonth() > 6){ //for sem 3
                options = document.createElement('option')
-               options.text = y + '-' + ((y+2)%100);
+               options.text = y + '-' + (y+2);
                o.add(options,null)
             }
             else{ //for sem 4
                options = document.createElement('option')
-               options.text = y-2 + '-' + ((y)%100);
+               options.text = y-2 + '-' + (y);
                o.add(options,null)
             }   
 
@@ -39,21 +39,21 @@ function fillOptions(o)
     {
         //for sem 5 and 6
         options = document.createElement('option')
-        options.text = (y-2) + '-' + ((y+1)%100);
+        options.text = (y-2) + '-' + (y+1);
         o.add(options,null)
         //for sem 3 and 4
         options = document.createElement('option')
-        options.text = (y-1) + '-' + ((y+2)%100);
+        options.text = (y-1) + '-' + (y+2);
         o.add(options,null)
         //for sem 1 and 2
         if (d.getMonth() > 6){
             options = document.createElement('option')
-            options.text = y + '-' + ((y+3)%100);
+            options.text = y + '-' + (y+3);
             o.add(options,null)
         }
         else{
            options = document.createElement('option')
-           options.text = y-3 + '-' + ((y)%100);
+           options.text = y-3 + '-' + (y);
            o.add(options,null)
          }  
 
@@ -80,16 +80,16 @@ function enable(c)
 <input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "{{ROOT}}/give_feedback/{{f.id}}/show"'>
 {% endif %}
 
-<form id = 'MainForm' m ethod = 'post'>
+<form id = 'MainForm' method = 'post'>
 {% csrf_token %}
 <b>Select Programme:</b>
 <select id = 'programme_name' name = 'programme'>
     {% for b in u.batch_set.all %}
         <option>{{b.programme}}</option>
     {% empty %}   
-        <option>MSc. (CA)</option>
-        <option>MBA-IT</option>
-        <option>BBA-IT</option>
+        <option>MSC(CA)</option>
+        <option>MBA(IT)</option>
+        <option>BBA(IT)</option>
         <option>BCA</option>
     {%endfor%}
 </select>
