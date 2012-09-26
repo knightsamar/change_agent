@@ -66,7 +66,7 @@ h3{
 #summary .tableelements td{
 	font-size:14px;
 	padding:16px;
-	
+	padding-left:50px;	
 	border-bottom:2px solid rgba(120,173,96,0.5);
 	text-align:center;
 }
@@ -111,6 +111,7 @@ function changesubmit(o,path)
 <input type = 'button' onclick ='javascript:location.href = "{{ROOT}}/manage_feedback/admin"' value = 'Admin'>
 </fieldset>
 {% endif %}
+
 <!-- New feedback forms -->
 <div class="fieldset" id='unfilled'>
 <img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-unfilled-bookmark.png"  width="228pt" height="48pt" align="left"/>
@@ -174,17 +175,18 @@ function changesubmit(o,path)
 {% endif %}
             <!-- Feedback About -->
 
-{% if feedback_about_list %}
-<div class="fieldset" id='summary'>
-<!--h2> Feedback Form Summary you can view</h2-->
-<img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-summary-bookmark.png"  width="238pt" height="48pt" align="left"/>
-<table class="tablemajor" width='100%' style="margin-top:10px;margin-bottom:20px;">
-{% for f in feedback_about %}
- <tr onclick="document.location = '{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout';" class="tableelements"><td>{{ f }} </td></tr>
-{% endfor %}
-</table>
-</div>
+{% if feedback_about %}
+	<div class="fieldset" id='summary'>
+	<!--h2> Feedback Form Summary you can view</h2-->
+		<img class="bookmark-images" src="{{MEDIA_URL}}/feedback-forms-summary-bookmark.png"  width="238pt" height="48pt" align="left"/>
+		<table class="tablemajor" width='100%' style="margin-top:10px;margin-bottom:20px;">
+		{% for f in feedback_about %}
+			 <tr onclick="document.location = '{{ROOT}}/manage_feedback/{{f.id}}/feedbackAbout';" class="tableelements"><td>{{ f }} </td></tr>
+		{% endfor %}
+		</table>
+	</div>
 {% endif %}
+
 
 {% endblock %}
 </body>

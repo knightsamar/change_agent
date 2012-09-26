@@ -1,27 +1,49 @@
 {% extends "base.html" %}
 {% block title %}
- Preview {{form.title}}
+	{{form.title}}
 {% endblock %}
 
 {% block content %}
-Submitted by {{sub}}
-<h3 align='center'>Form Preview ;)</h3><br/>
-<div id="form">
- <h3 align='center'>{{ form.title }}</h3>
-{% regroup submissionDetails by question as question_answers %}
-<ol>
-{% for question in question_answers %}
-   <br><li><q>{{ question.grouper }}</q></li>
-   {% for item in question.list %}
-   {% if item.answer %}
-      <img src="/change_agent_media/bullet" height='15' width=15> <ans>{{ item.answer }} </ans><br/>
-      {% else %}
-      -
-    {% endif %} 
-     {% endfor %}
-{% endfor %}      
-</ol>
+<style type="text/css">
+        #disclaimer{
+            font-family:verdana;
+            size:10;
+            text-align:center;
+            color:maroon;
 
+        }
+        #formtitle{
+                        font-family:Calibri;
+                        size:36;
+                        text-align:center;
+                        color:gray;
+			padding-bottom:0px;
+			margin-bottom:5px;
+        }
+
+
+</style>
+
+<div id="form">
+
+	<h1 id="formtitle"> {{ form.title }} Preview</h1>
+	Submitted by {{sub}}
+
+{% regroup submissionDetails by question as question_answers %}
+<div align="left" style="padding-left:20px;padding-right:20px;">
+	<ol>
+	{% for question in question_answers %}
+	   <br><li><q>{{ question.grouper }}</q></li>
+		{% for item in question.list %}
+		   {% if item.answer %}
+		      <img src="/change_agent_media/bullet" height='15' width=15> <ans>{{ item.answer }} </ans><br/>
+		   {% else %}
+      			-
+		   {% endif %} 
+		{% endfor %}
+	{% endfor %}      
+	</ol>
+</div>
 {% if form.deadline_for_filling < date %}
   <br/> <font color='red'>The deadline for filling this form has exceeded! You cannot edit the form.<br/></font>
   <br/>
@@ -36,7 +58,7 @@ Submitted by {{sub}}
 {% if nextform != None %}
 <input type='button' onclick="javascript:location.href='{{ROOT}}/give_feedback/{{nextform.id}}/preview.html'" value='Preview next submission'>
 {% endif %}
-<br/><br/>
+
 <input type = "submit" value = "Go back to main menu" onclick="javascript:location.href='{{ROOT}}/give_feedback/'">
 </div>
 {% endblock %}
