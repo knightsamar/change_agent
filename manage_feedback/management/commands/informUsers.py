@@ -19,22 +19,22 @@ class Command(BaseCommand):
         DEBUG = False
         if len(args) == 0:
             print self.help
-            return -1
+            return False
 
         wanted_group = args[0]
         if wanted_group is None:
             print self.help
-            return -2
+            return False
 
         if wanted_group == 'ALL':
            groups = group.objects.all();
         else:
-           groups = group.objects.filter(name=group)
+           groups = group.objects.filter(name=wanted_group)
 
         if groups.count() is 0:
             print 'No such group called %s found!!!' % wanted_group
             print self.help
-            return -3
+            return False
        
         #get email connection
         connection = mail.get_connection();
