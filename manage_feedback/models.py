@@ -88,7 +88,7 @@ class feedbackForm(models.Model):
 
 			#stores ids not mentioned in sequence at the end of the sortedlist
 			for z in endlist:
-				sortedlist.append(i)
+				sortedlist.append(z)
 		
 			sorted_questions = []
 			for s in sortedlist:

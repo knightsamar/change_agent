@@ -47,6 +47,7 @@ def getCurrentSemester(batch):
         pass;
     
     return Sem
+
 def adminindex(request):
         if 'username' not in request.session or request.session['username'] == None:
             print "not logged in"
@@ -65,7 +66,6 @@ def adminindex(request):
                 'u':u
                  });
         return HttpResponse(t.render(c));
-
 
 def createmassforms(request):
     if CREATEFORMS is False:

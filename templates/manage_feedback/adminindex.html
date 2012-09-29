@@ -82,7 +82,7 @@ function enable(c)
 
 <form id = 'MainForm' method = 'post'>
 {% csrf_token %}
-<b>Select Programme:</b>
+<b style="font-size:16px">Select Programme:</b>
 <select id = 'programme_name' name = 'programme'>
     {% for b in u.batch_set.all %}
         <option>{{b.programme}}</option>
@@ -94,23 +94,21 @@ function enable(c)
     {%endfor%}
 </select>
 
-<b>Select Batch:</b>
+<b style="font-size:16px;">Select Batch:</b>
     <select name = 'batch' required onfocus = 'fillOptions(this)'></select><br/><br/><br/>
 <br/>
 {% if view_summary %}
-<input type='button' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'> <br/>
+<input type='button' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'>
 {% endif %}
 {% if view_notfilled %}
 <input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
-{% endif %}<BR>
+{% endif %}
 {% if view_reports %}
 <input type='button' id='reports' value = "Report" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/summary/")'> 
 {% endif %}
-<br/>
-<hR>
-<BR>
 {% if create_forms %}
 {% if createforms %}
+<hr><br/>
 To Create Forms<BR><BR>
 <input type = 'radio' name = 'createforms' value = 'all' checked> All 
 <input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers
@@ -122,7 +120,7 @@ Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size
 {% endif %}
 </form>
 </fieldset> 
-<hr>
+<br/>
 <i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
 </form>
 <input type = 'button' value = 'logout' onclick = 'javascript:location.href = "{{ROOT}}/ldap_login/logout"'>
