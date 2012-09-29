@@ -131,10 +131,15 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-#the directory where emails will be stored
-EMAIL_FILE_PATH = '/home/knightsamar/change_agent/emails' # change this to a proper location
-DEFAULT_FROM_EMAIL = 'testing@testing.localhost'
+
+if DEBUG is True:
+   EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+else:
+   EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+#the directory where emails will be stored -- sued only when we use Filebase Email Backend
+EMAIL_FILE_PATH = ' /home/sdrc/change_agent/emails'
+DEFAULT_FROM_EMAIL = 'sdrc@sicsr.ac.in'
 
 #for ldapUtils 
 #an user who is allowed to search and access basic properties of objects
