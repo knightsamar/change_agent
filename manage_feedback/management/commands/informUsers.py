@@ -69,8 +69,8 @@ class Command(BaseCommand):
                 except SMTPException as s:
                     print "Error while sending email : %s" % s
                     continue;
-                #except Exception as e:
-                #    print "Unhandled exception while sending email : %s" % e
+                except Exception as e:
+                    print "Unhandled exception while sending email : %s" % e
                     continue;
         
         connection.close()
