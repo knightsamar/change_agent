@@ -135,3 +135,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 #the directory where emails will be stored
 EMAIL_FILE_PATH = '/home/knightsamar/change_agent/emails' # change this to a proper location
 DEFAULT_FROM_EMAIL = 'testing@testing.localhost'
+
+#for ldapUtils 
+#an user who is allowed to search and access basic properties of objects
+LDAP_USERNAME = 'moodleldap@sicsr.edu'
+LDAP_PASSWORD = 'c0d3c0mp13+3'
+
+
+

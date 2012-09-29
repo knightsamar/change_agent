@@ -1,4 +1,5 @@
 import ldap;
+from change_agent.settings import LDAP_USERNAME, LDAP_PASSWORD
 
 class ldapManager:
     
@@ -23,7 +24,7 @@ class ldapManager:
         
         return result;
 
-    def connect(self,server='10.10.21.2',username='a',password='b',):
+    def connect(self,server='10.10.21.2',username=LDAP_USERNAME,password=LDAP_PASSWORD):
         '''connects to the given ldap server using name and password.
             this user must preferably have permissions of traversal, browsing if not everything
         '''

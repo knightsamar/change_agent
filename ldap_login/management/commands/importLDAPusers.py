@@ -12,7 +12,8 @@ class Command(NoArgsCommand):
     """
     args = None;
     help = "imports LDAP users from Active Directory into database"
-    
+    can_import_settings = True
+  
     exclusion_list = ['exam','Domain Controllers']; #list of OUs we do not want to handle at all.
     def handle_noargs(self,  **options):
         #**options is a dictionary of keyword parameters beyond those defined
@@ -30,7 +31,7 @@ class Command(NoArgsCommand):
                     groupObj = group.objects.get(name=g);
                     print "Using existing group %s" % g
                 except group.DoesNotExist:
-                    groupObj = group.objects.create(name=g,created_on=datetime.now());
+                    groupObj = group(name=g,created_on=datetime.now());
                     groupObj.save();
                     print "Created group %s" % g;
                 finally:
@@ -43,7 +44,7 @@ class Command(NoArgsCommand):
                             userObj = user.objects.get(pk=username)
                             print "Using existing user %s " % userObj
                         except user.DoesNotExist:
-                            userObj = user.objects.create(pk=username);
+                            userObj = user(pk=username);
                             userObj.created_on = datetime.now();
                             print "Created user %s " % userObj;
                         except Exception as e:
@@ -51,17 +52,25 @@ class Command(NoArgsCommand):
                             print e;
                             print traceback.print_exc();
                         finally: #so that we update these properties for all user
-                            userObj.fullname = u['displayName'][0] #because it's a dictionary of lists!
-                            userObj.groups.add(groupObj); #add this user to the group;
-			    
+                            if 'displayName' in u:
+                                userObj.fullname = u['displayName'][0] #because it's a dictionary of lists!
+			    else:
+                                userObj.fullname = userObj.pk
 			    #Don't forget to assign role!
 		            if username.startswith('0') or username.startswith('1'):
-				userObj.role = Role.objects.get_or_create(name='student')
+				userObj.role = Role.objects.get_or_create(name='student')[0]
 			    else:
-				userObj.role = Role.objects.get_or_create(name='faculty')
+				userObj.role = Role.objects.get_or_create(name='faculty')[0]
 
                             userObj.save();
-
+			    #the following must be done after saving 
+			    #refer: http://stackoverflow.com/questions/7837033/valueerror-cannot-add-instance-is-on-database-default-value-is-on-databas
+                            userObj.groups.add(groupObj); #add this user to the group;
+        except KeyError as e:
+            print 'KeyError happened in the structure :'
+            print e.message
+            print 'Structure:', u
+            print
         except Exception as e:
             print 'Some unexpected exception occured!';
             print e;

@@ -15,7 +15,7 @@ class feedbackQuestionAdmin(admin.ModelAdmin):
     
 class feedbackFormAdmin(admin.ModelAdmin):
     actions = ['duplicateForm','notFilled'];
-    list_display=['title', 'deadline_for_filling', 'about']
+    list_display=['title', 'deadline_for_filling','about','created_on']
     ordering=['title']
     list_filter = ['allowed_groups','about'];
     search_fields = ['title']
