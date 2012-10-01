@@ -61,8 +61,9 @@ class Command(BaseCommand):
                         body = body, 
                         from_email = DEFAULT_FROM_EMAIL, 
                         to = [to], 
-                        connection = connection)
-                
+                        connection = connection,
+		)
+                email.content_subtype = 'html'
                 try:
                     email.send()
                     print 'Done sending email!'
