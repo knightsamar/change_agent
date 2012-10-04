@@ -27,6 +27,6 @@ db-converter/*
 *manage_feedback/management/commands/__init__.py
 *templates/base.html.rej
 *templates/give_feedback/index.html.backup
-media/piecharts/*
-media/summary_graphs/*
-media/summary_sheets/*
+media/piecharts/*.png
+media/summary_graphs/*.png
+media/summary_sheets/*.xls
