@@ -30,3 +30,4 @@ db-converter/*
 media/piecharts/*.png
 media/summary_graphs/*.png
 media/summary_sheets/*.xls
+backups/

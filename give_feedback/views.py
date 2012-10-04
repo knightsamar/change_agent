@@ -457,7 +457,11 @@ def submit(request,form):
     # Remove this form from the list of unfilled forms...
     print "unfilled form ki list", unfilled
     print "current form ,f ", f
-    unfilled.remove(f)
+    
+    #temporary fix for the bug #196
+    if f in unfilled:
+       unfilled.remove(f)
+
     request.session['unfilled']=unfilled
     print "unfilled form ki list after removing..!!", unfilled
 
