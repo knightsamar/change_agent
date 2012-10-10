@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{user.fullname}} : Status of Forms {% endblock %}
 {% block content %}
+
 <div id="form" style='text-align:left;'>
     <table align='center' border='1'>
         <thead align='center'>
@@ -12,7 +13,7 @@
         </thead>
         <tbody align='center'>
         {% for form,status in status_of_all_forms.iteritems %}
-           <tr>
+           <tr class='row_{% cycle 'odd' 'even' %}'>
                 <td>{{ form }}</td>
                 <td> {{ status.deadline_for_filling|date:"D d M Y"}} </td>
                 {% if status.submitted %}
@@ -21,9 +22,14 @@
                     <td>{{ status.submitted|yesno:'Submitted,Not Submitted'}} </td>
                 {% endif %}
            </tr>
+	{% empty %}
+           <tr>
+                <td colspan='3'>No forms available for this user to fill.</td>
+           </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
+<br/><b>Note:</b> Only those forms which have deadline in current month will be shown here because this feature is still under development.<br/>
 <input type='button' onclick="javascript:location.href='{% url manage_feedback.views.adminindex %}'" value="Go back">
 {% endblock %}
