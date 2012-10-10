@@ -63,6 +63,7 @@ def adminindex(request):
                 'view_summary':u.has_permission('view summary'),
                 'view_notfilled':u.has_permission('view notfilled'),
                 'view_reports':u.has_permission('view reports'),
+                'view_user_status':u.has_permission('view_user_status'),
                 'u':u
                  });
         return HttpResponse(t.render(c));
@@ -567,4 +568,14 @@ def notFilled(request):
          );
    
         return HttpResponse(t.render(c))
-     
+
+def get_user_status(request):
+    try:
+        u = user.objects.get(pk=request.POST['username'])
+    except Exception as e:
+        return HttpResponse('Cannot find user with username "%s" ' % username)
+        
+    t = loader.get_template('manage_feedback/user_status.html')
+    c = Context({'status_of_all_forms' : u.get_status_of_all_forms()})
+
+    return HttpResponse(t.render(c))

@@ -1,4 +1,5 @@
 from django.db import models
+from give_feedback.models import feedbackSubmission
 
 #one feedbackquestion is applicable for many Forms and one Form can have many such questions
 class feedbackQuestion(models.Model):
@@ -46,6 +47,23 @@ class feedbackForm(models.Model):
                 #
             pass;
         
+        def has_been_filled_by_user(self, user):
+            '''determines whether the given form was submitted by the give user or not
+               if feedback was submitted, returns the feedbackSubmission object
+               if feedback was not submitted, returns False
+
+            '''
+            try:
+                submission = feedbackSubmission.objects.get(feedbackForm=self, submitter=user)
+                return submission
+            except feedbackSubmission.DoesNotExist as e:
+                return False
+            except feedbackSubmission.MultipleObjectsReturned as e:
+                print 'This single user %s has MULTIPLE submissions!! -- Design problem detected!' % (user)
+                print e.msg
+                print e
+                raise e
+
 	def sortedQuestions(self):
 		#if sequence is left empty it shows questions in default format
 		if(self.sequence == ''):

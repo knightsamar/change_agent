@@ -100,7 +100,47 @@ class user(models.Model):
         
     def __str__(self):
 	    return self.username;
-    
+   
+    def get_status_of_all_forms(self):
+        '''returns the status for all the forms which the user is allowed to fill
+           CAVEAT: This method currently processes ONLY those forms WHICH have deadlines in the CURRENT monnth AND year.
+           WHY: Because we couldn't find a way to ORDER the forms via deadline OR group them by Semester so as to improve the display for the coordinators
+        
+        '''
+        #get all forms which can be filled by this user.
+        #ie. get all forms which are allowed to be filled by all the groups that this user belongs to.
+        associated_groups = list(self.groups.all().values_list('pk',flat=True)) #ref: http://localhost/docs/django-12/ref/models/querysets.html#in
+        
+        allowed_forms = feedbackForm.objects.filter(allowed_groups__in=associated_groups, deadline_for_filling__year=datetime.now().year,deadline_for_filling__month=datetime.now().month).select_related().distinct().order_by('-deadline_for_filling')
+
+        #define a status dictionary
+        status_of_allowed_forms = {}
+       
+
+        #NOTE: Though the above allowed_forms list is sorted by -deadline_for_filling, the dictionary produced below is no proper order and renders everything randomly creating problems in display. Hence, the CAVEAT
+
+        #for each such form
+        for f in allowed_forms:
+            #whether it was filled by the user
+            submission = f.has_been_filled_by_user(self)
+            if submission is False:
+                #if not filled, mark no
+                status_of_allowed_forms[f.title] = {
+                    'submitted': False, 
+                    'deadline_for_filling':f.deadline_for_filling,
+                    'group':f.allowed_groups.only().__str__(), #TODO: figure out a better way
+                    }
+            else:
+                #if filled, mark yes and put the day it was filled
+                status_of_allowed_forms[f.title] = {
+                    'submitted': True,
+                    'submitted_on':submission.when,
+                    'deadline_for_filling':f.deadline_for_filling,
+                    'group':f.allowed_groups.all().__str__(), #TODO: figure out a better way
+                    }
+
+        return status_of_allowed_forms
+
     def get_unfilled_forms(self):
         all_forms = list(feedbackForm.objects.all().exclude(title="About This Project").filter(deadline_for_filling__gt = datetime.now()).order_by('-deadline_for_filling','about'))
         #print "all-forms.. ", all_forms

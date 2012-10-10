@@ -43,7 +43,7 @@ class feedbackFormAdmin(admin.ModelAdmin):
             groups=existing_form.allowed_groups.values()
             for g in groups:
                 # to extract users who were supposed to fill the form
-                u=user.objects.filter(groups=g['id'])
+                u=user.objects.filter(groups=g['id']).order_by('username')
                 user_all.extend(u)
             #now from this list.. remove ppl who have filled the form...!!
             forms=feedbackSubmission.objects.filter(feedbackForm=existing_form)

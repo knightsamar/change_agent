@@ -74,7 +74,7 @@ function enable(c)
 
 </script>
 
-<h3> hi..{{u.username}}..!!</h3>
+<h3> Hi {{u.username}}!</h3>
 
 {% if formfilled %}
 <input type = 'button' value = 'Feedback About this Software' onclick = 'javascript:location.href = "{{ROOT}}/give_feedback/{{f.id}}/show"'>
@@ -95,21 +95,27 @@ function enable(c)
 </select>
 
 <b style="font-size:16px;">Select Batch:</b>
-    <select name = 'batch' required onfocus = 'fillOptions(this)'></select><br/><br/><br/>
+    <select name = 'batch' required onfocus = 'fillOptions(this)'></select><br/>
 <br/>
+{% if view_summary or view_notfilled or view_reports %}
+<h2>View Batch-wide reports</h2>
+{% endif %}
 {% if view_summary %}
-<input type='button' id='submitbtn' value = "Get Students' Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'>
+<input type='button' id='submitbtn' value = "Get Excel Copy of Filled Feedback Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/studentsummary")'>
 {% endif %}
 {% if view_notfilled %}
-<input type='button' id='notfilled' value = "Get Students who have not filled the form" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
+<input type='button' id='notfilled' value = "Get List of Students who have not filled Forms" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/notfilled/")'> 
 {% endif %}
+
 {% if view_reports %}
-<input type='button' id='reports' value = "Report" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/summary/")'> 
+<input type='button' id='reports' value = "Get Summary Report" onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/summary/")'> 
 {% endif %}
+<hr/>
+
 {% if create_forms %}
 {% if createforms %}
-<hr><br/>
-To Create Forms<BR><BR>
+<br/>
+<h2>Create Mass Feedback Forms</h2>
 <input type = 'radio' name = 'createforms' value = 'all' checked> All 
 <input type = 'radio' name = 'createforms' value = 'teachers'> Only Teachers
 <input type = 'radio' name = 'createforms' value = 'subjects'> Only Subjects
@@ -118,10 +124,21 @@ Deadline for submissions (YYYY-MM-DD) <input type = 'text' name = 'deadline'size
 <input type = 'button'  id = 'create' value = 'Create Mass Feedback Forms' onclick = 'changesubmit(this,"{{ROOT}}/manage_feedback/createmassforms/")'>
 {% endif %}
 {% endif %}
+
+{% if view_user_status %}
+<hr/>
+<h2>View status of all Feedback Forms for an user </h2>
+<label for='username'><b>PRN/Username :</b></label>
+<input type='text' name='username' />
+<input type='button' value='Get status of all Feedback Forms' onclick = 'changesubmit(this,"{% url manage_feedback.views.get_user_status %}")'/>
+<hr/>
+{% endif %}
+
 </form>
 </fieldset> 
 <br/>
 <i>Please note this<b> feature is Beta </b> and currently under development. We are offering only <b> a preview of the real thing :)</b></li>
 </form>
+<br/>
 <input type = 'button' value = 'logout' onclick = 'javascript:location.href = "{{ROOT}}/ldap_login/logout"'>
 {% endblock %}

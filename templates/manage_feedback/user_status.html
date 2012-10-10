@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{user.fullname}} : Status of Forms {% endblock %}
+{% block content %}
+<div id="form" style='text-align:left;'>
+    <table align='center' border='1'>
+        <thead align='center'>
+            <tr>
+                <td><b>Form Title<b/></td>
+                <td><b>Deadline</b></td>
+                <td><b>Status</b></td>
+            </tr>
+        </thead>
+        <tbody align='center'>
+        {% for form,status in status_of_all_forms.iteritems %}
+           <tr>
+                <td>{{ form }}</td>
+                <td> {{ status.deadline_for_filling|date:"D d M Y"}} </td>
+                {% if status.submitted %}
+                    <td>{{ status.submitted|yesno:'Submitted,Not Submitted'}} <br/> on <br/> {{ status.submitted_on|date:"D d M Y"}} </td>
+                {% else %}
+                    <td>{{ status.submitted|yesno:'Submitted,Not Submitted'}} </td>
+                {% endif %}
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<input type='button' onclick="javascript:location.href='{% url manage_feedback.views.adminindex %}'" value="Go back">
+{% endblock %}
