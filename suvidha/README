@@ -1,3 +1,22 @@
-Suvidha provides a way to connect with multiple authentication systems
+What is Suvidha ?
+=================
+Suvidha provides a way to connect with multiple authentication systems with your software which has been written to suit a single authentication system.
 
+
+How does it do that ?
+====================
+To do that, it proxies the access to your authentication systems through a proxy User and Group model. Thus your code needs to deal with only one type of User and one type of Group rather (atleast in basic operations, at this level) rather than being overwhelmed by multiple authentication systems.
+
+Thus, your system begins to look like this:
+
+
+********************               (((((((((((((((((((((((((               ***************************
+        Your      ==========>     (        Suvidha.User      ) ----------->  OriginalAuthSystem.User
+        Code      <==========     (            Model         ) <-----------           Model
+********************               )))))))))))))))))))))))))               ***************************
+
+#The same applies for Group model too.
+
+What do I have to do?
+=====================
 

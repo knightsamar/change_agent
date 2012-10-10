@@ -74,5 +74,6 @@ Example:
             print "Error:", e.message
             print
         except Exception as e:
+            print 
             print 'ERROR: ',e.message
             print

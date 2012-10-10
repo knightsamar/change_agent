@@ -7,7 +7,7 @@ verbose_name = "User ID in the actual backend, MUST be a primary key")
 	
 	def __str__(self):
 		return "%s user from %s" % (self.userid, self.backend)	
-	
+
 	def get_real_user(self):
 		print 'Accessing', self.backend
 		try:
